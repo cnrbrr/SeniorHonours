@@ -29,6 +29,7 @@ $( "#modalLogin1" ).click(function(){
 		return;
 	}
 	alert("Logging in");
+	location.href = "home.html";
 });
 });
 
