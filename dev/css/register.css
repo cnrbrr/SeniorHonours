@@ -26,7 +26,7 @@ h1{
   color: red;
 }
 
-#text1, #text2, #text3, #pass1, #pass2, #skillLevel{
+#text1, #text2, #text3, #pass1, #pass2, #skillLevel, #date1{
   width: 100%;
   text-align: center;
 }
