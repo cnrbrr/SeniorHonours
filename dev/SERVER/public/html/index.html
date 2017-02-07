@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="./public/css/index.css">
+
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="./public/js/index.js"></script>
+</head>
+<body>
+	<div class="container">
+<div id="bg">
+  <img src="./public/html/Images/LoginBackground.jpg" id ="bgimg" alt="">
+</div>
+</div>
+<div class="container text-center" >
+	<div class="btn-group text-center" role="group" >
+  <div class="page-header text-center" id="titleHead">
+  </div>
+</div>
+</div>
+
+<div class="container text-center" id="btnsGrp">
+	<div class="btn-group text-center" role="group" id="btn1">
+	</div>
+	<div class="btn-group text-center" role="group" id="btn2">
+	</div>
+</div>
+</body>
+  <div class="modal fade text-center" id="loginModal" role="dialog">
+    <div class="modal-dialog modal-lg text-center">
+      <div class="modal-content text-center">
+        <div class="modal-header text-center">
+          <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
+          <h4 class="modal-title text-center">Login</h4>
+        </div>
+        <div class="modal-body text-center">
+          	<span>
+	         	<input type="text" placeholder="Enter your Email" id="emailCheck">
+	         	<p></p>
+	        	<input type="password" placeholder="Enter your Password" id="passCheck">
+          	</span>
+        </div>
+        <div class="modal-footer">
+        	<button type="button" class="btn btn-success" data-dismiss="modal"id="modalLogin1">Login</button>
+          <button type="button" class="btn btn-warning" id="modalClose" data-dismiss="modal" style="float: left;">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</html>

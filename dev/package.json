@@ -1,0 +1,28 @@
+{
+  "name": "dev",
+  "version": "1.0.0",
+  "description": "Json File",
+  "main": "js/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cnrbrr/SeniorHonours.git"
+  },
+  "author": "Conor Barr",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/cnrbrr/SeniorHonours/issues"
+  },
+  "homepage": "https://github.com/cnrbrr/SeniorHonours#readme",
+  "dependencies": {
+    "good": "^7.1.0",
+    "good-console": "^6.2.0",
+    "good-squeeze": "^5.0.1",
+    "hapi": "^16.1.0",
+    "hapi-stormpath": "^1.0.0",
+    "jQuery": "^1.7.4",
+    "stormpath": "^0.20.1"
+  }
+}
