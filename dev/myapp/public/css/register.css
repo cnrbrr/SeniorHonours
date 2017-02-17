@@ -1,0 +1,36 @@
+#bg {
+  position: fixed; 
+  top: -50%; 
+  left: -50%; 
+  width: 200%; 
+  height: 200%;
+}
+#bg img {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  bottom: 0; 
+  margin: auto; 
+  min-width: 50%;
+  min-height: 50%;
+}
+
+#bgimg {
+
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+h1{
+  color: red;
+}
+
+#text1, #text2, #text3, #pass1, #pass2, #skillLevel, #date1{
+  width: 100%;
+  text-align: center;
+}
+
+.page-header{
+  width: 100%;
+}
