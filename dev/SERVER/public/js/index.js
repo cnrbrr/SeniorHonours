@@ -11,6 +11,7 @@ $( document ).ready(function() {
 
 $( document ).ready(function() {
 $( "#regButton" ).click(function(){
+	
 	location.href = "register";
 });
 });

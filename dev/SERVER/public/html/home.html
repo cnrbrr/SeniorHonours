@@ -2,6 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"> 
+     <script src="../js/alertify.js"></script>
+      <link rel="stylesheet" href="../js/css/alertify.css">
+      <link rel="stylesheet" href="../js/css/themes/default.css"> 
 </head>
 <body>
 	<div class="container">
@@ -24,12 +27,16 @@
       </tr>
     </thead>
     <tr>
-      <td><input type="image" src="Images/java.png" id="javaLogo"></td>
+      <td><input type="image" src="Images/java.png" id="javaLogo" onclick="alert('hey')"></td>
     </tr>
   </table>
 </div>
 </body>
-
+<script>
+function check(){
+  alert("k");
+}
+</script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="../css/home.css">
 

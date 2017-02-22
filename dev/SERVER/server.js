@@ -201,6 +201,91 @@ server.register(require('inert'), (err) => {
     });
 
     server.route({
+        method: 'GET',
+        path: '/js/blockly_compressed.js',
+        handler: function (request, reply) {
+            reply.file('./public/js/blockly_compressed.js');
+        }
+    });
+    server.route({
+        method: 'GET',
+        path: '/js/blocks_compressed.js',
+        handler: function (request, reply) {
+            reply.file('./public/js/blocks_compressed.js');
+        }
+    });
+    server.route({
+        method: 'GET',
+        path: '/msg/js/en.js',
+        handler: function (request, reply) {
+            reply.file('./public/js/msg/js/en.js');
+        }
+    });
+///////////////////////////////////////////
+    server.route({
+        method: 'GET',
+        path: '/js/alertify.js',
+        handler: function (request, reply) {
+            reply.file('./public/js/alertify.js');
+        }
+    });
+    server.route({
+        method: 'GET',
+        path: '/js/css/alertify.css',
+        handler: function (request, reply) {
+            reply.file('./public/js/css/alertify.css');
+        }
+    });
+    server.route({
+        method: 'GET',
+        path: '/js/css/themes/default.css',
+        handler: function (request, reply) {
+            reply.file('./public/js/css/themes/default.css');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/ace/src-noconflict/ace.js',
+        handler: function (request, reply) {
+            reply.file('./public/ace/src-noconflict/ace.js');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/jstext',
+        handler: function (request, reply) {
+            reply.file('./public/html/jstext.html');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/ace/src-noconflict/theme-merbivore.js',
+        handler: function (request, reply) {
+            reply.file('./public/ace/src-noconflict/theme-merbivore.js');
+        }
+    });
+    
+
+    server.route({
+        method: 'GET',
+        path: '/ace/src-noconflict/mode-javascript.js',
+        handler: function (request, reply) {
+            reply.file('./public/ace/src-noconflict/mode-javascript.js');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/ace/src-noconflict/worker-javascript.js',
+        handler: function (request, reply) {
+            reply.file('./public/ace/src-noconflict/worker-javascript.js');
+        }
+    });
+
+    server.route({
         method: 'POST',
         path: '/regSubmit',
         handler: function (request, reply) {
