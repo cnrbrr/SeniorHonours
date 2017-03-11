@@ -19,15 +19,32 @@ server.route({
     }
 });
 
-// server.register([{
-//     register: require('hapi-stormpath'),
-//     options: {
-//         apiKeyId: '5Z9FR5F0AAJCLQHZOTPWPTESJ', //required
-//         apiKeySecret: 'aO3Cxa02/hv1TH/UmVPm1Zp4P+mJpH90noYIoc8M/hw', //required
-//         applicationHref: 'https://api.stormpath.com/v1/applications/2ZJzzlc0QcDOTrMIPZ7Jvj', // optional, if specified, plugin exposes application and authenticator
-//         cacheOptions: { store: 'memory', ttl: 300, tti: 300 } // optional
-//     }
-// }]);
+//from https://api.stormpath.com/ui2/index.html#/quickstart/none/nodejs/backend/project-type/existing   
+// application data
+var my_api_key =  {id: '5Z9FR5F0AAJCLQHZOTPWPTESJ', secret: 'aO3Cxa02/hv1TH/UmVPm1Zp4P+mJpH90noYIoc8M/hw'};
+var my_href = 'https://api.stormpath.com/v1/applications/2ZJzzlc0QcDOTrMIPZ7Jvj';
+ 
+//create the stormpath client object based on api info
+var client = new stormpath.Client({ apiKey: my_api_key });
+console.log("Client connection established");
+ 
+//get the right stormpath application for client
+var application;
+client.getApplication(my_href, function(err, app) {
+               if (err) {
+                              return console.error(err);
+               }
+               application = app;
+               console.log("Application got :" + application);
+});
+
+application.getOAuthPolicy(function (err, oauthPolicy) {
+  if (err) {
+    return console.error(err);
+  }
+
+  console.log('OAuth policy retrieved!', oauthPolicy.href);
+});
 server.register({
     register: Good,
     options: {
@@ -288,8 +305,52 @@ server.register(require('inert'), (err) => {
     server.route({
         method: 'POST',
         path: '/regSubmit',
-        handler: function (request, reply) {
-            console.log(request.payload);
+       handler: function (request, reply) {
+           // console.log(request.payload);
+                             
+               //register the user
+               application.createAccount(request.payload, function(err, createdAccount) {
+                   if (err) {
+                              console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                   }else{
+                   // console.log('Account:', createdAccount);
+                   console.log('Account Registered!');
+                   reply.file('./public/js/mainLink.js');
+                    }
+                                
+                   });
+        }
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/logSubmit',
+       handler: function (request, reply) {
+            var userAuth = {
+                username: request.payload.email,
+                password: request.payload.password
+            };
+                             
+               //register the user
+               application.authenticateAccount(userAuth, function(err, validAccount) {
+                   if (err) {
+                              console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                   }else{
+                   console.log('Account Valid!');
+                   reply.file('./public/js/mainLink.js');
+                    }
+                                
+                   });
+        }
+    });
+});
+
+
+    // server.route({
+    //     method: 'POST',
+    //     path: '/regSubmit',
+    //     handler: function (request, reply) {
+    //         console.log(request.payload);
 
         //     console.log("POSTING");
         //     var client = new stormpath.Client({
@@ -310,8 +371,8 @@ server.register(require('inert'), (err) => {
         // });
         //     console.log("DONE");
        // getValues();
-        }
-    });
+    //     }
+    // });
 // server.route({
 //     method: 'POST', 
 //     path: '/regSubmit',
@@ -320,10 +381,11 @@ server.register(require('inert'), (err) => {
 //         console.log("New Applicant Received");
 //     }
 // });
-});
+//});
 
 // function getValues(){
 //     console.log("Works so far!");
 //     var first = document.getElementById('fname');
 //     console.log("Hope: " + first);
 // }
+

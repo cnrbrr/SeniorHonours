@@ -29,8 +29,17 @@ $( "#modalLogin1" ).click(function(){
 		alert("Please Enter a valid password!");
 		return;
 	}
+
 	
-	location.href = "main";
+	userdata = new Object();
+userdata.email = $email;
+userdata.password = $pass;
+                             
+//post the user data to the appropriate route.
+$.post("/logSubmit", userdata)
+               .done(function(data) {
+                 console.log("Done! " + data); // change for whatever callback you want
+});
 });
 });
 
