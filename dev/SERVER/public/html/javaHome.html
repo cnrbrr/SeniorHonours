@@ -27,10 +27,17 @@
 <div class="container text-center" >
 	<div class="btn-group text-center" role="group" >
   <div class="page-header text-center" id="titleHead">
+    <h1>Blockly</h1>
   </div>
 </div>
 </div>
-<div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+  <div class="container btn-group" style: "position: absolute;">
+    <div class="well" id="informationArea" ></div>
+    <div class="container" style="left: 0px;">
+        <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+    </div>
+    
+  </div>
 </body>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -38,12 +45,15 @@
 <script>
   var workspace = Blockly.inject('blocklyDiv',
       {toolbox: document.getElementById('toolbox')});
- </script>
+</script>
+
 
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="/javaHome.js"></script>
+
 
 </html>

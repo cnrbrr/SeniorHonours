@@ -27,24 +27,18 @@ var my_href = 'https://api.stormpath.com/v1/applications/2ZJzzlc0QcDOTrMIPZ7Jvj'
 //create the stormpath client object based on api info
 var client = new stormpath.Client({ apiKey: my_api_key });
 console.log("Client connection established");
- 
+ console.log("Connecting to application...");
 //get the right stormpath application for client
 var application;
-client.getApplication(my_href, function(err, app) {
+client.getApplication(my_href,
+function(err, app) {
                if (err) {
                               return console.error(err);
                }
                application = app;
-               console.log("Application got :" + application);
+               console.log("Application Connected!");
 });
 
-application.getOAuthPolicy(function (err, oauthPolicy) {
-  if (err) {
-    return console.error(err);
-  }
-
-  console.log('OAuth policy retrieved!', oauthPolicy.href);
-});
 server.register({
     register: Good,
     options: {
@@ -76,6 +70,7 @@ server.register({
         server.log('info', 'Server running at: ' + server.info.uri);
     });
 });
+
 
 server.register(require('inert'), (err) => {
 
@@ -238,6 +233,13 @@ server.register(require('inert'), (err) => {
             reply.file('./public/js/msg/js/en.js');
         }
     });
+    server.route({
+        method: 'GET',
+        path: '/javaHome.js',
+        handler: function (request, reply) {
+            reply.file('./public/js/javaHome.js');
+        }
+    });
 ///////////////////////////////////////////
     server.route({
         method: 'GET',
@@ -303,18 +305,56 @@ server.register(require('inert'), (err) => {
     });
 
     server.route({
+        method: 'GET',
+        path: '/text1-1',
+        handler: function (request, reply) {
+            reply.file('./public/JSON/text1-1.JSON');
+        }
+    });
+
+    server.route({
         method: 'POST',
         path: '/regSubmit',
        handler: function (request, reply) {
            // console.log(request.payload);
-                             
+                var newUser = {
+                    givenName: request.payload.givenName,
+                    surname: request.payload.surname,
+                    username: request.payload.username,
+                    email: request.payload.email,
+                    password: request.payload.password
+                };
                //register the user
-               application.createAccount(request.payload, function(err, createdAccount) {
+               application.createAccount(newUser, function(err, createdAccount) {
                    if (err) {
                               console.log("SOMETHING WENT WRONG!\n" + err + "-----");
                    }else{
                    // console.log('Account:', createdAccount);
                    console.log('Account Registered!');
+ // var authenticator = new stormpath.OAuthAuthenticator(application);
+ //                    authenticator.authenticate({
+ //                    body: {
+ //                    grant_type: 'password',
+ //                    username: request.payload.email,
+ //                    password: request.payload.password
+ //                    }
+ //                    }, function(err, result){
+ //                    console.log(result.accessTokenResponse);
+ //                    //A successful request will result in an accessTokenResponse
+ //                    });
+
+                    createdAccount.getCustomData(function(err, customData){
+                        customData.DOB = request.payload.DOB;
+                        customData.level = request.payload.level;
+                        customData.gender = request.payload.gender;
+                        customData.save(function(err){
+                        if(!err) {
+                            console.log('Custom data added');
+                        }else{
+                             console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                        }
+                        });
+                    });
                    reply.file('./public/js/mainLink.js');
                     }
                                 
@@ -325,6 +365,28 @@ server.register(require('inert'), (err) => {
     server.route({
         method: 'POST',
         path: '/logSubmit',
+       handler: function (request, reply) {
+            var userAuth = {
+                username: request.payload.email,
+                password: request.payload.password
+            };
+                             
+               //register the user
+               application.authenticateAccount(userAuth, function(err, validAccount) {
+                   if (err) {
+                              console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                   }else{
+                   console.log('Account Valid!');
+                   reply.file('./public/js/mainLink.js');
+                    }
+                                
+                   });
+        }
+    });
+
+        server.route({
+        method: 'POST',
+        path: '/blocklySubmit',
        handler: function (request, reply) {
             var userAuth = {
                 username: request.payload.email,

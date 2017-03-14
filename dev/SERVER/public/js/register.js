@@ -67,6 +67,9 @@ userdata.surname = $second;
 userdata.username = $email;
 userdata.email = $email;
 userdata.password = $passFirst;
+userdata.DOB = $DOB;
+userdata.level = $level;
+userdata.gender = $gender;
                              
 //post the user data to the appropriate route.
 $.post("/regSubmit", userdata)

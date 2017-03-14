@@ -1,0 +1,16 @@
+{
+	"tutorial": "1",
+	"point": "2",
+	"topic": "Basic Javascript (JS)",
+	"deeper": "Working with Variables! Mathmatical Operations!",
+	"levels":
+	{
+			"level":
+					[{"diff": "5", "description": "", "how": "", "task": ""},
+					{"diff": "4", "description": "", "how": "", "task": ""},
+					{"diff": "3", "description": "", "how": "", "task": ""},
+					{"diff": "2", "description": "", "how": "", "task": ""},
+					{"diff": "1", "description": "", "how": "", "task": ""}
+					]
+	}
+}

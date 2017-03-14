@@ -3,8 +3,11 @@ $( document ).ready(function() {
 	$heading.appendTo($("#titleHead"));
 });
 
-// $( document ).ready(function() {
-// $( "#javaLogo" ).click(function(){
-	
-// });
-// });
+$( document ).ready(function() {
+	$( '#modalChoice1' ).click(function(){
+		location.href = "javahome";
+	});
+	$( '#modalChoice2' ).click(function(){
+		location.href = "jstext";
+	});
+});

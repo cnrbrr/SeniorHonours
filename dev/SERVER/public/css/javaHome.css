@@ -41,12 +41,4 @@ line-height : 100%;
   filter: alpha(opacity=50);
 }
 
-img {
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-}
 
-img:hover{
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
