@@ -278,6 +278,13 @@ server.register(require('inert'), (err) => {
             reply.file('./public/html/jstext.html');
         }
     });
+    server.route({
+        method: 'GET',
+        path: '/jstext2',
+        handler: function (request, reply) {
+            reply.file('./public/html/jstext2.html');
+        }
+    });
 
     server.route({
         method: 'GET',
@@ -309,6 +316,22 @@ server.register(require('inert'), (err) => {
         path: '/text1-1',
         handler: function (request, reply) {
             reply.file('./public/JSON/text1-1.JSON');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/text1-2',
+        handler: function (request, reply) {
+            reply.file('./public/JSON/text1-2.JSON');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/text1-3',
+        handler: function (request, reply) {
+            reply.file('./public/JSON/text1-3.JSON');
         }
     });
 
