@@ -15,8 +15,8 @@ function parseJSON(json, levelVal){
 
 $(document).ready(function(){
 
-	$.getJSON( "text1-2", function( json ) {
-		parseJSON(json,5);//set the value to one above the value we want, if 0-4 in array 5 will do all not 4
+	$.getJSON( "text1-1", function( json ) {
+		parseJSON(json,1);//set the value to one above the value we want, if 0-4 in array 5 will do all not 4
 	});
 	
 });

@@ -354,17 +354,7 @@ server.register(require('inert'), (err) => {
                    }else{
                    // console.log('Account:', createdAccount);
                    console.log('Account Registered!');
- // var authenticator = new stormpath.OAuthAuthenticator(application);
- //                    authenticator.authenticate({
- //                    body: {
- //                    grant_type: 'password',
- //                    username: request.payload.email,
- //                    password: request.payload.password
- //                    }
- //                    }, function(err, result){
- //                    console.log(result.accessTokenResponse);
- //                    //A successful request will result in an accessTokenResponse
- //                    });
+
 
                     createdAccount.getCustomData(function(err, customData){
                         customData.DOB = request.payload.DOB;
@@ -373,6 +363,17 @@ server.register(require('inert'), (err) => {
                         customData.save(function(err){
                         if(!err) {
                             console.log('Custom data added');
+                             var authenticator = new stormpath.OAuthAuthenticator(application);
+                    authenticator.authenticate({
+                    body: {
+                    grant_type: 'password',
+                    username: request.payload.email,
+                    password: request.payload.password
+                    }
+                    }, function(err, result){
+                    console.log(result.accessTokenResponse);
+                    //A successful request will result in an accessTokenResponse
+                    });
                         }else{
                              console.log("SOMETHING WENT WRONG!\n" + err + "-----");
                         }
