@@ -25,40 +25,40 @@ $( document ).ready(function() {
 });
 
 $( document ).ready(function() {
- 	$( '#regBtn' ).click(function(){
+	$( '#regBtn' ).click(function(){
 		validateForm();
 	});
 });
 
 function validateForm(){
-		var $first = $( '#fname' ).val();
-		var $second = $( '#sname' ).val();
-		var $email = $( '#emailAdd' ).val();
-		var $passFirst = $( '#initPass' ).val();
-		var $level = $( '#rangeVal' ).val();
-		var $passSecond = $( '#sPass' ).val();
-		var $DOB = $( '#bday' ).val();
-		var $gender = getGender();
-		if(nameCheck($first) === false){
-			alert("Please enter a valid first name!");
-			return false;
-		}
-		if(nameCheck($second) === false){
-			alert("Please enter a valid last name!");
-			return false;
-		}
-		if(isEmail($email) === false){
-			alert("Please enter a valid email address!");
-			return false;
-		}
-		if($passFirst !== $passSecond){
-			alert("Please ensure both passwords are matching!");
-			return false;
-		}
-		if(checkDate($DOB) ===false){
-			alert("Please enter a valid Date of Birth!");
-			return false;
-		}
+	var $first = $( '#fname' ).val();
+	var $second = $( '#sname' ).val();
+	var $email = $( '#emailAdd' ).val();
+	var $passFirst = $( '#initPass' ).val();
+	var $level = $( '#rangeVal' ).val();
+	var $passSecond = $( '#sPass' ).val();
+	var $DOB = $( '#bday' ).val();
+	var $gender = getGender();
+	if(nameCheck($first) === false){
+		alert("Please enter a valid first name!");
+		return false;
+	}
+	if(nameCheck($second) === false){
+		alert("Please enter a valid last name!");
+		return false;
+	}
+	if(isEmail($email) === false){
+		alert("Please enter a valid email address!");
+		return false;
+	}
+	if($passFirst !== $passSecond){
+		alert("Please ensure both passwords are matching!");
+		return false;
+	}
+	if(checkDate($DOB) ===false){
+		alert("Please enter a valid Date of Birth!");
+		return false;
+	}
 		//from http://stackoverflow.com/questions/35969139/nodejs-how-to-send-data-from-html-to-hapi
 //create an object to hold the user data
 userdata = new Object();
@@ -70,13 +70,22 @@ userdata.password = $passFirst;
 userdata.DOB = $DOB;
 userdata.level = $level;
 userdata.gender = $gender;
-                             
+
 //post the user data to the appropriate route.
 $.post("/regSubmit", userdata)
-               .done(function(data) {
-                 console.log("Done! " + data); // change for whatever callback you want
+.done(function(data) {
+               	// Check browser support
+               	if (typeof(Storage) !== "undefined") {
+    // Store
+    localStorage.setItem("jwt", data);
+    location.href = "main";
+} else {
+	document.cookie = "jwt=" + data;
+	location.href = "main";
+}
+
 });
- 
+
 //prevent the form from submitting
 return false;
 
@@ -84,14 +93,14 @@ return false;
 
 function isEmail(email) {
 	
-  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-  return regex.test(email);
+	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	return regex.test(email);
 }
 
 function checkDate(date){
 	if(date !== "" && date !== null && date !== " "){
 		var regEx = /^\d{4}-\d{2}-\d{2}$/;
-  		return date.match(regEx);
+		return date.match(regEx);
 	}else{
 		return false;
 	}
