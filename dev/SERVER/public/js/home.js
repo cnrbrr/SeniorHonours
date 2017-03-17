@@ -17,9 +17,9 @@ $( document ).ready(function() {
 } else {
 	pageData.data = getCookie("jwt");
 }
-alert("5");
+alert("5", pageData);
 pageData.page = "javaMain";
-$.post("/pageChange", pageData)
+$.get("/pageChange", pageData)
                .done(function(data) {
 alert("6", data);
 });
@@ -35,7 +35,7 @@ alert("6", data);
 	pageData.data = getCookie("jwt");
 }
 pageData.page = "jsText";
-$.post("/pageChange", userdata)
+$.get("/pageChange", userdata)
                .done(function(data) {
 
 });

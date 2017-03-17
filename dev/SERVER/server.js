@@ -32,12 +32,12 @@ console.log("Connecting to application...");
 var application;
 client.getApplication(my_href,
     function(err, app) {
-       if (err) {
-          return console.error(err);
-      }
-      application = app;
-      console.log("Application Connected!");
-  });
+     if (err) {
+      return console.error(err);
+  }
+  application = app;
+  console.log("Application Connected!");
+});
 
 server.register({
     register: Good,
@@ -348,9 +348,9 @@ server.route({
         };
                //register the user
                application.createAccount(newUser, function(err, createdAccount) {
-                   if (err) {
-                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                  }else{
+                 if (err) {
+                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+              }else{
                    // console.log('Account:', createdAccount);
                    console.log('Account Registered!');
 
@@ -374,14 +374,14 @@ server.route({
                                     console.log("SOMETHING WENT WRONG!\n" + err + "-----");
                                 }else{
                                     console.log("Token Generated!");
-                                    reply(result);
+                                    reply(result.accessTokenResponse);
                                 }
                     //A successful request will result in an accessTokenResponse
                 });
                         }else{
-                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                     }
-                 });
+                           console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                       }
+                   });
 });
 }
 
@@ -400,12 +400,12 @@ server.route({
 
                //register the user
                application.authenticateAccount(userAuth, function(err, validAccount) {
-                   if (err) {
-                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                  }else{
-                   console.log('Account Valid!');
-                   var authenticator = new stormpath.OAuthAuthenticator(application);
-                   authenticator.authenticate({
+                 if (err) {
+                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+              }else{
+                 console.log('Account Valid!');
+                 var authenticator = new stormpath.OAuthAuthenticator(application);
+                 authenticator.authenticate({
                     body: {
                         grant_type: 'password',
                         username: request.payload.email,
@@ -416,15 +416,15 @@ server.route({
                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
                     }else{
                         console.log("Token Generated!");
-                        reply(result);
+                        reply(result.accessTokenResponse);
                     }
                     //A successful request will result in an accessTokenResponse
                 });
-               }
+             }
 
-           });
-}
-});
+         });
+           }
+       });
 
 server.route({
     method: 'POST',
@@ -437,19 +437,19 @@ server.route({
 
                //register the user
                application.authenticateAccount(userAuth, function(err, validAccount) {
-                   if (err) {
-                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                  }else{
-                   console.log('Account Valid!');
-                   reply.file('./public/js/mainLink.js');
-               }
+                 if (err) {
+                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+              }else{
+                 console.log('Account Valid!');
+                 reply.file('./public/js/mainLink.js');
+             }
 
-           });
+         });
            }
        });
 
 server.route({
-    method: 'POST',
+    method: 'GET',
     path: '/pageChange',
     handler: function (request, reply) {
         var data = request.payload.data;
@@ -457,7 +457,7 @@ server.route({
         var token = data.accessTokenResponse;
         var authenticator = new stormpath.OAuthAuthenticator(application);
         console.log("Page: ", page);
-        console.log("TOKEN: ", token);
+        console.log("TOKEN: ", data);
         authenticator.authenticate({
             headers: { authorization: 'Bearer: ' + token }
         }, function(err, result) {
@@ -474,7 +474,8 @@ server.route({
         }
         });
 
-    }
+
+}
 });
 });
 
