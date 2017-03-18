@@ -5,41 +5,39 @@ $( document ).ready(function() {
 
 $( document ).ready(function() {
 	$( '#modalChoice1' ).click(function(){
-		alert("1");
 		pageData = new Object();
-
-		alert("2");
-	if (typeof(Storage) !== "undefined") {
-    // Store
-    alert("3");
-    pageData.data = localStorage.getItem("jwt");
-    alert("4");
-} else {
-	pageData.data = getCookie("jwt");
-}
-alert("5", pageData);
-pageData.page = "javaMain";
-$.get("/pageChange", pageData)
-               .done(function(data) {
-alert("6", data);
+       if (typeof(Storage) !== "undefined") {
+        pageData.data = localStorage.getItem("jwt");
+    } else {
+       pageData.data = getCookie("jwt");
+   }
+   pageData.page = "javaMain";
+   $.post("/pageChange", pageData)
+   .done(function(data) {
+    location.href="javahome";
 });
 
-	});
+});
 	$( '#modalChoice2' ).click(function(){
-				pageData = new Object();
+        alert("1");
+        pageData = new Object();
+       if (typeof(Storage) !== "undefined") {
+        alert("2");
+        pageData.data = localStorage.getItem("jwt");
+    } else {
 
-	if (typeof(Storage) !== "undefined") {
-    // Store
-    pageData.data = localStorage.getItem("jwt");
-} else {
-	pageData.data = getCookie("jwt");
-}
-pageData.page = "jsText";
-$.get("/pageChange", userdata)
-               .done(function(data) {
+        alert("3");
+       pageData.data = getCookie("jwt");
+   }
+   pageData.page = "jstext";
+        alert("4");
+   $.post("/pageChange", pageData)
+   .done(function(data) {
 
+        alert("5", data);
+    location.href="jstext";
 });
-	});
+});
 });
 
 function getCookie(cname) {

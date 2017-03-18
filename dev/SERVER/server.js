@@ -373,8 +373,8 @@ server.route({
                                 if(err2){
                                     console.log("SOMETHING WENT WRONG!\n" + err + "-----");
                                 }else{
-                                    console.log("Token Generated!");
-                                    reply(result.accessTokenResponse);
+                                    console.log("Token Generated! ");
+                                    reply(result.accessTokenResponse.access_token);
                                 }
                     //A successful request will result in an accessTokenResponse
                 });
@@ -415,8 +415,8 @@ server.route({
                     if(err2){
                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
                     }else{
-                        console.log("Token Generated!");
-                        reply(result.accessTokenResponse);
+                        console.log("Token Generated! ");
+                        reply(result.accessTokenResponse.access_token);
                     }
                     //A successful request will result in an accessTokenResponse
                 });
@@ -449,22 +449,20 @@ server.route({
        });
 
 server.route({
-    method: 'GET',
+    method: 'POST',
     path: '/pageChange',
     handler: function (request, reply) {
-        var data = request.payload.data;
+        var token = request.payload.data;
         var page = request.payload.page;
-        var token = data.accessTokenResponse;
         var authenticator = new stormpath.OAuthAuthenticator(application);
-        console.log("Page: ", page);
-        console.log("TOKEN: ", data);
         authenticator.authenticate({
             headers: { authorization: 'Bearer: ' + token }
         }, function(err, result) {
             if(!err){
             result.getAccount(function(err2, account) {
                 if(!err2){
-                console.log(account);
+                console.log("Account valid!");
+                reply("Continue");
             }else{
                 console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
             }
