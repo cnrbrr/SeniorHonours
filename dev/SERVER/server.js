@@ -32,12 +32,12 @@ console.log("Connecting to application...");
 var application;
 client.getApplication(my_href,
     function(err, app) {
-     if (err) {
-      return console.error(err);
-  }
-  application = app;
-  console.log("Application Connected!");
-});
+       if (err) {
+          return console.error(err);
+      }
+      application = app;
+      console.log("Application Connected!");
+  });
 
 server.register({
     register: Good,
@@ -278,6 +278,14 @@ server.route({
         reply.file('./public/html/jstext.html');
     }
 });
+
+server.route({
+    method: 'GET',
+    path: '/js/jstext.js',
+    handler: function (request, reply) {
+        reply.file('./public/js/jstext.js');
+    }
+});
 server.route({
     method: 'GET',
     path: '/jstext2',
@@ -348,9 +356,9 @@ server.route({
         };
                //register the user
                application.createAccount(newUser, function(err, createdAccount) {
-                 if (err) {
-                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-              }else{
+                   if (err) {
+                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                  }else{
                    // console.log('Account:', createdAccount);
                    console.log('Account Registered!');
 
@@ -359,6 +367,7 @@ server.route({
                     customData.DOB = request.payload.DOB;
                     customData.level = request.payload.level;
                     customData.gender = request.payload.gender;
+                    customData.crntJSON = "text1-1";//saves the current progress of the files, always starts here
                     customData.save(function(err){
                         if(!err) {
                             console.log('Custom data added');
@@ -379,9 +388,9 @@ server.route({
                     //A successful request will result in an accessTokenResponse
                 });
                         }else{
-                           console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                       }
-                   });
+                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                     }
+                 });
 });
 }
 
@@ -400,12 +409,12 @@ server.route({
 
                //register the user
                application.authenticateAccount(userAuth, function(err, validAccount) {
-                 if (err) {
-                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-              }else{
-                 console.log('Account Valid!');
-                 var authenticator = new stormpath.OAuthAuthenticator(application);
-                 authenticator.authenticate({
+                   if (err) {
+                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                  }else{
+                   console.log('Account Valid!');
+                   var authenticator = new stormpath.OAuthAuthenticator(application);
+                   authenticator.authenticate({
                     body: {
                         grant_type: 'password',
                         username: request.payload.email,
@@ -420,61 +429,133 @@ server.route({
                     }
                     //A successful request will result in an accessTokenResponse
                 });
-             }
+               }
 
-         });
-           }
-       });
+           });
+}
+});
 
 server.route({
     method: 'POST',
     path: '/blocklySubmit',
     handler: function (request, reply) {
-        var userAuth = {
-            username: request.payload.email,
-            password: request.payload.password
-        };
+        var token = request.payload.data;
+        var authenticator = new stormpath.OAuthAuthenticator(application);
+        authenticator.authenticate({
+            headers: { authorization: 'Bearer: ' + token }
+        }, function(err, result) {
+            if(!err){
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        console.log("Account valid!", account);
+                        reply("Y");
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("N");
+            }
+        });
 
-               //register the user
-               application.authenticateAccount(userAuth, function(err, validAccount) {
-                 if (err) {
-                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-              }else{
-                 console.log('Account Valid!');
-                 reply.file('./public/js/mainLink.js');
-             }
 
-         });
-           }
-       });
+    }
+});
 
 server.route({
     method: 'POST',
     path: '/pageChange',
     handler: function (request, reply) {
         var token = request.payload.data;
-        var page = request.payload.page;
         var authenticator = new stormpath.OAuthAuthenticator(application);
         authenticator.authenticate({
             headers: { authorization: 'Bearer: ' + token }
         }, function(err, result) {
             if(!err){
-            result.getAccount(function(err2, account) {
-                if(!err2){
-                console.log("Account valid!");
-                reply("Continue");
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        console.log("Account valid!", account);
+                        reply("Y");
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
             }else{
-                console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("N");
             }
-            });
-        }else{
-            console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-        }
         });
 
 
-}
+    }
 });
+
+server.route({
+    method: 'POST',
+    path: '/continueAccount',
+    handler: function (request, reply) {
+        var token = request.payload.data;
+        var authenticator = new stormpath.OAuthAuthenticator(application);
+        authenticator.authenticate({
+            headers: { authorization: 'Bearer: ' + token }
+        }, function(err, result) {
+            if(!err){
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        console.log("Account valid!");
+                        reply("Y");
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("N");
+            }
+        });
+
+
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/getCurrentJSON',
+    handler: function (request, reply) {
+        var token = request.payload.data;
+        var authenticator = new stormpath.OAuthAuthenticator(application);
+        authenticator.authenticate({
+            headers: { authorization: 'Bearer: ' + token }
+        }, function(err, result) {
+            if(!err){
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        console.log("Account valid!");
+                        account.getCustomData(function(err, customData){
+                            var current = customData.crntJSON;
+                            console.log("Current JSON sending... ");
+                            reply(current);
+                            console.log("Current JSON sent!");
+                        });
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("N");
+            }
+        });
+
+
+    }
+});
+
 });
 
 

@@ -6,52 +6,67 @@ $( document ).ready(function() {
 $( document ).ready(function() {
 	$( '#modalChoice1' ).click(function(){
 		pageData = new Object();
-       if (typeof(Storage) !== "undefined") {
-        pageData.data = localStorage.getItem("jwt");
-    } else {
-       pageData.data = getCookie("jwt");
-   }
-   pageData.page = "javaMain";
-   $.post("/pageChange", pageData)
-   .done(function(data) {
+   if (typeof(Storage) !== "undefined") {
+    pageData.data = localStorage.getItem("jwt");
+  } else {
+   pageData.data = getCookie("jwt");
+ }
+ $.post("/pageChange", pageData)
+ .done(function(data) {
+  if(data === "Y"){
     location.href="javahome";
+  }else{
+    location.href="home";
+  }
 });
 
 });
 	$( '#modalChoice2' ).click(function(){
-        alert("1");
-        pageData = new Object();
-       if (typeof(Storage) !== "undefined") {
-        alert("2");
-        pageData.data = localStorage.getItem("jwt");
+    pageData = new Object();
+    if (typeof(Storage) !== "undefined") {
+      pageData.data = localStorage.getItem("jwt");
     } else {
-
-        alert("3");
-       pageData.data = getCookie("jwt");
+     pageData.data = getCookie("jwt");
    }
-   pageData.page = "jstext";
-        alert("4");
    $.post("/pageChange", pageData)
    .done(function(data) {
-
-        alert("5", data);
-    location.href="jstext";
-});
-});
+    if(data === "Y"){
+      location.href="jstext";
+    }else{
+      location.href="home";
+    }
+  });
+ });
 });
 
 function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
     }
-    return "";
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
 }
+
+
+$( document ).ready(function() {
+  pageData = new Object();
+  if (typeof(Storage) !== "undefined") {
+    pageData.data = localStorage.getItem("jwt");
+  } else {
+   pageData.data = getCookie("jwt");
+ }
+ $.post("/continueAccount", pageData)
+ .done(function(data) {
+  if(data !== "Y"){
+    location.href="home";
+  }
+});
+});
