@@ -1,5 +1,7 @@
 'use strict';
 var stormpath = require('stormpath');
+var blocklyOrder = ["blockly1-1", "blockly1-2", "blockly1-3"];
+var textOrder = ["text1-1", "text1-2", "text1-3"];
 
 // var href = 'https://api.stormpath.com/v1/applications/2ZJzzlc0QcDOTrMIPZ7Jvj';
 const Hapi = require('hapi');
@@ -447,8 +449,59 @@ server.route({
             if(!err){
                 result.getAccount(function(err2, account) {
                     if(!err2){
-                        console.log("Account valid!", account);
-                        reply("Y");
+                        console.log("Account valid!");
+                        account.getCustomData(function(err, customData){
+                            customData.currentType = "B";//B meaning blockly
+                            customData.save(function(err){
+                                if(!err){
+                                reply("Y");
+                                console.log("Blockly Confirmed!");
+                                }else{
+                                    reply("N");
+                                }
+                            });
+
+                        });
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("N");
+            }
+        });
+
+
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/textSubmit',
+    handler: function (request, reply) {
+        var token = request.payload.data;
+        var authenticator = new stormpath.OAuthAuthenticator(application);
+        authenticator.authenticate({
+            headers: { authorization: 'Bearer: ' + token }
+        }, function(err, result) {
+            if(!err){
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        console.log("Account valid!");
+                        account.getCustomData(function(err, customData){
+                            customData.currentType = "T";//T meaning text
+                            customData.save(function(err){
+                                if(!err){
+                                reply("Y");
+                                console.log("Text Confirmed!");
+                                }else{
+                                    reply("N");
+                                }
+                            });
+
+                        });
                     }else{
                         console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
                         reply("N");
@@ -476,7 +529,7 @@ server.route({
             if(!err){
                 result.getAccount(function(err2, account) {
                     if(!err2){
-                        console.log("Account valid!", account);
+                        console.log("Account valid!");
                         reply("Y");
                     }else{
                         console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
@@ -536,9 +589,8 @@ server.route({
                     if(!err2){
                         console.log("Account valid!");
                         account.getCustomData(function(err, customData){
-                            var current = customData.crntJSON;
                             console.log("Current JSON sending... ");
-                            reply(current);
+                            reply(customData.crntJSON);
                             console.log("Current JSON sent!");
                         });
                     }else{
@@ -556,7 +608,64 @@ server.route({
     }
 });
 
+server.route({
+    method: 'POST',
+    path: '/getLevel',
+    handler: function (request, reply) {
+        var token = request.payload.data;
+        var authenticator = new stormpath.OAuthAuthenticator(application);
+        authenticator.authenticate({
+            headers: { authorization: 'Bearer: ' + token }
+        }, function(err, result) {
+            if(!err){
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        console.log("Account valid!");
+                        account.getCustomData(function(err, customData){
+                            console.log("Level sending... ");
+                            reply(customData.level);
+                            console.log("Level sent!");
+                        });
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("N");
+            }
+        });
+
+
+    }
 });
+
+});
+
+function blocklyNext(current){
+    for(var i = 0; i < blocklyOrder.length; i++){
+        if(current == blocklyOrder[i]){
+            if(i+1 <  blocklyOrder.length){
+                return blocklyOrder[i+1];
+            }else{
+                return ("END");
+            }
+        }
+    }
+}
+
+function textNext(current){
+    for(var i = 0; i < textOrder.length; i++){
+        if(current == textOrder[i]){
+            if(i+1 <  textOrder.length){
+                return textOrder[i+1];
+            }else{
+                return ("END");
+            }
+        }
+    }
+}
 
 
     // server.route({

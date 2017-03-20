@@ -1,4 +1,4 @@
-$( document ).ready(function() {
+
   pageData = new Object();
   if (typeof(Storage) != "undefined") {
     pageData.data = localStorage.getItem("jwt");
@@ -11,7 +11,7 @@ $( document ).ready(function() {
     location.href="home";
   }
 });
-});
+
 
 function getCookie(cname) {
   var name = cname + "=";

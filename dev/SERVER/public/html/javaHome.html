@@ -25,27 +25,24 @@
 </div>
 </div>
 <div class="container text-center" >
-	<div class="btn-group text-center" role="group" >
+	<div class="container btn-group">
   <div class="page-header text-center" id="titleHead">
     <h1>Blockly</h1>
   </div>
 </div>
 </div>
-  <div class="container btn-group" style: "position: absolute;">
+  <div class="container btn-group">
     <div class="well" id="informationArea" ></div>
-    <div class="container" style="left: 0px;">
-        <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
-    </div>
-    
+        <div id="blocklyArea"></div>    
   </div>
 </body>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="../css/javaHome.css">
 <script>
-  var workspace = Blockly.inject('blocklyDiv',
+  var workspace = Blockly.inject('blocklyArea',
       {toolbox: document.getElementById('toolbox')});
-</script>
+</script> 
 
 
 
