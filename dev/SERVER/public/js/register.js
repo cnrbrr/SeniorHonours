@@ -75,11 +75,11 @@ userdata.gender = $gender;
 $.post("/regSubmit", userdata)
 .done(function(data) {
                	// Check browser support
-               	if (typeof(Storage) !== "undefined") {
+    if (typeof(Storage) !== "undefined") {
     // Store
     localStorage.setItem("jwt", data);
     location.href = "main";
-} else {
+	} else {
 	document.cookie = "jwt=" + data;
 	location.href = "main";
 }

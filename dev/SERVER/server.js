@@ -344,6 +344,13 @@ server.route({
         reply.file('./public/JSON/text1-3.JSON');
     }
 });
+server.route({
+    method: 'GET',
+    path: '/javascript_compressed.js',
+    handler: function (request, reply) {
+        reply.file('./public/js/javascript_compressed.js');
+    }
+});
 
 server.route({
     method: 'POST',

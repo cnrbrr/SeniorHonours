@@ -7,6 +7,7 @@
       <link rel="stylesheet" href="../js/css/themes/default.css"> 
     <script src="../js/blockly_compressed.js"></script>
     <script src="../js/blocks_compressed.js"></script>
+    <script src="/javascript_compressed.js"></script>
     <script src="msg/js/en.js"></script>
     <xml id="toolbox" style="display: none">
   <block type="controls_if"></block>
@@ -42,6 +43,10 @@
 <script>
   var workspace = Blockly.inject('blocklyArea',
       {toolbox: document.getElementById('toolbox')});
+function check(){
+  var code = Blockly.JavaScript.workspaceToCode(workspace);
+  alert(code);
+}
 </script> 
 
 
