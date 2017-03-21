@@ -4,6 +4,7 @@ var blocklyOrder = ["blockly1-1", "blockly1-2", "blockly1-3"];
 var textOrder = ["text1-1", "text1-2", "text1-3"];
 
 // var href = 'https://api.stormpath.com/v1/applications/2ZJzzlc0QcDOTrMIPZ7Jvj';
+var fs = require('file-system');
 const Hapi = require('hapi');
 const Good = require('good');
 const Path = require('path');
@@ -346,6 +347,29 @@ server.route({
 });
 server.route({
     method: 'GET',
+    path: '/blockly1-1',
+    handler: function (request, reply) {
+        reply.file('./public/JSON/blockly1-1.JSON');
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/blockly1-2',
+    handler: function (request, reply) {
+        reply.file('./public/JSON/blockly1-2.JSON');
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/blockly1-3',
+    handler: function (request, reply) {
+        reply.file('./public/JSON/blockly1-3.JSON');
+    }
+});
+server.route({
+    method: 'GET',
     path: '/javascript_compressed.js',
     handler: function (request, reply) {
         reply.file('./public/js/javascript_compressed.js');
@@ -377,6 +401,8 @@ server.route({
                     customData.level = request.payload.level;
                     customData.gender = request.payload.gender;
                     customData.crntJSON = "text1-1";//saves the current progress of the files, always starts here
+                    customData.txtHist = [];
+                    customData.blHist = [];
                     customData.save(function(err){
                         if(!err) {
                             console.log('Custom data added');
@@ -458,30 +484,46 @@ server.route({
                     if(!err2){
                         console.log("Account valid!");
                         account.getCustomData(function(err, customData){
-                            customData.currentType = "B";//B meaning blockly
-                            customData.save(function(err){
-                                if(!err){
-                                reply("Y");
-                                console.log("Blockly Confirmed!");
-                                }else{
-                                    reply("N");
+                            if(customData.crntJSON.charAt(0) != 'b'){
+                                if(customData.blHist.length > 0){
+                                 customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
+                                 if(customData.crntJSON != "END"){
+                                    customData.save(function(err){
+                                        if(!err){
+                                            reply("Y");
+                                            console.log("Blockly Confirmed!");
+                                        }else{
+                                            reply("N");
+                                        }
+                                    });
                                 }
-                            });
-
-                        });
+                            }else{
+                                customData.crntJSON = "blockly1-1";
+                                customData.save(function(err){
+                                        if(!err){
+                                            reply("Y");
+                                            console.log("Blockly Confirmed!");
+                                        }else{
+                                            reply("N");
+                                        }
+                                    });
+                            }
+                            
+                        }
+                    });
                     }else{
                         console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
                         reply("N");
                     }
                 });
-            }else{
-                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                reply("N");
-            }
-        });
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+    reply("N");
+}
+});
 
 
-    }
+}
 });
 
 server.route({
@@ -498,30 +540,46 @@ server.route({
                     if(!err2){
                         console.log("Account valid!");
                         account.getCustomData(function(err, customData){
-                            customData.currentType = "T";//T meaning text
-                            customData.save(function(err){
-                                if(!err){
-                                reply("Y");
-                                console.log("Text Confirmed!");
-                                }else{
-                                    reply("N");
+                            if(customData.crntJSON.charAt(0) != 't'){
+                                if(customData.txtHist.length > 0){
+                                 customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
+                                 if(customData.crntJSON != "END"){
+                                    customData.save(function(err){
+                                        if(!err){
+                                            reply("Y");
+                                            console.log("text Confirmed!");
+                                        }else{
+                                            reply("N");
+                                        }
+                                    });
                                 }
-                            });
-
-                        });
+                            }else{
+                                customData.crntJSON = "text1-1";
+                                customData.save(function(err){
+                                        if(!err){
+                                            reply("Y");
+                                            console.log("Blockly Confirmed!");
+                                        }else{
+                                            reply("N");
+                                        }
+                                    });
+                            }
+                            
+                        }
+                    });
                     }else{
                         console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
                         reply("N");
                     }
                 });
-            }else{
-                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                reply("N");
-            }
-        });
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+    reply("N");
+}
+});
 
 
-    }
+}
 });
 
 server.route({
@@ -648,6 +706,107 @@ server.route({
     }
 });
 
+// server.route({
+//     method: 'POST',
+//     path: '/getResult',
+//     handler: function (request, reply) {
+//         var token = request.payload.data;
+//         var authenticator = new stormpath.OAuthAuthenticator(application);
+//         authenticator.authenticate({
+//             headers: { authorization: 'Bearer: ' + token }
+//         }, function(err, result) {
+//             if(!err){
+//                 result.getAccount(function(err2, account) {
+//                     if(!err2){
+//                         console.log("Account valid!");
+//                         account.getCustomData(function(err, customData){
+//                             console.log("Level sending... ");
+//                             reply(customData.level);
+//                             console.log("Level sent!");
+//                         });
+//                     }else{
+//                         console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+//                         reply("N");
+//                     }
+//                 });
+//             }else{
+//                 console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+//                 reply("N");
+//             }
+//         });
+
+
+//     }
+// });
+
+server.route({
+    method: 'POST',
+    path: '/getValidate',
+    handler: function (request, reply) {
+        var code = request.payload.code;
+        console.log("CODE: ", code);
+        var token = request.payload.data;
+        var authenticator = new stormpath.OAuthAuthenticator(application);
+        authenticator.authenticate({
+            headers: { authorization: 'Bearer: ' + token }
+        }, function(err, result) {
+            if(!err){
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        account.getCustomData(function(err, customData){
+                            var fileName = customData.crntJSON;
+                            var result = fileName + "Result.txt";
+                            if(validate(code, result)){
+                                if(fileName.charAt(0) == 't'){
+                                    var jsonNext = textNext(fileName);
+                                    if(jsonNext == "END"){
+                                        reply("END")
+                                    }else{
+                                        if(customData.txtHist.length > 0){
+                                            customData.txtHist[customData.txtHist.length] = customData.crntJSON;
+                                        }else{
+                                            customData.txtHist[0] = customData.crntJSON;
+                                        }
+                                        customData.crntJSON = jsonNext;
+
+                                        reply("Y");
+                                    }
+                                }else if(fileName.charAt(0) == 'b'){
+                                    var jsonNext = blocklyNext(fileName);
+                                    if(jsonNext == "END"){
+                                        reply("END")
+                                    }else{
+                                        if(customData.blHist.length > 0){
+                                           customData.blHist[customData.blHist.length] = customData.crntJSON;
+                                        }else{
+                                            customData.blHist[0] = customData.crntJSON;
+                                        }
+                                        customData.crntJSON = jsonNext;
+                                        reply("Y");
+                                    }
+                                }
+                                customData.save(function(err){
+                                    if(!err){
+                                        console.log("Next Confirmed!");
+                                    }else{
+                                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                    }
+                                });
+                            }
+                        });
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+    reply("N");
+}
+});
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+    reply("Relog");
+}
+});
+}
+});
+
 });
 
 function blocklyNext(current){
@@ -674,46 +833,21 @@ function textNext(current){
     }
 }
 
+function validate(code, filename){
+    //loop through and compare the crutial bits
+    var codeSplit = code.split(" ");
+    for(var i = 0; i < codeSplit.length; i++){
+        console.log(i + ": " + codeSplit[i]);
+    }
+    console.log(filename);
+    fs.readFile('./public/results/'+filename, 'utf-8', function(err, data){
+        if(err){
+            console.log("ERROR: ", err);
+        }else{
+            console.log("data", data);
+        }
+    });
+    return true;
+}
 
-    // server.route({
-    //     method: 'POST',
-    //     path: '/regSubmit',
-    //     handler: function (request, reply) {
-    //         console.log(request.payload);
 
-        //     console.log("POSTING");
-        //     var client = new stormpath.Client({
-        //       apiKey: {
-        //         id: '5Z9FR5F0AAJCLQHZOTPWPTESJ',
-        //         secret: 'aO3Cxa02/hv1TH/UmVPm1Zp4P+mJpH90noYIoc8M/hw'
-        //     }
-        // });
-        //     console.log("Client created");
-
-        //     client.getApplications({ name: 'My Application' }, function (err, applications) {
-        //         console.log("HERE");
-        //       if (err) {
-        //         return console.error(err);
-        //     }
-
-        //     var application = applications.items[0];
-        // });
-        //     console.log("DONE");
-       // getValues();
-    //     }
-    // });
-// server.route({
-//     method: 'POST', 
-//     path: '/regSubmit',
-//     handler: function (request, reply) {
-//         reply.file('./public/js/registerUser.php');
-//         console.log("New Applicant Received");
-//     }
-// });
-//});
-
-// function getValues(){
-//     console.log("Works so far!");
-//     var first = document.getElementById('fname');
-//     console.log("Hope: " + first);
-// }

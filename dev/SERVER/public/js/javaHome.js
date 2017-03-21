@@ -16,7 +16,7 @@ function getCookie(cname) {
 }
 
 
-$( document ).ready(function() {
+window.onload = function(){
 	pageData = new Object();
 	if (typeof(Storage) !== "undefined") {
 		pageData.data = localStorage.getItem("jwt");
@@ -44,7 +44,7 @@ $( document ).ready(function() {
 			beginParse();
 		}
 	});
-});
+}
 
 function parseJSON(json){
 	$('#informationArea').append("<h3>Tutorial " + json.tutorial + ": " + json.point + "  ||  " + json.topic + ": " + json.deeper +  "</h3>");
@@ -150,12 +150,35 @@ function beginParse(){
 	$.post("/getCurrentJSON", pageData)
 	.done(function(jsonData) {
 		$.getJSON( jsonData, function( json ) {
-					parseJSON(json);//set the value to one above the value we want, if 0-4 in array 5 will do all not 4
-					if (typeof(Storage) !== "undefined") {
-						localStorage.setItem("jsonFile", json);
-					} else {
-						document.cookie = "jsonFile=" + json;
-					}
-				});
+			parseJSON(json);//set the value to one above the value we want, if 0-4 in array 5 will do all not 4
+		});
 	});
+}
+
+function validate(code){
+    pageData = new Object();
+  if (typeof(Storage) !== "undefined") {
+    pageData.data = localStorage.getItem("jwt");
+  } else {
+    pageData.data = getCookie("jwt");
+  }
+  // $.post("getResult", pageData)
+  // .done(function(data) {
+  // 	alert("GOT IT!");
+  // 	pageData.result = data;
+  // });
+  pageData.code = code;
+  $.post("/getValidate", pageData)
+  .done(function(data) {
+    if(data == "Y"){
+      alert("SUCCESS!");
+      //code for moving onto next page
+      location.reload();
+    }else if(data == "Relog"){
+        //go to home page, token has expired
+        alert("mkay");
+    }else{
+      alert("PLEASE TRY AGAIN!");
+    }
+  });
 }

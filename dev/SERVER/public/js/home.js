@@ -11,9 +11,9 @@ $( document ).ready(function() {
   } else {
    pageData.data = getCookie("jwt");
  }
- $.post("/pageChange", pageData)
+ $.post("/blocklySubmit", pageData)
  .done(function(data) {
-  if(data === "Y"){
+  if(data == "Y"){
     location.href="javahome";
   }else{
     location.href="home";
@@ -28,9 +28,9 @@ $( document ).ready(function() {
     } else {
      pageData.data = getCookie("jwt");
    }
-   $.post("/pageChange", pageData)
+   $.post("/textSubmit", pageData)
    .done(function(data) {
-    if(data === "Y"){
+    if(data == "Y"){
       location.href="jstext";
     }else{
       location.href="home";
@@ -56,7 +56,7 @@ function getCookie(cname) {
 }
 
 
-$( document ).ready(function() {
+window.onload = function(){
   pageData = new Object();
   if (typeof(Storage) !== "undefined") {
     pageData.data = localStorage.getItem("jwt");
@@ -69,4 +69,4 @@ $( document ).ready(function() {
     location.href="home";
   }
 });
-});
+}

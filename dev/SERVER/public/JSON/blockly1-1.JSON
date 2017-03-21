@@ -1,0 +1,16 @@
+{
+	"tutorial": "1",
+	"point": "1",
+	"topic": "Basic Javascript (JS)",
+	"deeper": "Working with Variables!",
+	"levels":
+	{
+			"level":
+					[{"diff": "5", "description": "This part of the tutorial will be based on creating variables!", "how": "In javascript, variables are used to store data! We will do this using the 'var' keyword.", "task": "To complete the first task, create a variable which will store the value 'Hello world'. You may name the variable anything you like."},
+					{"diff": "4", "description": "", "how": "Variables, normally have the structure: var VARIABLENAME = SOME VALUE", "task": ""},
+					{"diff": "3", "description": "Variables are a key part of javascript!", "how": "", "task": ""},
+					{"diff": "2", "description": "Variables in Javascript have a great feature, where they don't require the programmer to specify their type!", "how": "To set the value of the variable to a string, place the value inside quotation marks 'Hello world!'", "task": ""},
+					{"diff": "1", "description": "", "how": "", "task": "to complete this task, the code will look like this: var myFirstVariable = 'Hello World!';"}
+					]
+	}
+}
