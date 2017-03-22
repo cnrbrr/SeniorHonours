@@ -202,6 +202,13 @@ server.register(require('inert'), (err) => {
     });
     server.route({
         method: 'GET',
+        path: '/css/jstext.css',
+        handler: function (request, reply) {
+            reply.file('./public/css/jstext.css');
+        }
+    });
+    server.route({
+        method: 'GET',
         path: '/js/home.js',
         handler: function (request, reply) {
             reply.file('./public/js/home.js');
@@ -842,26 +849,48 @@ function textNext(current){
 }
 
 function validate(code, filename, callback){
-    var evalCode = eval(code);
-    fs.readFile('./public/results/'+filename, 'utf-8', function(err, data){
-        if(err){
-            console.log("ERROR: ", err);
-        }else{
-            var fileData = data.split("||");
-            for(var i = 0; i < fileData.length; i++){
-                if(fileData[i] === evalCode || fileData[i] == evalCode){
-                    console.log("Found!");
-                    callback(true);
-                    break;
-                }else if(i == fileData.length - 1){
-                    console.log("Not Found!");
-                    callback(false);
-                    break;
-                }
-            }           
+    console.log(code);
+    var splitCode = code.split(" ");
+    var varNum = 0;
+    var varVals = [];
+    var functionNum = 0;
+    var functionReturn = [];
 
+    for(var i = 0; i < splitCode.length; i++){
+        if(splitCode[i] == "var"){
+            varNum++;
         }
-    });
+
+        if(splitCode[i] == "function"){
+            functionNum++;
+        }
+    }
+    // fs.readFile('./public/results/'+filename, 'utf-8', function(err, data){
+    //     if(err){
+    //         console.log("ERROR: ", err);
+    //     }else{
+    //         var fileData = data.split("||");
+    //         for(var i = 0; i < fileData.length; i++){
+    //             console.log(fileData[i]);
+    //             if(fileData[i] === evalCode || fileData[i] == evalCode){
+    //                 console.log("Found!");
+    //                 callback(true);
+    //                 break;
+    //             }else if(i == fileData.length - 1){
+    //                 console.log("Not Found!");
+    //                 callback(false);
+    //                 break;
+    //             }
+    //         }           
+
+    //     }
+    // });
 }
+
+function evalVar(code, name, callback){
+    var splitCode = code.split(" ");
+    
+}
+
 
 

@@ -1,33 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="js/jstext.js"></script>
-<title>Text Editor</title>
-<style type="text/css" media="screen">
-    #editor { 
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-</style>
+    <link rel="stylesheet" type="text/css" href="">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/jstext.js"></script>
+    <title>Text Editor</title>
 </head>
 <body>
+    <div class="container">
+        <div id="bg">
+          <img src="Images/LoginBackground.jpg" id ="bgimg" alt="">
+      </div>
+  </div>
+  <div class="container text-center" >
+     <div class="container btn-group">
+        <div class="page-header text-center" id="titleHead">
+            <h1>Text Editor</h1>
+      </div>
+  </div>
+</div>
 
-<div id="editor"></div>
-    
+<div class="container btn-group">
+  <div class="well" id="informationArea" ></div>
+  <div id="editor"></div>    
+</div>
+
+<link rel="stylesheet" href="/css/jstext.css">
 <script src="../ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/merbivore");
     editor.getSession().setMode("ace/mode/javascript");
+    function check(){
+        validate(editor.getSession().getValue());
+    }
 </script>
 
 </body>
