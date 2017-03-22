@@ -35,12 +35,12 @@ console.log("Connecting to application...");
 var application;
 client.getApplication(my_href,
     function(err, app) {
-       if (err) {
-          return console.error(err);
-      }
-      application = app;
-      console.log("Application Connected!");
-  });
+     if (err) {
+      return console.error(err);
+  }
+  application = app;
+  console.log("Application Connected!");
+});
 
 server.register({
     register: Good,
@@ -389,9 +389,9 @@ server.route({
         };
                //register the user
                application.createAccount(newUser, function(err, createdAccount) {
-                   if (err) {
-                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                  }else{
+                 if (err) {
+                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+              }else{
                    // console.log('Account:', createdAccount);
                    console.log('Account Registered!');
 
@@ -423,9 +423,9 @@ server.route({
                     //A successful request will result in an accessTokenResponse
                 });
                         }else{
-                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                     }
-                 });
+                           console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                       }
+                   });
 });
 }
 
@@ -444,12 +444,12 @@ server.route({
 
                //register the user
                application.authenticateAccount(userAuth, function(err, validAccount) {
-                   if (err) {
-                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                  }else{
-                   console.log('Account Valid!');
-                   var authenticator = new stormpath.OAuthAuthenticator(application);
-                   authenticator.authenticate({
+                 if (err) {
+                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+              }else{
+                 console.log('Account Valid!');
+                 var authenticator = new stormpath.OAuthAuthenticator(application);
+                 authenticator.authenticate({
                     body: {
                         grant_type: 'password',
                         username: request.payload.email,
@@ -464,9 +464,9 @@ server.route({
                     }
                     //A successful request will result in an accessTokenResponse
                 });
-               }
+             }
 
-           });
+         });
 }
 });
 
@@ -486,8 +486,8 @@ server.route({
                         account.getCustomData(function(err, customData){
                             if(customData.crntJSON.charAt(0) != 'b'){
                                 if(customData.blHist.length > 0){
-                                 customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
-                                 if(customData.crntJSON != "END"){
+                                   customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
+                                   if(customData.crntJSON != "END"){
                                     customData.save(function(err){
                                         if(!err){
                                             reply("Y");
@@ -500,22 +500,24 @@ server.route({
                             }else{
                                 customData.crntJSON = "blockly1-1";
                                 customData.save(function(err){
-                                        if(!err){
-                                            reply("Y");
-                                            console.log("Blockly Confirmed!");
-                                        }else{
-                                            reply("N");
-                                        }
-                                    });
+                                    if(!err){
+                                        reply("Y");
+                                        console.log("Blockly Confirmed!");
+                                    }else{
+                                        reply("N");
+                                    }
+                                });
                             }
                             
+                        }else{
+                            reply("Y");
                         }
                     });
-                    }else{
-                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-                        reply("N");
-                    }
-                });
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+    reply("N");
+}
+});
 }else{
     console.log("SOMETHING WENT WRONG!\n" + err + "-----");
     reply("N");
@@ -542,8 +544,8 @@ server.route({
                         account.getCustomData(function(err, customData){
                             if(customData.crntJSON.charAt(0) != 't'){
                                 if(customData.txtHist.length > 0){
-                                 customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
-                                 if(customData.crntJSON != "END"){
+                                   customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
+                                   if(customData.crntJSON != "END"){
                                     customData.save(function(err){
                                         if(!err){
                                             reply("Y");
@@ -556,22 +558,24 @@ server.route({
                             }else{
                                 customData.crntJSON = "text1-1";
                                 customData.save(function(err){
-                                        if(!err){
-                                            reply("Y");
-                                            console.log("Blockly Confirmed!");
-                                        }else{
-                                            reply("N");
-                                        }
-                                    });
+                                    if(!err){
+                                        reply("Y");
+                                        console.log("Blockly Confirmed!");
+                                    }else{
+                                        reply("N");
+                                    }
+                                });
                             }
                             
+                        }else{
+                            reply("Y");
                         }
                     });
-                    }else{
-                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-                        reply("N");
-                    }
-                });
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+    reply("N");
+}
+});
 }else{
     console.log("SOMETHING WENT WRONG!\n" + err + "-----");
     reply("N");
@@ -744,7 +748,6 @@ server.route({
     path: '/getValidate',
     handler: function (request, reply) {
         var code = request.payload.code;
-        console.log("CODE: ", code);
         var token = request.payload.data;
         var authenticator = new stormpath.OAuthAuthenticator(application);
         authenticator.authenticate({
@@ -756,29 +759,30 @@ server.route({
                         account.getCustomData(function(err, customData){
                             var fileName = customData.crntJSON;
                             var result = fileName + "Result.txt";
-                            if(validate(code, result)){
-                                if(fileName.charAt(0) == 't'){
-                                    var jsonNext = textNext(fileName);
-                                    if(jsonNext == "END"){
-                                        reply("END")
-                                    }else{
-                                        if(customData.txtHist.length > 0){
-                                            customData.txtHist[customData.txtHist.length] = customData.crntJSON;
+                            validate(code, result, function(result){
+                                if(result){
+                                    if(fileName.charAt(0) == 't'){
+                                        var jsonNext = textNext(fileName);
+                                        if(jsonNext == "END"){
+                                            reply("END")
                                         }else{
-                                            customData.txtHist[0] = customData.crntJSON;
-                                        }
-                                        customData.crntJSON = jsonNext;
+                                            if(customData.txtHist.length > 0){
+                                                customData.txtHist[customData.txtHist.length] = customData.crntJSON;
+                                            }else{
+                                                customData.txtHist[0] = customData.crntJSON;
+                                            }
+                                            customData.crntJSON = jsonNext;
 
-                                        reply("Y");
-                                    }
-                                }else if(fileName.charAt(0) == 'b'){
-                                    var jsonNext = blocklyNext(fileName);
-                                    if(jsonNext == "END"){
-                                        reply("END")
-                                    }else{
-                                        if(customData.blHist.length > 0){
-                                           customData.blHist[customData.blHist.length] = customData.crntJSON;
+                                            reply("Y");
+                                        }
+                                    }else if(fileName.charAt(0) == 'b'){
+                                        var jsonNext = blocklyNext(fileName);
+                                        if(jsonNext == "END"){
+                                            reply("END")
                                         }else{
+                                            if(customData.blHist.length > 0){
+                                             customData.blHist[customData.blHist.length] = customData.crntJSON;
+                                         }else{
                                             customData.blHist[0] = customData.crntJSON;
                                         }
                                         customData.crntJSON = jsonNext;
@@ -792,8 +796,12 @@ server.route({
                                         console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
                                     }
                                 });
+                            }else{
+                                console.log("this point");
+                                reply("N");
                             }
-                        });
+                            });
+                    });
 }else{
     console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
     reply("N");
@@ -833,21 +841,27 @@ function textNext(current){
     }
 }
 
-function validate(code, filename){
-    //loop through and compare the crutial bits
-    var codeSplit = code.split(" ");
-    for(var i = 0; i < codeSplit.length; i++){
-        console.log(i + ": " + codeSplit[i]);
-    }
-    console.log(filename);
+function validate(code, filename, callback){
+    var evalCode = eval(code);
     fs.readFile('./public/results/'+filename, 'utf-8', function(err, data){
         if(err){
             console.log("ERROR: ", err);
         }else{
-            console.log("data", data);
+            var fileData = data.split("||");
+            for(var i = 0; i < fileData.length; i++){
+                if(fileData[i] === evalCode || fileData[i] == evalCode){
+                    console.log("Found!");
+                    callback(true);
+                    break;
+                }else if(i == fileData.length - 1){
+                    console.log("Not Found!");
+                    callback(false);
+                    break;
+                }
+            }           
+
         }
     });
-    return true;
 }
 
 
