@@ -155,29 +155,67 @@ function beginParse(){
 }
 
 function validate(code){
-    pageData = new Object();
-  if (typeof(Storage) !== "undefined") {
-    pageData.data = localStorage.getItem("jwt");
-  } else {
-    pageData.data = getCookie("jwt");
-  }
+	pageData = new Object();
+	if (typeof(Storage) !== "undefined") {
+		pageData.data = localStorage.getItem("jwt");
+	} else {
+		pageData.data = getCookie("jwt");
+	}
   // $.post("getResult", pageData)
   // .done(function(data) {
   // 	alert("GOT IT!");
   // 	pageData.result = data;
   // });
-  pageData.code = code;
-  $.post("/getValidate", pageData)
-  .done(function(data) {
-    if(data == "Y"){
-      alert("SUCCESS!");
+pageData.code = code;
+$.post("/getValidate", pageData)
+.done(function(data) {
+	if(data == "Y"){
+		alert("SUCCESS!");
       //code for moving onto next page
       location.reload();
-    }else if(data == "Relog"){
-        //go to home page, token has expired
-        alert("mkay");
-    }else{
-      alert("PLEASE TRY AGAIN!");
-    }
-  });
+  }else if(data == "Relog"){
+  	$("#loginModal").modal("toggle");
+  }else{
+  	alert("PLEASE TRY AGAIN!");
+  }
+});
 }
+
+$( document ).ready(function() {
+  $( "#modalLogin1" ).click(function(){
+      //change to other screen where tasks will be
+      var $email = $('#emailCheck').val();
+      var $pass = $('#passCheck').val();
+      if($email === null || $email === "" || $email === " "){
+        alert("Please Enter a valid email address!");
+        return;
+      }
+      if($pass === null || $pass === "" || $pass === " "){
+        alert("Please Enter a valid password!");
+        return;
+      }
+
+      
+      userdata = new Object();
+      userdata.email = $email;
+      userdata.password = $pass;
+
+    //post the user data to the appropriate route.
+    $.post("/logSubmit", userdata)
+    .done(function(data) {
+      if(data == "N"){
+        $("#logDetails").empty();
+        $("#logDetails").append("There was an error! Please login again!");
+      }else{
+        // Check browser support
+        if (typeof(Storage) !== "undefined") {
+            // Store
+            localStorage.setItem("jwt", data);
+          } else {
+            document.cookie = "jwt=" + data;
+          }
+    }
+
+  });
+  });
+});

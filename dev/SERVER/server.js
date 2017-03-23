@@ -5,6 +5,7 @@ var textOrder = ["text1-1", "text1-2", "text1-3"];
 
 // var href = 'https://api.stormpath.com/v1/applications/2ZJzzlc0QcDOTrMIPZ7Jvj';
 var fs = require('file-system');
+var EVAL = require('eval');
 const Hapi = require('hapi');
 const Good = require('good');
 const Path = require('path');
@@ -398,6 +399,11 @@ server.route({
                application.createAccount(newUser, function(err, createdAccount) {
                  if (err) {
                   console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                  if(String(err).includes("2001")){
+                    reply("USED");
+                  }else{
+                    reply("N");
+                  }
               }else{
                    // console.log('Account:', createdAccount);
                    console.log('Account Registered!');
@@ -423,6 +429,7 @@ server.route({
                             }, function(err2, result){
                                 if(err2){
                                     console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                                    reply("N");
                                 }else{
                                     console.log("Token Generated! ");
                                     reply(result.accessTokenResponse.access_token);
@@ -431,6 +438,7 @@ server.route({
                 });
                         }else{
                            console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                           reply("N");
                        }
                    });
 });
@@ -453,6 +461,7 @@ server.route({
                application.authenticateAccount(userAuth, function(err, validAccount) {
                  if (err) {
                   console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                  reply("N");
               }else{
                  console.log('Account Valid!');
                  var authenticator = new stormpath.OAuthAuthenticator(application);
@@ -465,6 +474,7 @@ server.route({
                 }, function(err2, result){
                     if(err2){
                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                        reply("N");
                     }else{
                         console.log("Token Generated! ");
                         reply(result.accessTokenResponse.access_token);
@@ -767,7 +777,9 @@ server.route({
                             var fileName = customData.crntJSON;
                             var result = fileName + "Result.txt";
                             validate(code, result, function(result){
+                                console.log("2 " + result);
                                 if(result){
+                                    console.log("3");
                                     if(fileName.charAt(0) == 't'){
                                         var jsonNext = textNext(fileName);
                                         if(jsonNext == "END"){
@@ -807,14 +819,16 @@ server.route({
                                 console.log("this point");
                                 reply("N");
                             }
-                            });
-                    });
+                        });
+});
 }else{
+    console.log("4");
     console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
     reply("N");
 }
 });
 }else{
+    console.log("5");
     console.log("SOMETHING WENT WRONG!\n" + err + "-----");
     reply("Relog");
 }
@@ -849,22 +863,17 @@ function textNext(current){
 }
 
 function validate(code, filename, callback){
-    console.log(code);
-    var splitCode = code.split(" ");
-    var varNum = 0;
-    var varVals = [];
-    var functionNum = 0;
-    var functionReturn = [];
-
-    for(var i = 0; i < splitCode.length; i++){
-        if(splitCode[i] == "var"){
-            varNum++;
+    evalVar(code, function(data){
+        if(data != "ERROR"){
+            var program = code + " exports.x = "+data;
+            var logger = EVAL(program);
+        }else{
+            callback(data);
         }
+        
+    });
 
-        if(splitCode[i] == "function"){
-            functionNum++;
-        }
-    }
+
     // fs.readFile('./public/results/'+filename, 'utf-8', function(err, data){
     //     if(err){
     //         console.log("ERROR: ", err);
@@ -885,11 +894,23 @@ function validate(code, filename, callback){
 
     //     }
     // });
+callback(false);
 }
 
-function evalVar(code, name, callback){
+function evalVar(code, callback){
     var splitCode = code.split(" ");
-    
+    for(var i = 0; i < splitCode.length; i++){
+        if(splitCode[i] == 'var'){
+            if((i+1)<splitCode.length){
+                callback(splitCode[i+1]);
+                return;
+            }else{
+                callback("ERROR");
+                return;
+            }
+        }
+    }
+    callback("ERROR");
 }
 
 

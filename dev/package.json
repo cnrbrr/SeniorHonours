@@ -19,6 +19,8 @@
   "dependencies": {
     "alertifyjs": "^1.9.0",
     "composer": "^0.14.0",
+    "esprima": "^3.1.3",
+    "eval": "^0.1.2",
     "express": "^4.14.1",
     "express-stormpath": "^3.2.0",
     "file-system": "^2.2.2",
@@ -34,6 +36,7 @@
     "jshint": "^2.9.4",
     "mime": "^1.3.4",
     "njwt": "^0.4.0",
-    "stormpath": "^0.20.1"
+    "stormpath": "^0.20.1",
+    "uglify-js": "^2.8.14"
   }
 }

@@ -155,9 +155,7 @@ function beginParse(){
 }
 
 function validate(code){
-  alert(String(code));
-  alert(eval(String(code)));
-    pageData = new Object();
+  pageData = new Object();
   if (typeof(Storage) !== "undefined") {
     pageData.data = localStorage.getItem("jwt");
   } else {
@@ -171,10 +169,48 @@ function validate(code){
       //code for moving onto next page
       location.reload();
     }else if(data == "Relog"){
-        //go to home page, token has expired
-        alert("mkay");
+      $("#loginModal").modal();
     }else{
       alert("PLEASE TRY AGAIN!");
     }
   });
 }
+
+$( document ).ready(function() {
+  $( "#modalLogin1" ).click(function(){
+      //change to other screen where tasks will be
+      var $email = $('#emailCheck').val();
+      var $pass = $('#passCheck').val();
+      if($email === null || $email === "" || $email === " "){
+        alert("Please Enter a valid email address!");
+        return;
+      }
+      if($pass === null || $pass === "" || $pass === " "){
+        alert("Please Enter a valid password!");
+        return;
+      }
+
+      
+      userdata = new Object();
+      userdata.email = $email;
+      userdata.password = $pass;
+
+    //post the user data to the appropriate route.
+    $.post("/logSubmit", userdata)
+    .done(function(data) {
+      if(data == "N"){
+        $("#logDetails").empty();
+        $("#logDetails").append("There was an error! Please login again!");
+      }else{
+        // Check browser support
+        if (typeof(Storage) !== "undefined") {
+            // Store
+            localStorage.setItem("jwt", data);
+          } else {
+            document.cookie = "jwt=" + data;
+          }
+    }
+
+  });
+  });
+});

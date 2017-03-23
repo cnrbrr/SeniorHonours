@@ -38,17 +38,22 @@ $( document ).ready(function() {
 		//post the user data to the appropriate route.
 		$.post("/logSubmit", userdata)
 		.done(function(data) {
-		               	// Check browser support
-		               	if (typeof(Storage) !== "undefined") {
-		    // Store
-		    localStorage.setItem("jwt", data);
-		    location.href = "main";
-		} else {
-			document.cookie = "jwt=" + data;
-			location.href = "main";
-		}
+			if(data == "N"){
+				$("#logDetails").empty();
+				$("#logDetails").append("There was an error! Please login again!");
+			}else{
+				// Check browser support
+				if (typeof(Storage) !== "undefined") {
+				    // Store
+				    localStorage.setItem("jwt", data);
+				    location.href = "main";
+				} else {
+					document.cookie = "jwt=" + data;
+					location.href = "main";
+				}
+			}
 
-		});
+});
 	});
 });
 
