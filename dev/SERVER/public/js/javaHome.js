@@ -155,35 +155,33 @@ function beginParse(){
 }
 
 function validate(code){
-	pageData = new Object();
-	if (typeof(Storage) !== "undefined") {
-		pageData.data = localStorage.getItem("jwt");
-	} else {
-		pageData.data = getCookie("jwt");
-	}
-pageData.code = code;
-$.post("/getValidate", pageData)
-.done(function(data) {
-	if(data == "Y"){
-		$('#infoHelp').empty();
-		$('#infoHelp').append("Would you like to continue to the next blockly task? Or attempt the text editor?");
-		$('#infoBtns').empty();
-		$('#infoBtns').append("<button type='button'class='btn btn-success text-center' data-dismiss='modal' id='modalInfo1'>Continue</button>");
-		$('#infoBtns').append("<button type='button' class='btn btn-warning' id='modalText' data-dismiss='modal' style='float: left;'>Text Editor</button>");
-		$('#infoModal').modal("toggle");
-      //code for moving onto next page
-      location.reload();
-  }else if(data == "Relog"){
-  	$("#loginModal").modal("toggle");
-  }else{
-  		$("#infoHelp").empty();
+  pageData = new Object();
+  if (typeof(Storage) !== "undefined") {
+    pageData.data = localStorage.getItem("jwt");
+  } else {
+    pageData.data = getCookie("jwt");
+  }
+  pageData.code = code;
+  $.post("/getValidate", pageData)
+  .done(function(data) {
+    if(data == "Y"){
+      $("#infoHelp").empty();
+      $("#infoHelp").append("Are you ready to progress onto the next task?");
+      $("#infoHelp").css('color', 'black');   
+      $('#infoBtns').empty();
+      $('#infoBtns').append("<button type='button'class='btn btn-success text-center' data-dismiss='modal' onclick='location.reload()' id='modalInfo1'>Continue</button>");
+      $("#infoModal").modal("toggle");
+    }else if(data == "Relog"){
+      $("#loginModal").modal();
+    }else{
+      $("#infoHelp").empty();
         $("#infoHelp").append("Seems like something wasn't quite right! Keep going!");
         $("#infoHelp").css('color', 'red');
         $('#infoBtns').empty();
         $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
         $("#infoModal").modal("toggle");
-  }
-});
+    }
+  });
 }
 
 $( document ).ready(function() {

@@ -6,6 +6,8 @@ var textOrder = ["text1-1", "text1-2", "text1-3"];
 // var href = 'https://api.stormpath.com/v1/applications/2ZJzzlc0QcDOTrMIPZ7Jvj';
 var fs = require('file-system');
 var EVAL = require('eval');
+var esprima = require('esprima');
+var test = require('unit.js');
 const Hapi = require('hapi');
 const Good = require('good');
 const Path = require('path');
@@ -36,12 +38,12 @@ console.log("Connecting to application...");
 var application;
 client.getApplication(my_href,
     function(err, app) {
-     if (err) {
-      return console.error(err);
-  }
-  application = app;
-  console.log("Application Connected!");
-});
+       if (err) {
+          return console.error(err);
+      }
+      application = app;
+      console.log("Application Connected!");
+  });
 
 server.register({
     register: Good,
@@ -397,14 +399,14 @@ server.route({
         };
                //register the user
                application.createAccount(newUser, function(err, createdAccount) {
-                 if (err) {
-                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                  if(String(err).includes("2001")){
-                    reply("USED");
-                  }else{
-                    reply("N");
-                  }
-              }else{
+                   if (err) {
+                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                      if(String(err).includes("2001")){
+                        reply("USED");
+                    }else{
+                        reply("N");
+                    }
+                }else{
                    // console.log('Account:', createdAccount);
                    console.log('Account Registered!');
 
@@ -437,10 +439,10 @@ server.route({
                     //A successful request will result in an accessTokenResponse
                 });
                         }else{
-                           console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                           reply("N");
-                       }
-                   });
+                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                         reply("N");
+                     }
+                 });
 });
 }
 
@@ -459,13 +461,13 @@ server.route({
 
                //register the user
                application.authenticateAccount(userAuth, function(err, validAccount) {
-                 if (err) {
-                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                  reply("N");
-              }else{
-                 console.log('Account Valid!');
-                 var authenticator = new stormpath.OAuthAuthenticator(application);
-                 authenticator.authenticate({
+                   if (err) {
+                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                      reply("N");
+                  }else{
+                   console.log('Account Valid!');
+                   var authenticator = new stormpath.OAuthAuthenticator(application);
+                   authenticator.authenticate({
                     body: {
                         grant_type: 'password',
                         username: request.payload.email,
@@ -481,9 +483,9 @@ server.route({
                     }
                     //A successful request will result in an accessTokenResponse
                 });
-             }
+               }
 
-         });
+           });
 }
 });
 
@@ -503,8 +505,8 @@ server.route({
                         account.getCustomData(function(err, customData){
                             if(customData.crntJSON.charAt(0) != 'b'){
                                 if(customData.blHist.length > 0){
-                                   customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
-                                   if(customData.crntJSON != "END"){
+                                 customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
+                                 if(customData.crntJSON != "END"){
                                     customData.save(function(err){
                                         if(!err){
                                             reply("Y");
@@ -561,8 +563,8 @@ server.route({
                         account.getCustomData(function(err, customData){
                             if(customData.crntJSON.charAt(0) != 't'){
                                 if(customData.txtHist.length > 0){
-                                   customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
-                                   if(customData.crntJSON != "END"){
+                                 customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
+                                 if(customData.crntJSON != "END"){
                                     customData.save(function(err){
                                         if(!err){
                                             reply("Y");
@@ -775,11 +777,9 @@ server.route({
                     if(!err2){
                         account.getCustomData(function(err, customData){
                             var fileName = customData.crntJSON;
-                            var result = fileName + "Result.txt";
+                            var result = fileName;
                             validate(code, result, function(result){
-                                console.log("2 " + result);
                                 if(result){
-                                    console.log("3");
                                     if(fileName.charAt(0) == 't'){
                                         var jsonNext = textNext(fileName);
                                         if(jsonNext == "END"){
@@ -800,8 +800,8 @@ server.route({
                                             reply("END")
                                         }else{
                                             if(customData.blHist.length > 0){
-                                             customData.blHist[customData.blHist.length] = customData.crntJSON;
-                                         }else{
+                                               customData.blHist[customData.blHist.length] = customData.crntJSON;
+                                           }else{
                                             customData.blHist[0] = customData.crntJSON;
                                         }
                                         customData.crntJSON = jsonNext;
@@ -816,7 +816,7 @@ server.route({
                                     }
                                 });
                             }else{
-                                console.log("this point");
+                                console.log("Failed Test");
                                 reply("N");
                             }
                         });
@@ -863,15 +863,65 @@ function textNext(current){
 }
 
 function validate(code, filename, callback){
-    evalVar(code, function(data){
-        if(data != "ERROR"){
-            var program = code + " exports.x = "+data;
-            var logger = EVAL(program);
-        }else{
-            callback(data);
-        }
-        
-    });
+    var result = filename + "Result.txt";
+    switch(filename){
+        case "blockly1-1":
+            evalVar(code, function(data){
+                if(data != "ERROR"){
+                    // var program = code + " exports.x = "+data;
+                    // var logger = EVAL(program);
+                    // var stepOne = String(logger.x);
+                    var str = code.toLowerCase();
+                    console.log(str);
+                    try{
+                        test.value(str).contains('hello');
+                        test.value(str).contains('world');
+                    }catch(err){
+                        callback(false);
+                    }
+                    var tree = esprima.tokenize(code);
+                    console.log(tree);
+
+                }else{
+                    callback(data);
+                    return;
+                }
+
+            });
+            break;
+        case "text1-1":
+                var str = code.toLowerCase();
+                try{
+                    test.value(str).contains('hello');
+                    test.value(str).contains('world');
+                    esprima.parse(code);
+                    var tree = esprima.tokenize(code);
+                    var strBool = false;
+                    var varBool = false;
+                    for(var i = 0; i < tree.length; i++){
+                        if(tree[i].type == 'String'){
+                            strBool = true;
+                        }
+                        if(tree[i].value == 'var'){
+                            varBool = true;
+                        }
+                    }
+                    if(strBool == true && varBool == true){
+                        callback(true);
+                        return;
+                    }
+                }catch(err){
+                    console.log(err);
+                    callback(false);
+                    return;
+                }
+                console.log("PASSED!");
+                //callback(true);
+        break;
+    }
+
+
+
 
 
     // fs.readFile('./public/results/'+filename, 'utf-8', function(err, data){
@@ -894,7 +944,6 @@ function validate(code, filename, callback){
 
     //     }
     // });
-callback(false);
 }
 
 function evalVar(code, callback){
@@ -912,6 +961,7 @@ function evalVar(code, callback){
     }
     callback("ERROR");
 }
+
 
 
 
