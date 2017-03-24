@@ -18,10 +18,9 @@
   <img src="./public/html/Images/LoginBackground.jpg" id ="bgimg" alt="">
 </div>
 </div>
-<div class="container text-center" >
-	<div class="btn-group text-center" role="group" >
-  <div class="page-header text-center" id="titleHead">
-  </div>
+<div class="container text-center" id="titleHolder">
+	<div class="text-center navbar">
+  <div class="page-header text-center well" id="titleHead"></div>
 </div>
 </div>
 
@@ -49,6 +48,23 @@
         <div class="modal-footer">
         	<button type="button" class="btn btn-success" data-dismiss="modal"id="modalLogin1">Login</button>
           <button type="button" class="btn btn-warning" id="modalClose" data-dismiss="modal" style="float: left;">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade text-center" id="infoModal" role="dialog">
+    <div class="modal-dialog modal-lg text-center">
+      <div class="modal-content text-center">
+        <div class="modal-header text-center">
+          <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
+          <h4 class="modal-title text-center"></h4>
+        </div>
+        <div class="modal-body text-center">
+            <p id="infoHelp"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success text-center" data-dismiss="modal" data-toggle="modal" data-target="#loginModal" id="modalReg1">Understood</button>
         </div>
       </div>
     </div>

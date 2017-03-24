@@ -1,7 +1,7 @@
 
 
 $( document ).ready(function() {
-	var $heading = $('<h1>Senior Honours</h1>');
+	var $heading = $('<h1>SENIOR HONOURS</h1>');
 	$heading.appendTo($("#titleHead"));
 	var $input1 = $('<input type="button" class="btn btn-primary text-center" value="login" id="logButton" data-toggle="modal" data-target="#loginModal"/>');
 	$input1.appendTo($("#btn1"));
@@ -11,7 +11,6 @@ $( document ).ready(function() {
 
 $( document ).ready(function() {
 	$( "#regButton" ).click(function(){
-
 		location.href = "register";
 	});
 });
@@ -22,11 +21,17 @@ $( document ).ready(function() {
 			var $email = $('#emailCheck').val();
 			var $pass = $('#passCheck').val();
 			if($email === null || $email === "" || $email === " "){
-				alert("Please Enter a valid email address!");
+				$("#infoHelp").empty();
+				$("#infoHelp").append("Please ensure you have entered a valid email address");
+				$("#infoHelp").css('color', 'red');
+				$("#infoModal").modal("toggle");
 				return;
 			}
 			if($pass === null || $pass === "" || $pass === " "){
-				alert("Please Enter a valid password!");
+				$("#infoHelp").empty();
+				$("#infoHelp").append("Please ensure you have entered a valid password");
+				$("#infoHelp").css('color', 'red');
+				$("#infoModal").modal("toggle");
 				return;
 			}
 
@@ -40,7 +45,9 @@ $( document ).ready(function() {
 		.done(function(data) {
 			if(data == "N"){
 				$("#logDetails").empty();
-				$("#logDetails").append("There was an error! Please login again!");
+				$("#logDetails").append("There was an error! Please ensure you have used the correct email and password!");
+				$("#logDetails").css('color', 'red');
+				$("#loginModal").modal("toggle");
 			}else{
 				// Check browser support
 				if (typeof(Storage) !== "undefined") {

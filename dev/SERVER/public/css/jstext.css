@@ -4,15 +4,17 @@ div.container {
     border: 1px solid gray;
 }
 
-.well {
-    float: left;
+#titleHead {
+    background-color: rgba(245, 245, 245, 0.4);
+   width: 100%;
+}
+
+#informationArea {
+  float: left;
     max-width: 33%;
     height: 100%;
     margin: 0;
     padding: 1em;
-}
-
-#informationArea {
     list-style-type: none;
     padding: 0;
 }

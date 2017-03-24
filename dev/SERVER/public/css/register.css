@@ -23,9 +23,14 @@
 }
 
 h1{
-  color: red;
+  color: #ff751a;
+  text-align: center;
 }
 
+.well {
+   background-color: rgba(245, 245, 245, 0.4);
+   width: 100%;
+}
 #text1, #text2, #text3, #pass1, #pass2, #skillLevel, #date1{
   width: 100%;
   text-align: center;

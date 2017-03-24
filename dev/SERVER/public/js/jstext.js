@@ -165,13 +165,21 @@ function validate(code){
   $.post("/getValidate", pageData)
   .done(function(data) {
     if(data == "Y"){
-      alert("SUCCESS!");
-      //code for moving onto next page
-      location.reload();
+      $("#infoHelp").empty();
+      $("#infoHelp").append("Are you ready to progress onto the next task?");
+      $("#infoHelp").css('color', 'black');   
+      $('#infoBtns').empty();
+      $('#infoBtns').append("<button type='button'class='btn btn-success text-center' data-dismiss='modal' onclick='location.reload()' id='modalInfo1'>Continue</button>");
+      $("#infoModal").modal("toggle");
     }else if(data == "Relog"){
       $("#loginModal").modal();
     }else{
-      alert("PLEASE TRY AGAIN!");
+      $("#infoHelp").empty();
+        $("#infoHelp").append("Seems like something wasn't quite right! Keep going!");
+        $("#infoHelp").css('color', 'red');
+        $('#infoBtns').empty();
+        $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+        $("#infoModal").modal("toggle");
     }
   });
 }
@@ -182,11 +190,21 @@ $( document ).ready(function() {
       var $email = $('#emailCheck').val();
       var $pass = $('#passCheck').val();
       if($email === null || $email === "" || $email === " "){
-        alert("Please Enter a valid email address!");
+        $("#infoHelp").empty();
+        $("#infoHelp").append("Please ensure you have entered a valid email address");
+        $("#infoHelp").css('color', 'red');
+        $('#infoBtns').empty();
+        $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+        $("#infoModal").modal("toggle");
         return;
       }
       if($pass === null || $pass === "" || $pass === " "){
-        alert("Please Enter a valid password!");
+        $("#infoHelp").empty();
+        $("#infoHelp").append("Please ensure you have entered a valid password");
+        $("#infoHelp").css('color', 'red');
+        $('#infoBtns').empty();
+        $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+        $("#infoModal").modal("toggle");
         return;
       }
 
@@ -201,6 +219,8 @@ $( document ).ready(function() {
       if(data == "N"){
         $("#logDetails").empty();
         $("#logDetails").append("There was an error! Please login again!");
+        $("#logDetails").css('color', 'red');
+        $("#loginModal").modal("toggle");        
       }else{
         // Check browser support
         if (typeof(Storage) !== "undefined") {

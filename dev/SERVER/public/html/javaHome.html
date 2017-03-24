@@ -128,9 +128,9 @@
     </div>
   </div>
   <div class="container text-center" >
-   <div class="container btn-group">
-    <div class="page-header text-center" id="titleHead">
-      <h1>Blockly</h1>
+   <div class="container navbar">
+    <div class="page-header text-center well" id="titleHead">
+      <h1 style="color: #ff751a;">Blockly</h1>
     </div>
   </div>
 </div>
@@ -172,6 +172,24 @@ function check(){
       </div>
     </div>
   </div>
+
+  <div class="modal fade text-center" id="infoModal" role="dialog">
+    <div class="modal-dialog modal-lg text-center">
+      <div class="modal-content text-center">
+        <div class="modal-header text-center">
+          <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
+          <h4 class="modal-title text-center"></h4>
+        </div>
+        <div class="modal-body text-center">
+            <p id="regHelp"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success text-center" data-dismiss="modal" id="modalReg1">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

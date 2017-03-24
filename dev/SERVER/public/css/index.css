@@ -1,6 +1,11 @@
 h1{
-	color: red;
-	text-align: center;
+	color: #ff751a;
+  text-align: center;
+}
+
+.well {
+   background-color: rgba(245, 245, 245, 0.4);
+   width: 100%;
 }
 
 #titleHead{
