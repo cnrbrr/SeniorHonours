@@ -169,7 +169,7 @@ function validate(code){
       $("#infoHelp").append("Are you ready to progress onto the next task?");
       $("#infoHelp").css('color', 'black');   
       $('#infoBtns').empty();
-      $('#infoBtns').append("<button type='button'class='btn btn-success text-center' data-dismiss='modal' onclick='location.reload()' id='modalInfo1'>Continue</button>");
+      $('#infoBtns').append("<button type='button'class='btn btn-success text-center' data-dismiss='modal' onclick='ontoNext()' id='modalInfo1'>Continue</button>");
       $("#infoModal").modal("toggle");
     }else if(data == "Relog"){
       $("#loginModal").modal();
@@ -229,8 +229,35 @@ $( document ).ready(function() {
           } else {
             document.cookie = "jwt=" + data;
           }
+          $("#infoHelp").empty();
+        $("#infoHelp").append("Logged In!");
+        $("#infoHelp").css('color', 'green');
+        $('#infoBtns').empty();
+        $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+        $("#infoModal").modal("toggle");
     }
 
   });
   });
 });
+
+function ontoNext(){
+  userData = new Object();
+  if (typeof(Storage) !== "undefined") {
+    userData.data = localStorage.getItem("jwt");
+  } else {
+    userData.data = getCookie("jwt");
+  }
+  $.post("/getNext", userData)
+    .done(function(data) {
+    if(data == "END"){//modal about congrats and more tutorials soon!
+        $("#endModal").modal("toggle");
+        return;
+    }else if(data != "Y"){
+      
+    }else{
+      location.reload();
+    }
+
+  });
+}

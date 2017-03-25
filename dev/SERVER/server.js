@@ -38,12 +38,12 @@ console.log("Connecting to application...");
 var application;
 client.getApplication(my_href,
     function(err, app) {
-       if (err) {
-          return console.error(err);
-      }
-      application = app;
-      console.log("Application Connected!");
-  });
+     if (err) {
+      return console.error(err);
+  }
+  application = app;
+  console.log("Application Connected!");
+});
 
 server.register({
     register: Good,
@@ -399,14 +399,14 @@ server.route({
         };
                //register the user
                application.createAccount(newUser, function(err, createdAccount) {
-                   if (err) {
-                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                      if(String(err).includes("2001")){
-                        reply("USED");
-                    }else{
-                        reply("N");
-                    }
+                 if (err) {
+                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                  if(String(err).includes("2001")){
+                    reply("USED");
                 }else{
+                    reply("N");
+                }
+            }else{
                    // console.log('Account:', createdAccount);
                    console.log('Account Registered!');
 
@@ -439,10 +439,10 @@ server.route({
                     //A successful request will result in an accessTokenResponse
                 });
                         }else{
-                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                         reply("N");
-                     }
-                 });
+                           console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                           reply("N");
+                       }
+                   });
 });
 }
 
@@ -461,13 +461,13 @@ server.route({
 
                //register the user
                application.authenticateAccount(userAuth, function(err, validAccount) {
-                   if (err) {
-                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                      reply("N");
-                  }else{
-                   console.log('Account Valid!');
-                   var authenticator = new stormpath.OAuthAuthenticator(application);
-                   authenticator.authenticate({
+                 if (err) {
+                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                  reply("N");
+              }else{
+                 console.log('Account Valid!');
+                 var authenticator = new stormpath.OAuthAuthenticator(application);
+                 authenticator.authenticate({
                     body: {
                         grant_type: 'password',
                         username: request.payload.email,
@@ -483,9 +483,9 @@ server.route({
                     }
                     //A successful request will result in an accessTokenResponse
                 });
-               }
+             }
 
-           });
+         });
 }
 });
 
@@ -505,8 +505,8 @@ server.route({
                         account.getCustomData(function(err, customData){
                             if(customData.crntJSON.charAt(0) != 'b'){
                                 if(customData.blHist.length > 0){
-                                 customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
-                                 if(customData.crntJSON != "END"){
+                                   customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
+                                   if(customData.crntJSON != "END"){
                                     customData.save(function(err){
                                         if(!err){
                                             reply("Y");
@@ -563,8 +563,8 @@ server.route({
                         account.getCustomData(function(err, customData){
                             if(customData.crntJSON.charAt(0) != 't'){
                                 if(customData.txtHist.length > 0){
-                                 customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
-                                 if(customData.crntJSON != "END"){
+                                   customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
+                                   if(customData.crntJSON != "END"){
                                     customData.save(function(err){
                                         if(!err){
                                             reply("Y");
@@ -729,6 +729,82 @@ server.route({
     }
 });
 
+server.route({
+    method: 'POST',
+    path: '/getNext',
+    handler: function (request, reply) {
+        var token = request.payload.data;
+        var authenticator = new stormpath.OAuthAuthenticator(application);
+        authenticator.authenticate({
+            headers: { authorization: 'Bearer: ' + token }
+        }, function(err, result) {
+            if(!err){
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        account.getCustomData(function(err, customData){
+                            var fileName = customData.crntJSON;
+                            if(fileName.charAt(0) == 't'){
+                                var jsonNext = textNext(fileName);
+                                if(String(jsonNext) == "END"){
+                                    reply("END");
+                                }else{
+                                    if(customData.txtHist.length > 0){
+                                        customData.txtHist[customData.txtHist.length] = customData.crntJSON;
+                                    }else{
+                                        customData.txtHist[0] = customData.crntJSON;
+                                    }
+                                    customData.crntJSON = jsonNext;
+
+                                    reply("Y");
+                                }
+                            }else if(fileName.charAt(0) == 'b'){
+                                blocklyNext(fileName, function(jsonNext){
+                                    if(jsonNext.charAt(0) == 'E'){
+                                console.log("3");
+                                        if(customData.blHist.length > 0){
+                                         customData.blHist[customData.blHist.length] = customData.crntJSON;
+                                     }else{
+                                        customData.blHist[0] = customData.crntJSON;
+                                    }
+                                    console.log("Sending...");
+                                    reply("END");
+                                    console.log("SENT!");
+                                }else{
+                                console.log("4");
+                                    if(customData.blHist.length > 0){
+                                     customData.blHist[customData.blHist.length] = customData.crntJSON;
+                                 }else{
+                                    customData.blHist[0] = customData.crntJSON;
+                                }
+                                customData.crntJSON = jsonNext;
+                                reply("Y");
+                            }
+                        });
+
+}
+customData.save(function(err){
+    if(!err){
+        console.log("Next Confirmed!");
+    }else{
+        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+    }
+});
+});
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+    reply("N");
+}
+});
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+    reply("N");
+}
+});
+
+
+}
+});
+
 // server.route({
 //     method: 'POST',
 //     path: '/getResult',
@@ -777,74 +853,40 @@ server.route({
                     if(!err2){
                         account.getCustomData(function(err, customData){
                             var fileName = customData.crntJSON;
-                            var result = fileName;
-                            validate(code, result, function(result){
+                            validate(code, fileName, function(result){
                                 if(result){
-                                    if(fileName.charAt(0) == 't'){
-                                        var jsonNext = textNext(fileName);
-                                        if(jsonNext == "END"){
-                                            reply("END")
-                                        }else{
-                                            if(customData.txtHist.length > 0){
-                                                customData.txtHist[customData.txtHist.length] = customData.crntJSON;
-                                            }else{
-                                                customData.txtHist[0] = customData.crntJSON;
-                                            }
-                                            customData.crntJSON = jsonNext;
-
-                                            reply("Y");
-                                        }
-                                    }else if(fileName.charAt(0) == 'b'){
-                                        var jsonNext = blocklyNext(fileName);
-                                        if(jsonNext == "END"){
-                                            reply("END")
-                                        }else{
-                                            if(customData.blHist.length > 0){
-                                               customData.blHist[customData.blHist.length] = customData.crntJSON;
-                                           }else{
-                                            customData.blHist[0] = customData.crntJSON;
-                                        }
-                                        customData.crntJSON = jsonNext;
-                                        reply("Y");
-                                    }
+                                    console.log("Passed Test!");
+                                    reply("Y");
+                                }else{
+                                    console.log("Failed Test");
+                                    reply("N");
                                 }
-                                customData.save(function(err){
-                                    if(!err){
-                                        console.log("Next Confirmed!");
-                                    }else{
-                                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-                                    }
-                                });
-                            }else{
-                                console.log("Failed Test");
-                                reply("N");
-                            }
+                            });
                         });
-});
-}else{
-    console.log("4");
-    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-    reply("N");
-}
-});
-}else{
-    console.log("5");
-    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-    reply("Relog");
-}
-});
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("Relog");
+            }
+        });
 }
 });
 
 });
 
-function blocklyNext(current){
+function blocklyNext(current, callback){
     for(var i = 0; i < blocklyOrder.length; i++){
         if(current == blocklyOrder[i]){
             if(i+1 <  blocklyOrder.length){
-                return blocklyOrder[i+1];
+                callback(blocklyOrder[i+1]);
+                return;
             }else{
-                return ("END");
+                callback("END");
+                return;
             }
         }
     }
@@ -866,30 +908,41 @@ function validate(code, filename, callback){
     var result = filename + "Result.txt";
     switch(filename){
         case "blockly1-1":
-            evalVar(code, function(data){
-                if(data != "ERROR"){
-                    // var program = code + " exports.x = "+data;
-                    // var logger = EVAL(program);
-                    // var stepOne = String(logger.x);
-                    var str = code.toLowerCase();
-                    console.log(str);
-                    try{
-                        test.value(str).contains('hello');
-                        test.value(str).contains('world');
-                    }catch(err){
-                        callback(false);
-                    }
-                    var tree = esprima.tokenize(code);
-                    console.log(tree);
-
-                }else{
-                    callback(data);
-                    return;
+        var str = code.toLowerCase();
+        try{
+            test.value(str).contains('hello');
+            test.value(str).contains('world');
+            esprima.parse(code);
+            var tree = esprima.tokenize(code);
+            var strBool = false;
+            var varBool = false;
+            for(var i = 0; i < tree.length; i++){
+                if(tree[i].type == 'String'){
+                    strBool = true;
                 }
-
-            });
-            break;
-        case "text1-1":
+                if(tree[i].value == 'var'){
+                    varBool = true;
+                }
+            }
+            if(strBool == true && varBool == true){
+                callback(true);
+                return;
+            }
+        }catch(err){
+            console.log(err);
+            callback(false);
+            return;
+        }
+        console.log("PASSED!");
+                //callback(true);
+                break;
+                case "blockly1-2":
+                callback(true);
+                break;
+                case "blockly1-3":
+                callback(true);
+                break;
+                case "text1-1":
                 var str = code.toLowerCase();
                 try{
                     test.value(str).contains('hello');
@@ -917,8 +970,8 @@ function validate(code, filename, callback){
                 }
                 console.log("PASSED!");
                 //callback(true);
-        break;
-    }
+                break;
+            }
 
 
 
