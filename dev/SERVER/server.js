@@ -8,6 +8,8 @@ var fs = require('file-system');
 var EVAL = require('eval');
 var esprima = require('esprima');
 var test = require('unit.js');
+var changeLimit = 10;
+var percentLimit = 66;
 const Hapi = require('hapi');
 const Good = require('good');
 const Path = require('path');
@@ -38,12 +40,12 @@ console.log("Connecting to application...");
 var application;
 client.getApplication(my_href,
     function(err, app) {
-     if (err) {
-      return console.error(err);
-  }
-  application = app;
-  console.log("Application Connected!");
-});
+       if (err) {
+          return console.error(err);
+      }
+      application = app;
+      console.log("Application Connected!");
+  });
 
 server.register({
     register: Good,
@@ -399,15 +401,14 @@ server.route({
         };
                //register the user
                application.createAccount(newUser, function(err, createdAccount) {
-                 if (err) {
-                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                  if(String(err).includes("2001")){
-                    reply("USED");
+                   if (err) {
+                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                      if(String(err).includes("2001")){
+                        reply("USED");
+                    }else{
+                        reply("N");
+                    }
                 }else{
-                    reply("N");
-                }
-            }else{
-                   // console.log('Account:', createdAccount);
                    console.log('Account Registered!');
 
 
@@ -418,7 +419,9 @@ server.route({
                     customData.crntJSON = "text1-1";//saves the current progress of the files, always starts here
                     customData.txtHist = [];
                     customData.blHist = [];
-                    customData.save(function(err){
+                    customData.opportunity = 0;
+                    customData.diff = 0;
+                    customData.save(function(err, callback){
                         if(!err) {
                             console.log('Custom data added');
                             var authenticator = new stormpath.OAuthAuthenticator(application);
@@ -439,10 +442,10 @@ server.route({
                     //A successful request will result in an accessTokenResponse
                 });
                         }else{
-                           console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                           reply("N");
-                       }
-                   });
+                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                         reply("N");
+                     }
+                 });
 });
 }
 
@@ -461,13 +464,13 @@ server.route({
 
                //register the user
                application.authenticateAccount(userAuth, function(err, validAccount) {
-                 if (err) {
-                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                  reply("N");
-              }else{
-                 console.log('Account Valid!');
-                 var authenticator = new stormpath.OAuthAuthenticator(application);
-                 authenticator.authenticate({
+                   if (err) {
+                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                      reply("N");
+                  }else{
+                   console.log('Account Valid!');
+                   var authenticator = new stormpath.OAuthAuthenticator(application);
+                   authenticator.authenticate({
                     body: {
                         grant_type: 'password',
                         username: request.payload.email,
@@ -483,9 +486,9 @@ server.route({
                     }
                     //A successful request will result in an accessTokenResponse
                 });
-             }
+               }
 
-         });
+           });
 }
 });
 
@@ -505,9 +508,9 @@ server.route({
                         account.getCustomData(function(err, customData){
                             if(customData.crntJSON.charAt(0) != 'b'){
                                 if(customData.blHist.length > 0){
-                                   customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
-                                   if(customData.crntJSON != "END"){
-                                    customData.save(function(err){
+                                 customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
+                                 if(customData.crntJSON != "END"){
+                                    customData.save(function(err, callback){
                                         if(!err){
                                             reply("Y");
                                             console.log("Blockly Confirmed!");
@@ -518,7 +521,7 @@ server.route({
                                 }
                             }else{
                                 customData.crntJSON = "blockly1-1";
-                                customData.save(function(err){
+                                customData.save(function(err, callback){
                                     if(!err){
                                         reply("Y");
                                         console.log("Blockly Confirmed!");
@@ -563,9 +566,9 @@ server.route({
                         account.getCustomData(function(err, customData){
                             if(customData.crntJSON.charAt(0) != 't'){
                                 if(customData.txtHist.length > 0){
-                                   customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
-                                   if(customData.crntJSON != "END"){
-                                    customData.save(function(err){
+                                 customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
+                                 if(customData.crntJSON != "END"){
+                                    customData.save(function(err, callback){
                                         if(!err){
                                             reply("Y");
                                             console.log("text Confirmed!");
@@ -573,10 +576,12 @@ server.route({
                                             reply("N");
                                         }
                                     });
+                                }else{
+                                    reply("END");
                                 }
                             }else{
                                 customData.crntJSON = "text1-1";
-                                customData.save(function(err){
+                                customData.save(function(err, callback){
                                     if(!err){
                                         reply("Y");
                                         console.log("Blockly Confirmed!");
@@ -744,9 +749,21 @@ server.route({
                         account.getCustomData(function(err, customData){
                             var fileName = customData.crntJSON;
                             if(fileName.charAt(0) == 't'){
-                                var jsonNext = textNext(fileName);
-                                if(String(jsonNext) == "END"){
+                                textNext(fileName, function(jsonNext){
+                                    if(jsonNext.charAt(0) == 'E'){
+                                        if(customData.txtHist.length > 0){
+                                           customData.txtHist[customData.txtHist.length] = customData.crntJSON;
+                                       }else{
+                                        customData.txtHist[0] = customData.crntJSON;
+                                    }
                                     reply("END");
+                                    customData.save(function(err, callback){
+                                        if(!err){
+                                            console.log("Last Confirmed!");
+                                        }else{
+                                            console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                        }
+                                    });
                                 }else{
                                     if(customData.txtHist.length > 0){
                                         customData.txtHist[customData.txtHist.length] = customData.crntJSON;
@@ -754,41 +771,53 @@ server.route({
                                         customData.txtHist[0] = customData.crntJSON;
                                     }
                                     customData.crntJSON = jsonNext;
-
-                                    reply("Y");
+                                    customData.save(function(err, callback){
+                                        if(!err){
+                                            console.log("Next Confirmed!");
+                                            reply("Y");
+                                        }else{
+                                            console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                        }
+                                    });
+                                    
                                 }
-                            }else if(fileName.charAt(0) == 'b'){
-                                blocklyNext(fileName, function(jsonNext){
-                                    if(jsonNext.charAt(0) == 'E'){
-                                console.log("3");
-                                        if(customData.blHist.length > 0){
-                                         customData.blHist[customData.blHist.length] = customData.crntJSON;
-                                     }else{
-                                        customData.blHist[0] = customData.crntJSON;
-                                    }
-                                    console.log("Sending...");
-                                    reply("END");
-                                    console.log("SENT!");
-                                }else{
-                                console.log("4");
-                                    if(customData.blHist.length > 0){
-                                     customData.blHist[customData.blHist.length] = customData.crntJSON;
-                                 }else{
-                                    customData.blHist[0] = customData.crntJSON;
-                                }
-                                customData.crntJSON = jsonNext;
-                                reply("Y");
-                            }
-                        });
+                            });
+}else if(fileName.charAt(0) == 'b'){
+    blocklyNext(fileName, function(jsonNext){
+        if(jsonNext.charAt(0) == 'E'){
+            if(customData.blHist.length > 0){
+               customData.blHist[customData.blHist.length] = customData.crntJSON;
+           }else{
+            customData.blHist[0] = customData.crntJSON;
+        }
+        reply("END");
+        customData.save(function(err, callback){
+            if(!err){
+                console.log("Last Confirmed!");
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+            }
+        });
+    }else{
+        if(customData.blHist.length > 0){
+           customData.blHist[customData.blHist.length] = customData.crntJSON;
+       }else{
+        customData.blHist[0] = customData.crntJSON;
+    }
+    customData.crntJSON = jsonNext;
+    customData.save(function(err, callback){
+        if(!err){
+            console.log("Next Confirmed!");
+            reply("Y");
+        }else{
+            console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+        }
+    });
+}
+});
 
 }
-customData.save(function(err){
-    if(!err){
-        console.log("Next Confirmed!");
-    }else{
-        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-    }
-});
+
 });
 }else{
     console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
@@ -804,39 +833,6 @@ customData.save(function(err){
 
 }
 });
-
-// server.route({
-//     method: 'POST',
-//     path: '/getResult',
-//     handler: function (request, reply) {
-//         var token = request.payload.data;
-//         var authenticator = new stormpath.OAuthAuthenticator(application);
-//         authenticator.authenticate({
-//             headers: { authorization: 'Bearer: ' + token }
-//         }, function(err, result) {
-//             if(!err){
-//                 result.getAccount(function(err2, account) {
-//                     if(!err2){
-//                         console.log("Account valid!");
-//                         account.getCustomData(function(err, customData){
-//                             console.log("Level sending... ");
-//                             reply(customData.level);
-//                             console.log("Level sent!");
-//                         });
-//                     }else{
-//                         console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-//                         reply("N");
-//                     }
-//                 });
-//             }else{
-//                 console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-//                 reply("N");
-//             }
-//         });
-
-
-//     }
-// });
 
 server.route({
     method: 'POST',
@@ -876,9 +872,75 @@ server.route({
 }
 });
 
+server.route({
+    method: 'POST',
+    path: '/updateLevel',
+    handler: function (request, reply) {
+        var token = request.payload.data;
+        var levels = [request.payload.how, request.payload.desc, request.payload.task];
+        var authenticator = new stormpath.OAuthAuthenticator(application);
+        authenticator.authenticate({
+            headers: { authorization: 'Bearer: ' + token }
+        }, function(err, result) {
+            if(!err){
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        account.getCustomData(function(err, customData){
+                            console.log("JSON CHECK 2: ", customData.crntJSON);
+                            var crntLevel = parseInt(customData.level);
+                            var difference = parseInt((levels[0] - crntLevel) + (levels[1] - crntLevel) + (levels[2] -crntLevel));
+                            var chances = parseInt((5 - crntLevel)*3);
+                            console.log(crntLevel + ": " + difference);
+                            var updatedOpp = parseInt(customData.opportunity);
+                            var updatedDiff = parseInt(customData.diff);
+                            if(customData.opportunity == 0){
+                                customData.opportunity = chances;
+                            }else{
+                                updatedOpp+=chances;
+                                customData.opportunity = updatedOpp;
+                            }
+
+                            if(customData.diff == 0){
+                                customData.diff = difference;
+                            }else{
+                                updatedDiff+=difference;
+                                customData.diff = updatedDiff;
+                            }
+                            console.log(updatedDiff + " / " + updatedOpp); 
+                            var percent = (parseInt(updatedDiff)/parseInt(updatedOpp))*100;
+                            console.log(percent + "%");
+                            if(updatedOpp > changeLimit && percent > percentLimit){
+                                if(crntLevel < 5){
+                                    crntLevel++;
+                                    console.log("changing level...");
+                                    customData.level = crntLevel;
+                                    console.log("level changed!");
+                                }else{
+                                    console.log("MAX LEVEL ALREADY ACHIEVED!");
+                                }
+                            }
+                            customData.save(function(err, callback){
+                                if(!err){
+                                    console.log("Level Confirmed!", customData.level);
+                                }else{
+                                    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                }
+                            });
+                        });
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+}
+});
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+}
+});
+}
 });
 
-function blocklyNext(current, callback){
+});
+
+function blocklyNext(current, callback){//gets the next blockly file
     for(var i = 0; i < blocklyOrder.length; i++){
         if(current == blocklyOrder[i]){
             if(i+1 <  blocklyOrder.length){
@@ -892,13 +954,15 @@ function blocklyNext(current, callback){
     }
 }
 
-function textNext(current){
+function textNext(current, callback){//gets the next text file
     for(var i = 0; i < textOrder.length; i++){
         if(current == textOrder[i]){
             if(i+1 <  textOrder.length){
-                return textOrder[i+1];
+                callback(textOrder[i+1]);
+                return;
             }else{
-                return ("END");
+                callback("END");
+                return;
             }
         }
     }
@@ -934,44 +998,50 @@ function validate(code, filename, callback){
             return;
         }
         console.log("PASSED!");
-                //callback(true);
-                break;
-                case "blockly1-2":
-                callback(true);
-                break;
-                case "blockly1-3":
-                callback(true);
-                break;
-                case "text1-1":
-                var str = code.toLowerCase();
-                try{
-                    test.value(str).contains('hello');
-                    test.value(str).contains('world');
-                    esprima.parse(code);
-                    var tree = esprima.tokenize(code);
-                    var strBool = false;
-                    var varBool = false;
-                    for(var i = 0; i < tree.length; i++){
-                        if(tree[i].type == 'String'){
-                            strBool = true;
+                    //callback(true);
+                    break;
+                    case "blockly1-2":
+                    callback(true);
+                    break;
+                    case "blockly1-3":
+                    callback(true);
+                    break;
+                    case "text1-1":
+                    var str = code.toLowerCase();
+                    try{
+                        test.value(str).contains('hello');
+                        test.value(str).contains('world');
+                        esprima.parse(code);
+                        var tree = esprima.tokenize(code);
+                        var strBool = false;
+                        var varBool = false;
+                        for(var i = 0; i < tree.length; i++){
+                            if(tree[i].type == 'String'){
+                                strBool = true;
+                            }
+                            if(tree[i].value == 'var'){
+                                varBool = true;
+                            }
                         }
-                        if(tree[i].value == 'var'){
-                            varBool = true;
+                        if(strBool == true && varBool == true){
+                            callback(true);
+                            return;
                         }
-                    }
-                    if(strBool == true && varBool == true){
-                        callback(true);
+                    }catch(err){
+                        console.log(err);
+                        callback(false);
                         return;
                     }
-                }catch(err){
-                    console.log(err);
-                    callback(false);
-                    return;
+                    console.log("PASSED!");
+                    //callback(true);
+                    break;
+                    case "text1-2":
+                    callback(true);
+                    break;
+                    case "text1-3":
+                    callback(true);
+                    break;
                 }
-                console.log("PASSED!");
-                //callback(true);
-                break;
-            }
 
 
 

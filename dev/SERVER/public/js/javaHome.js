@@ -155,57 +155,59 @@ function beginParse(){
 }
 
 function validate(code){
-  pageData = new Object();
-  if (typeof(Storage) !== "undefined") {
-    pageData.data = localStorage.getItem("jwt");
-  } else {
-    pageData.data = getCookie("jwt");
-  }
-  pageData.code = code;
-  $.post("/getValidate", pageData)
-  .done(function(data) {
-    if(data == "Y"){
-      $("#infoHelp").empty();
-      $("#infoHelp").append("Are you ready to progress onto the next task?");
-      $("#infoHelp").css('color', 'black');   
-      $('#infoBtns').empty();
-      $('#infoBtns').append("<button type='button'class='btn btn-success text-center' data-dismiss='modal' onclick='ontoNext()' id='modalInfo1'>Continue</button>");
-      $("#infoModal").modal("toggle");
-    }else if(data == "Relog"){
-      $("#loginModal").modal();
-    }else{
-      $("#infoHelp").empty();
-        $("#infoHelp").append("Seems like something wasn't quite right! Keep going!");
-        $("#infoHelp").css('color', 'red');
-        $('#infoBtns').empty();
-        $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
-        $("#infoModal").modal("toggle");
-    }
-  });
+	pageData = new Object();
+	if (typeof(Storage) !== "undefined") {
+		pageData.data = localStorage.getItem("jwt");
+	} else {
+		pageData.data = getCookie("jwt");
+	}
+	pageData.code = code;
+	$.post("/getValidate", pageData)
+	.done(function(data) {
+		if(data == "Y"){
+			$("#infoTitle").empty();
+			$("#infoTitle").append("Congratulations!");
+			$("#infoHelp").empty();
+			$("#infoHelp").append("You have completed this task! Are you ready to progress onto the next task?");
+			$("#infoHelp").css('color', 'black');   
+			$('#infoBtns').empty();
+			$('#infoBtns').append("<button type='button'class='btn btn-success text-center' data-dismiss='modal' onclick='ontoNext()' id='modalInfo1'>Continue</button>");
+			$("#infoModal").modal("toggle");
+		}else if(data == "Relog"){
+			$("#loginModal").modal();
+		}else{
+			$("#infoHelp").empty();
+			$("#infoHelp").append("Seems like something wasn't quite right! Keep going!");
+			$("#infoHelp").css('color', 'red');
+			$('#infoBtns').empty();
+			$('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+			$("#infoModal").modal("toggle");
+		}
+	});
 }
 
 $( document ).ready(function() {
-  $( "#modalLogin1" ).click(function(){
+	$( "#modalLogin1" ).click(function(){
       //change to other screen where tasks will be
       var $email = $('#emailCheck').val();
       var $pass = $('#passCheck').val();
       if($email === null || $email === "" || $email === " "){
-        $("#infoHelp").empty();
-        $("#infoHelp").append("Please ensure you have entered a valid email address");
-        $("#infoHelp").css('color', 'red');
-        $('#infoBtns').empty();
-        $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
-        $("#infoModal").modal("toggle");
-        return;
+      	$("#infoHelp").empty();
+      	$("#infoHelp").append("Please ensure you have entered a valid email address");
+      	$("#infoHelp").css('color', 'red');
+      	$('#infoBtns').empty();
+      	$('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+      	$("#infoModal").modal("toggle");
+      	return;
       }
       if($pass === null || $pass === "" || $pass === " "){
-        $("#infoHelp").empty();
-        $("#infoHelp").append("Please ensure you have entered a valid password");
-        $("#infoHelp").css('color', 'red');
-        $('#infoBtns').empty();
-        $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
-        $("#infoModal").modal("toggle");
-        return;
+      	$("#infoHelp").empty();
+      	$("#infoHelp").append("Please ensure you have entered a valid password");
+      	$("#infoHelp").css('color', 'red');
+      	$('#infoBtns').empty();
+      	$('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+      	$("#infoModal").modal("toggle");
+      	return;
       }
 
       
@@ -216,48 +218,61 @@ $( document ).ready(function() {
     //post the user data to the appropriate route.
     $.post("/logSubmit", userdata)
     .done(function(data) {
-      if(data == "N"){
-        $("#logDetails").empty();
-        $("#logDetails").append("There was an error! Please login again!");
-        $("#logDetails").css('color', 'red');
-		$("#loginModal").modal("toggle");
-      }else{
+    	if(data == "N"){
+    		$("#logDetails").empty();
+    		$("#logDetails").append("There was an error! Please login again!");
+    		$("#logDetails").css('color', 'red');
+    		$("#loginModal").modal("toggle");
+    	}else{
         // Check browser support
         if (typeof(Storage) !== "undefined") {
             // Store
             localStorage.setItem("jwt", data);
-          } else {
-            document.cookie = "jwt=" + data;
-          }
-          $("#infoHelp").empty();
+        } else {
+        	document.cookie = "jwt=" + data;
+        }
+        $("#infoHelp").empty();
         $("#infoHelp").append("Logged In!");
         $("#infoHelp").css('color', 'green');
         $('#infoBtns').empty();
         $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
         $("#infoModal").modal("toggle");
-    }
+    	}
 
-  });
-  });
+	});
+});
 });
 
 function ontoNext(){
-  userData = new Object();
-  if (typeof(Storage) !== "undefined") {
-    userData.data = localStorage.getItem("jwt");
-  } else {
-    userData.data = getCookie("jwt");
-  }
-  $.post("/getNext", userData)
-    .done(function(data) {
+	userData = new Object();
+	if (typeof(Storage) !== "undefined") {
+		userData.data = localStorage.getItem("jwt");
+	} else {
+		userData.data = getCookie("jwt");
+	}
+	$.post("/getNext", userData)
+	.done(function(data) {
     if(data == "END"){//modal about congrats and more tutorials soon!
-        $("#endModal").modal("toggle");
-        return;
+    	$("#endModal").modal("toggle");
+    	return;
     }else if(data != "Y"){
-      
+
     }else{
-      location.reload();
+    	updateData = new Object();
+    	if (typeof(Storage) !== "undefined") {
+    		updateData.data = localStorage.getItem("jwt");
+    		updateData.desc = localStorage.getItem("descLev");
+    		updateData.how = localStorage.getItem("howLev");
+    		updateData.task = localStorage.getItem("taskLev");
+    	} else {
+    		updateData.data = getCookie("jwt");
+    		updateData.desc = getCookie("descLev");
+    		updateData.how = getCookie("howLev");
+    		updateData.task = getCookie("taskLev");
+    	}
+    	$.post("/updateLevel", updateData);
+    	location.reload();
     }
 
-  });
+});
 }

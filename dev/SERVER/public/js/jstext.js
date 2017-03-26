@@ -165,8 +165,10 @@ function validate(code){
   $.post("/getValidate", pageData)
   .done(function(data) {
     if(data == "Y"){
+      $("#infoTitle").empty();
+      $("#infoTitle").append("Congratulations!");
       $("#infoHelp").empty();
-      $("#infoHelp").append("Are you ready to progress onto the next task?");
+      $("#infoHelp").append("You have completed this task! Are you ready to progress onto the next task?");
       $("#infoHelp").css('color', 'black');   
       $('#infoBtns').empty();
       $('#infoBtns').append("<button type='button'class='btn btn-success text-center' data-dismiss='modal' onclick='ontoNext()' id='modalInfo1'>Continue</button>");
@@ -243,15 +245,28 @@ function ontoNext(){
     userData.data = getCookie("jwt");
   }
   $.post("/getNext", userData)
-    .done(function(data) {
+  .done(function(data) {
     if(data == "END"){//modal about congrats and more tutorials soon!
-        $("#endModal").modal("toggle");
-        return;
+      $("#endModal").modal("toggle");
+      return;
     }else if(data != "Y"){
-      
+
     }else{
+      updateData = new Object();
+      if (typeof(Storage) !== "undefined") {
+        updateData.data = localStorage.getItem("jwt");
+        updateData.desc = localStorage.getItem("descLev");
+        updateData.how = localStorage.getItem("howLev");
+        updateData.task = localStorage.getItem("taskLev");
+      } else {
+        updateData.data = getCookie("jwt");
+        updateData.desc = getCookie("descLev");
+        updateData.how = getCookie("howLev");
+        updateData.task = getCookie("taskLev");
+      }
+      $.post("/updateLevel", updateData);
       location.reload();
     }
 
-  });
+});
 }
