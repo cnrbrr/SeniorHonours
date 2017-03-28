@@ -1,22 +1,9 @@
 
-
-// $( document ).ready(function() {
-// 	var $textInput = $('<input type="text" style="width: 30%"id="fname" placeholder="Please Enter your first name here" class="form-control">');
-// 	$textInput.appendTo($('#text1'));
-// 	$textInput = $('<input type="text" style="width: 30%"id="sname" placeholder="Please Enter your last name here" class="form-control">');
-// 	$textInput.appendTo($('#text2'));
-// 	$textInput = $('<input type="text" style="width: 30%"id="emailAdd" placeholder="Please Enter your email here" class="form-control">');
-// 	$textInput.appendTo($('#text3'));
-// 	$textInput = $('<input type="password" style="width: 30%"id="initPass" placeholder="Please Enter your password here" class="form-control">');
-// 	$textInput.appendTo($('#pass1'));
-// 	$textInput = $('<input type="password" style="width: 30%"id="sPass" placeholder="Please repeat your password" class="form-control">');
-// 	$textInput.appendTo($('#pass2'));
-// });
-var skillSet = ["Very Experienced", "A Little Experience", "Refresh My Memory", "I've heard of the language?", "Nope, no experience"];
-$("#rangeVal").on("input", function(){$("#skillDisplay").empty();
+var skillSet = ["Very Experienced", "A Little Experience", "Refresh My Memory", "I've heard of the language?", "Nope, no experience"];//options for the slider
+$("#rangeVal").on("input", function(){$("#skillDisplay").empty();//display options beneath the slider
 	$("#skillDisplay").append(skillSet[$("#rangeVal").val() - 1]);});
 
-$( document ).ready(function() {
+$( document ).ready(function() {//red when not valid, green when valid
 	$( '#emailAdd' ).keyup(function(){
 		var $currentEmail = $('#emailAdd').val();
 		if(isEmail($currentEmail)){
@@ -34,7 +21,7 @@ $( document ).ready(function() {
 });
 
 function validateForm(){
-	var $first = $( '#fname' ).val();
+	var $first = $( '#fname' ).val();//get values
 	var $second = $( '#sname' ).val();
 	var $email = $( '#emailAdd' ).val();
 	var $passFirst = $( '#initPass' ).val();
@@ -43,10 +30,9 @@ function validateForm(){
 	var $DOB = $( '#bday' ).val();
 	var $gender = getGender();
 
-		$("#regHelp").empty();
 	if(nameCheck($first) === false){
 		$("#regHelp").empty();
-        $("#regHelp").append("Please enter a valid first name!");
+        $("#regHelp").append("Please enter a valid first name!");//validate the values
         $("#regModal").modal("toggle");
 		return false;
 	}
@@ -78,7 +64,7 @@ function validateForm(){
         $("#regModal").modal("toggle");
         return false;
 	}
-		//from http://stackoverflow.com/questions/35969139/nodejs-how-to-send-data-from-html-to-hapi
+		// based on http://stackoverflow.com/questions/35969139/nodejs-how-to-send-data-from-html-to-hapi
 //create an object to hold the user data
 userdata = new Object();
 userdata.givenName = $first;
@@ -87,7 +73,7 @@ userdata.username = $email;
 userdata.email = $email;
 userdata.password = $passFirst;
 userdata.DOB = $DOB;
-userdata.level = $level;
+userdata.level = $level;//submit the values to the server
 userdata.gender = $gender;
 
 //post the user data to the appropriate route.
@@ -96,7 +82,7 @@ $.post("/regSubmit", userdata)
                	// Check browser support
                	if(data == "N"){
                		$("#regHelp").empty();
-               		$("#regHelp").append("There was an error! Please attempt to register again again!");
+               		$("#regHelp").append("There was an error! Please attempt to register again again!");//if denied for some reason let the user know
                		$("#regModal").modal("toggle");
                	}else if(data == "USED"){
                		$("#regHelp").empty();
@@ -104,7 +90,7 @@ $.post("/regSubmit", userdata)
                		$("#regModal").modal("toggle");
                	}else{
 				// Check browser support
-				if (typeof(Storage) !== "undefined") {
+				if (typeof(Storage) !== "undefined") {//if all ok, store the token retrieved from the server
 				    // Store
 				    localStorage.setItem("jwt", data);
 				    location.href = "main";
@@ -121,13 +107,13 @@ return false;
 
 }
 
-function isEmail(email) {
+function isEmail(email) {//email in valid form
 	
 	var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	return regex.test(email);
 }
 
-function checkDate(date){
+function checkDate(date){//dob in valid form
 	if(date !== "" && date !== null && date !== " "){
 		var regEx = /^\d{4}-\d{2}-\d{2}$/;
 		return date.match(regEx);
@@ -136,23 +122,6 @@ function checkDate(date){
 	}
 }
 function getGender(){
-	// var $male = $('input[name=optradio1]:checked').val();
-	// var $female = $('input[name=optradio2]:checked').val();
-	// var $other = $('input[name=optradio3]:checked').val();
-	// if($male == "on"){
-	// 	return 1;
-	// }
-
-	// if($female == "on"){
-	// 	return 2;
-	// }
-
-	// if($other == "on"){
-	// 	return 3;
-	// }
-	// if($male !== "on" && $female !== "on" && $other !== "on"){
-	// 	return 4;
-	// }
 	return $('#genderID').val();
 }
 
@@ -166,13 +135,13 @@ function nameCheck(fname){
 }
 
 function passwordVal(passCheck){
+	$("#regHelp").empty();
 	var splitter = passCheck.split("");
 	var upperCase = false;
-	var lowerCase = false;
+	var lowerCase = false;//check that theres an uppercase letter, lowercase, correct length, no non alpha values and a number
 	var lengthBool = false;
 	var nonAlpha = true;
 	var number = false;
-	var Exp = /((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;
 	for(var i = 0; i < splitter.length; i++){
 		if(splitter[i] == splitter[i].toUpperCase()){
 			upperCase = true;
@@ -199,7 +168,7 @@ function passwordVal(passCheck){
 		return true;
 	}
 	if(upperCase == false){
-        $("#regHelp").append("Please ensure your password contains a capital letter! <br></br>");
+        $("#regHelp").append("Please ensure your password contains a capital letter! <br></br>");//alert the user
 	}
 	if(lowerCase == false){
         $("#regHelp").append("Please ensure your password contains a lower case letter!<br></br>");

@@ -886,11 +886,9 @@ server.route({
                 result.getAccount(function(err2, account) {
                     if(!err2){
                         account.getCustomData(function(err, customData){
-                            console.log("JSON CHECK 2: ", customData.crntJSON);
                             var crntLevel = parseInt(customData.level);
                             var difference = parseInt((levels[0] - crntLevel) + (levels[1] - crntLevel) + (levels[2] -crntLevel));
                             var chances = parseInt((5 - crntLevel)*3);
-                            console.log(crntLevel + ": " + difference);
                             var updatedOpp = parseInt(customData.opportunity);
                             var updatedDiff = parseInt(customData.diff);
                             if(customData.opportunity == 0){
@@ -906,9 +904,7 @@ server.route({
                                 updatedDiff+=difference;
                                 customData.diff = updatedDiff;
                             }
-                            console.log(updatedDiff + " / " + updatedOpp); 
                             var percent = (parseInt(updatedDiff)/parseInt(updatedOpp))*100;
-                            console.log(percent + "%");
                             if(updatedOpp > changeLimit && percent > percentLimit){
                                 if(crntLevel < 5){
                                     crntLevel++;
@@ -969,79 +965,325 @@ function textNext(current, callback){//gets the next text file
 }
 
 function validate(code, filename, callback){
-    var result = filename + "Result.txt";
+    // var result = filename + "Result.txt";
     switch(filename){
         case "blockly1-1":
-        var str = code.toLowerCase();
-        try{
-            test.value(str).contains('hello');
-            test.value(str).contains('world');
-            esprima.parse(code);
-            var tree = esprima.tokenize(code);
-            var strBool = false;
-            var varBool = false;
-            for(var i = 0; i < tree.length; i++){
-                if(tree[i].type == 'String'){
-                    strBool = true;
+            var str = code.toLowerCase();
+            try{
+                test.value(str).contains('hello');
+                test.value(str).contains('world');
+                esprima.parse(code);
+                var tree = esprima.tokenize(code);
+                var strBool = false;
+                var varBool = false;              
+                for(var i = 0; i < tree.length; i++){
+                    if(tree[i].type == 'String'){
+                        var comp = String(tree[i].value).toLowerCase();
+                        if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
+                            strBool = true;
+                        }
+                    }
+                    if(tree[i].value == 'var'){
+                        varBool = true;
+                    }
                 }
-                if(tree[i].value == 'var'){
-                    varBool = true;
+                if(strBool == true && varBool == true){
+                    callback(true);
+                    return;
+                }else{
+                    callback(false);
+                    console.log("FAILED!");
+                    return;
                 }
-            }
-            if(strBool == true && varBool == true){
-                callback(true);
+            }catch(err){
+                console.log(err);
+                callback(false);
                 return;
             }
-        }catch(err){
-            console.log(err);
-            callback(false);
-            return;
-        }
-        console.log("PASSED!");
-                    //callback(true);
-                    break;
-                    case "blockly1-2":
-                    callback(true);
-                    break;
-                    case "blockly1-3":
-                    callback(true);
-                    break;
-                    case "text1-1":
-                    var str = code.toLowerCase();
-                    try{
-                        test.value(str).contains('hello');
-                        test.value(str).contains('world');
-                        esprima.parse(code);
-                        var tree = esprima.tokenize(code);
-                        var strBool = false;
-                        var varBool = false;
-                        for(var i = 0; i < tree.length; i++){
-                            if(tree[i].type == 'String'){
-                                strBool = true;
-                            }
-                            if(tree[i].value == 'var'){
-                                varBool = true;
-                            }
+            console.log("PASSED!");
+            break; 
+
+        case "blockly1-2":
+            var str = code.toLowerCase();
+            try{
+                test.value(str).contains('hello', 'world', 8);
+                esprima.parse(code);
+                var tree = esprima.tokenize(code);
+                var strBool = false;
+                var varBool = false;
+                var numBool = false;
+                for(var i = 0; i < tree.length; i++){
+                    if(tree[i].type == 'String'){
+                        var comp = String(tree[i].value).toLowerCase();
+                        if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
+                            strBool = true;
                         }
-                        if(strBool == true && varBool == true){
-                            callback(true);
-                            return;
-                        }
-                    }catch(err){
-                        console.log(err);
+                    }
+                    if(tree[i].value == 'var'){
+                        varBool = true;
+                    }
+                    if(tree[i].type == 'Numeric' && tree[i].value == '8'){
+                        numBool = true;
+                    }
+                }
+                if(strBool == true && varBool == true && numBool == true){
+                    callback(true);
+                    return;
+                }else{
+                    callback(false);
+                    console.log("FAILED!");
+                    return;
+                }
+            }catch(err){
+                console.log(err);
+                callback(false);
+                return;
+            }
+            console.log("PASSED!");
+            break;
+        
+        case "blockly1-3":
+            try{
+                esprima.parse(code);
+                var tree = esprima.tokenize(code);
+                var varCount = 0;
+                var opBool = false;
+                var numCount = 0;
+                var usedNums = [];
+                var opUsed;
+                console.log(code);
+                for(var i = 0; i < tree.length; i++){
+                    if(tree[i].type == 'String'){
                         callback(false);
                         return;
                     }
-                    console.log("PASSED!");
-                    //callback(true);
-                    break;
-                    case "text1-2":
-                    callback(true);
-                    break;
-                    case "text1-3":
-                    callback(true);
-                    break;
+                    if(tree[i].value == 'var'){
+                        varCount++;
+                    }
+
+                    if(tree[i].type == 'Numeric'){
+                        usedNums[numCount] = tree[i].value;
+                        numCount++;
+
+                    }
+                    if(tree[i].type == 'Punctuator'){
+                        if(tree[i].value == '+'){
+                            opBool = true;
+                            opUsed = 1;
+                        }else if(tree[i].value == '-'){
+                            opBool = true;
+                            opUsed = 2;
+                        }else if(tree[i].value == '/'){
+                            opBool = true;
+                            opUsed = 3;
+                        }else if(tree[i].value == '*'){
+                            opBool = true;
+                            opUsed = 4;
+                        }
+                    }
                 }
+                console.log(opBool + ", " + varCount + ", " + numCount);
+                if(opBool == true && varCount == 3 && numCount == 2){
+                    evalVar(code, (varCount - 1), function(data){
+                        console.log("YAY", data);
+                        if(data != "ERROR"){
+                            var program = code + " exports.x = "+data;
+                            var logger = EVAL(program);
+                            var stepOne = parseInt(logger.x);
+                            var stepTwo = parseInt(usedNums[0]);
+                            for(var i = 1; i < usedNums.length; i++){
+                                if(opUsed == 1){
+                                    stepTwo += parseInt(usedNums[i]);
+                                }else if(opUsed == 2){
+                                    stepTwo -= parseInt(usedNums[i]);
+                                }else if(opUsed == 3){
+                                    stepTwo /= parseInt(usedNums[i]);
+                                }else if(opUsed == 4){
+                                    stepTwo *= parseInt(usedNums[i]);
+                                }
+                                
+                            }
+                            console.log(stepOne + " : " + stepTwo);
+                            if(stepOne == stepTwo){
+                            callback(true);
+                            return;
+                        }else{
+                            callback(false);
+                            return;
+                        }
+                        }
+                    });
+                    
+                }else{
+                    callback(false);
+                    console.log("FAILED!");
+                    return;
+                }
+            }catch(err){
+                console.log(err);
+                callback(false);
+                return;
+            }
+            console.log("PASSED!");
+            break;
+        
+        case "text1-1":
+            var str = code.toLowerCase();
+            try{
+                test.value(str).contains('hello');
+                test.value(str).contains('world');
+                esprima.parse(code);
+                var tree = esprima.tokenize(code);
+                var strBool = false;
+                var varBool = false;              
+                for(var i = 0; i < tree.length; i++){
+                    if(tree[i].type == 'String'){
+                        var comp = String(tree[i].value).toLowerCase();
+                        if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
+                            strBool = true;
+                        }
+                    }
+                    if(tree[i].value == 'var'){
+                        varBool = true;
+                    }
+                }
+                if(strBool == true && varBool == true){
+                    callback(true);
+                    return;
+                }else{
+                    callback(false);
+                    console.log("FAILED!");
+                    return;
+                }
+            }catch(err){
+                console.log(err);
+                callback(false);
+                return;
+            }
+            console.log("PASSED!");
+            break; 
+
+        case "text1-2":
+            var str = code.toLowerCase();
+            try{
+                test.value(str).contains('hello', 'world', 8);
+                esprima.parse(code);
+                var tree = esprima.tokenize(code);
+                var strBool = false;
+                var varBool = false;
+                var numBool = false;
+                for(var i = 0; i < tree.length; i++){
+                    if(tree[i].type == 'String'){
+                        var comp = String(tree[i].value).toLowerCase();
+                        if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
+                            strBool = true;
+                        }
+                    }
+                    if(tree[i].value == 'var'){
+                        varBool = true;
+                    }
+                    if(tree[i].type == 'Numeric' && tree[i].value == '8'){
+                        numBool = true;
+                    }
+                }
+                if(strBool == true && varBool == true && numBool == true){
+                    callback(true);
+                    return;
+                }else{
+                    callback(false);
+                    console.log("FAILED!");
+                    return;
+                }
+            }catch(err){
+                console.log(err);
+                callback(false);
+                return;
+            }
+            console.log("PASSED!");
+            break;
+            
+        case "text1-3":
+            try{
+                esprima.parse(code);
+                var tree = esprima.tokenize(code);
+                var varCount = 0;
+                var opBool = false;
+                var numCount = 0;
+                var usedNums = [];
+                var opUsed;
+                for(var i = 0; i < tree.length; i++){
+                    if(tree[i].type == 'String'){
+                        callback(false);
+                        return;
+                    }
+                    if(tree[i].value == 'var'){
+                        varCount++;
+                    }
+
+                    if(tree[i].type == 'Numeric'){
+                        usedNums[numCount] = tree[i].value;
+                        numCount++;
+
+                    }
+                    if(tree[i].type == 'Punctuator'){
+                        if(tree[i].value == '+'){
+                            opBool = true;
+                            opUsed = 1;
+                        }else if(tree[i].value == '-'){
+                            opBool = true;
+                            opUsed = 2;
+                        }else if(tree[i].value == '/'){
+                            opBool = true;
+                            opUsed = 3;
+                        }else if(tree[i].value == '*'){
+                            opBool = true;
+                            opUsed = 4;
+                        }
+                    }
+                }
+                if(opBool == true && varCount == 3 && numCount == 2){
+                    evalVar(code, (varCount - 1), function(data){
+                        if(data != "ERROR"){
+                            var program = code + " exports.x = "+data;
+                            var logger = EVAL(program);
+                            var stepOne = parseInt(logger.x);
+                            var stepTwo = parseInt(usedNums[0]);
+                            for(var i = 1; i < usedNums.length; i++){
+                                if(opUsed == 1){
+                                    stepTwo += parseInt(usedNums[i]);
+                                }else if(opUsed == 2){
+                                    stepTwo -= parseInt(usedNums[i]);
+                                }else if(opUsed == 3){
+                                    stepTwo /= parseInt(usedNums[i]);
+                                }else if(opUsed == 4){
+                                    stepTwo *= parseInt(usedNums[i]);
+                                }
+                                
+                            }
+                            console.log(stepOne + " : " + stepTwo);
+                            if(stepOne == stepTwo){
+                            callback(true);
+                            return;
+                        }else{
+                            callback(false);
+                            return;
+                        }
+                        }
+                    });
+                    
+                }else{
+                    callback(false);
+                    console.log("FAILED!");
+                    return;
+                }
+            }catch(err){
+                console.log(err);
+                callback(false);
+                return;
+            }
+            console.log("PASSED!");
+            break;
+    }
 
 
 
@@ -1069,18 +1311,42 @@ function validate(code, filename, callback){
     // });
 }
 
-function evalVar(code, callback){
+function evalVar(code, countVal, callback){
     var splitCode = code.split(" ");
+    var counter = 0;
     for(var i = 0; i < splitCode.length; i++){
-        if(splitCode[i] == 'var'){
-            if((i+1)<splitCode.length){
-                callback(splitCode[i+1]);
-                return;
-            }else{
-                callback("ERROR");
-                return;
+        if(splitCode[i].includes('\n')){
+            var check = splitCode[i].split('\n');
+            for(var j = 0; j < check.length; j++){
+                if(check[j] == 'var'){
+                    if(counter == countVal){
+                        if((i+1)<splitCode.length){
+                            callback(splitCode[i+1]);
+                            return;
+                        }else{
+                            callback("ERROR");
+                            return;
+                        }
+                    }else{
+                        counter++;
+                    }
+                }
             }
         }
+        if(splitCode[i] == 'var'){
+            if(counter == countVal){
+                if((i+1)<splitCode.length){
+                    callback(splitCode[i+1]);
+                    return;
+                }else{
+                    callback("ERROR");
+                    return;
+                }
+            }else{
+                counter++;
+            }
+            
+    }
     }
     callback("ERROR");
 }

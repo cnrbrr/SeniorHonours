@@ -1,6 +1,7 @@
 $( document ).ready(function() {
 	var $heading = $('<h1>Senior Honours</h1>');
 	$heading.appendTo($("#titleHead"));
+  $("#titleHead").append("<p>Please choose which tutorial you would like to try<p>");
 });
 
 $( document ).ready(function() {

@@ -176,6 +176,8 @@ function validate(code){
 		}else if(data == "Relog"){
 			$("#loginModal").modal();
 		}else{
+			$("#infoTitle").empty();
+      $("#infoTitle").append("Try Again!");
 			$("#infoHelp").empty();
 			$("#infoHelp").append("Seems like something wasn't quite right! Keep going!");
 			$("#infoHelp").css('color', 'red');
@@ -192,6 +194,8 @@ $( document ).ready(function() {
       var $email = $('#emailCheck').val();
       var $pass = $('#passCheck').val();
       if($email === null || $email === "" || $email === " "){
+      	$("#infoTitle").empty();
+      $("#infoTitle").append("Error!");
       	$("#infoHelp").empty();
       	$("#infoHelp").append("Please ensure you have entered a valid email address");
       	$("#infoHelp").css('color', 'red');
@@ -201,6 +205,8 @@ $( document ).ready(function() {
       	return;
       }
       if($pass === null || $pass === "" || $pass === " "){
+      	$("#infoTitle").empty();
+      $("#infoTitle").append("Error!");
       	$("#infoHelp").empty();
       	$("#infoHelp").append("Please ensure you have entered a valid password");
       	$("#infoHelp").css('color', 'red');
@@ -231,6 +237,8 @@ $( document ).ready(function() {
         } else {
         	document.cookie = "jwt=" + data;
         }
+        $("#infoTitle").empty();
+      	$("#infoTitle").append("All Good!");
         $("#infoHelp").empty();
         $("#infoHelp").append("Logged In!");
         $("#infoHelp").css('color', 'green');
