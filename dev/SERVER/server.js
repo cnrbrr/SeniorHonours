@@ -505,49 +505,65 @@ server.route({
                 result.getAccount(function(err2, account) {
                     if(!err2){
                         console.log("Account valid!");
-                        account.getCustomData(function(err, customData){
-                            if(customData.crntJSON.charAt(0) != 'b'){
-                                if(customData.blHist.length > 0){
-                                 customData.crntJSON = blocklyNext(customData.blHist[customData.blHist.length]);
-                                 if(customData.crntJSON != "END"){
-                                    customData.save(function(err, callback){
-                                        if(!err){
-                                            reply("Y");
-                                            console.log("Blockly Confirmed!");
-                                        }else{
-                                            reply("N");
-                                        }
-                                    });
+                        account.getCustomData(function(err3, customData){
+                            if(!err3){
+                                if(customData.crntJSON.charAt(0) != 'b'){
+                                    if(customData.blHist.length > 0){
+                                        blocklyNext(customData.blHist[customData.blHist.length - 1], function(nextBlockVal){
+                                            if(nextBlockVal != "END"){
+                                                customData.crntJSON = nextBlockVal;
+                                                customData.save(function(err4, callback){
+                                                    if(!err4){
+                                                        reply("Y");
+                                                        console.log("blockly Confirmed!");
+                                                    }else{
+                                                        console.log(err4);
+                                                        reply("N");
+                                                    }
+                                                });
+                                            }else{
+                                                customData.crntJSON = customData.blHist[customData.blHist.length - 1]
+                                                customData.save(function(err4, callback){
+                                                    if(!err4){
+                                                        reply("Y");
+                                                        console.log("blockly Confirmed!");
+                                                    }else{
+                                                        console.log(err4);
+                                                        reply("N");
+                                                    }
+                                                });
+                                            }
+                                        });
+                                 
+                                    }else{
+                                        customData.crntJSON = "blockly1-1";
+                                        customData.save(function(err, callback){
+                                            if(!err){
+                                                reply("Y");
+                                                console.log("Blockly Confirmed!");
+                                            }else{
+                                                reply("N");
+                                            }
+                                        });
+                                    }
+                                }else{
+                                    reply("Y");
                                 }
                             }else{
-                                customData.crntJSON = "blockly1-1";
-                                customData.save(function(err, callback){
-                                    if(!err){
-                                        reply("Y");
-                                        console.log("Blockly Confirmed!");
-                                    }else{
-                                        reply("N");
-                                    }
-                                });
+                                reply("N");
                             }
-                            
-                        }else{
-                            reply("Y");
-                        }
-                    });
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-    reply("N");
-}
-});
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-    reply("N");
-}
-});
-
-
-}
+                        });
+                }else{
+                    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                    reply("N");
+                }
+            });
+        }else{
+            console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+            reply("N");
+        }
+    });
+    }
 });
 
 server.route({
@@ -563,51 +579,65 @@ server.route({
                 result.getAccount(function(err2, account) {
                     if(!err2){
                         console.log("Account valid!");
-                        account.getCustomData(function(err, customData){
-                            if(customData.crntJSON.charAt(0) != 't'){
-                                if(customData.txtHist.length > 0){
-                                 customData.crntJSON = textNext(customData.txtHist[customData.txtHist.length]);
-                                 if(customData.crntJSON != "END"){
-                                    customData.save(function(err, callback){
-                                        if(!err){
-                                            reply("Y");
-                                            console.log("text Confirmed!");
-                                        }else{
-                                            reply("N");
-                                        }
-                                    });
+                        account.getCustomData(function(err3, customData){
+                            if(!err3){
+                                if(customData.crntJSON.charAt(0) != 't'){
+                                    if(customData.txtHist.length > 0){
+                                        textNext(customData.txtHist[customData.txtHist.length - 1], function(nextTextVal){
+                                            if(nextTextVal != "END"){
+                                                customData.crntJSON = nextTextVal;
+                                                customData.save(function(err4, callback){
+                                                    if(!err4){
+                                                        reply("Y");
+                                                        console.log("text Confirmed!");
+                                                    }else{
+                                                        console.log(err4);
+                                                        reply("N");
+                                                    }
+                                                });
+                                            }else{
+                                                customData.crntJSON = customData.txtHist[customData.txtHist.length - 1]
+                                                customData.save(function(err4, callback){
+                                                    if(!err4){
+                                                        reply("Y");
+                                                        console.log("text Confirmed!");
+                                                    }else{
+                                                        console.log(err4);
+                                                        reply("N");
+                                                    }
+                                                });
+                                            }
+                                        });
+                                 
+                                    }else{
+                                        customData.crntJSON = "text1-1";
+                                        customData.save(function(err, callback){
+                                            if(!err){
+                                                reply("Y");
+                                                console.log("Text Confirmed!");
+                                            }else{
+                                                reply("N");
+                                            }
+                                        });
+                                    }
                                 }else{
-                                    reply("END");
+                                    reply("Y");
                                 }
                             }else{
-                                customData.crntJSON = "text1-1";
-                                customData.save(function(err, callback){
-                                    if(!err){
-                                        reply("Y");
-                                        console.log("Blockly Confirmed!");
-                                    }else{
-                                        reply("N");
-                                    }
-                                });
+                                reply("N");
                             }
-                            
-                        }else{
-                            reply("Y");
-                        }
-                    });
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-    reply("N");
-}
-});
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-    reply("N");
-}
-});
-
-
-}
+                        });
+                }else{
+                    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                    reply("N");
+                }
+            });
+        }else{
+            console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+            reply("N");
+        }
+    });
+    }
 });
 
 server.route({
@@ -951,9 +981,12 @@ function blocklyNext(current, callback){//gets the next blockly file
 }
 
 function textNext(current, callback){//gets the next text file
+    console.log("1.1");
     for(var i = 0; i < textOrder.length; i++){
         if(current == textOrder[i]){
+            console.log("1.2: " + textOrder);
             if(i+1 <  textOrder.length){
+                console.log("1.3");
                 callback(textOrder[i+1]);
                 return;
             }else{
@@ -962,6 +995,8 @@ function textNext(current, callback){//gets the next text file
             }
         }
     }
+
+    console.log("UH OH")
 }
 
 function validate(code, filename, callback){
@@ -1046,19 +1081,16 @@ function validate(code, filename, callback){
             try{
                 esprima.parse(code);
                 var tree = esprima.tokenize(code);
-                var varCount = 0;
                 var opBool = false;
+                var correctEnd = false;
                 var numCount = 0;
                 var usedNums = [];
+                var iden = [];
                 var opUsed;
-                console.log(code);
                 for(var i = 0; i < tree.length; i++){
                     if(tree[i].type == 'String'){
                         callback(false);
                         return;
-                    }
-                    if(tree[i].value == 'var'){
-                        varCount++;
                     }
 
                     if(tree[i].type == 'Numeric'){
@@ -1081,29 +1113,40 @@ function validate(code, filename, callback){
                             opUsed = 4;
                         }
                     }
+                    if(tree[i].type == 'Identifier'){
+                        if(iden.indexOf(tree[i].value) < 0){
+                            iden[iden.length] = tree[i].value;
+                        }
+                    }
+
+                    if(i == (tree.length - 1)){
+                        if(tree[i].type == 'Punctuator' && tree[i].value == ';'){
+                            correctEnd = true;
+                        }
+                    }
                 }
-                console.log(opBool + ", " + varCount + ", " + numCount);
-                if(opBool == true && varCount == 3 && numCount == 2){
-                    evalVar(code, (varCount - 1), function(data){
-                        console.log("YAY", data);
-                        if(data != "ERROR"){
-                            var program = code + " exports.x = "+data;
+                if(opBool == true && iden.length == 3 && numCount == 2){
+                    var program = "";
+                    if(correctEnd){
+                        program = code + " exports.x = "+String(iden[iden.length - 1]).trim();
+                    }else{
+                        program = code + "; exports.x = "+String(iden[iden.length - 1]).trim();
+                    }
                             var logger = EVAL(program);
-                            var stepOne = parseInt(logger.x);
-                            var stepTwo = parseInt(usedNums[0]);
+                            var stepOne = parseFloat(logger.x);
+                            var stepTwo = parseFloat(usedNums[0]);
                             for(var i = 1; i < usedNums.length; i++){
                                 if(opUsed == 1){
-                                    stepTwo += parseInt(usedNums[i]);
+                                    stepTwo += parseFloat(usedNums[i]);
                                 }else if(opUsed == 2){
-                                    stepTwo -= parseInt(usedNums[i]);
+                                    stepTwo -= parseFloat(usedNums[i]);
                                 }else if(opUsed == 3){
-                                    stepTwo /= parseInt(usedNums[i]);
+                                    stepTwo /= parseFloat(usedNums[i]);
                                 }else if(opUsed == 4){
-                                    stepTwo *= parseInt(usedNums[i]);
+                                    stepTwo *= parseFloat(usedNums[i]);
                                 }
                                 
                             }
-                            console.log(stepOne + " : " + stepTwo);
                             if(stepOne == stepTwo){
                             callback(true);
                             return;
@@ -1111,8 +1154,6 @@ function validate(code, filename, callback){
                             callback(false);
                             return;
                         }
-                        }
-                    });
                     
                 }else{
                     callback(false);
@@ -1206,18 +1247,16 @@ function validate(code, filename, callback){
             try{
                 esprima.parse(code);
                 var tree = esprima.tokenize(code);
-                var varCount = 0;
                 var opBool = false;
+                var correctEnd = false;
                 var numCount = 0;
                 var usedNums = [];
+                var iden = [];
                 var opUsed;
                 for(var i = 0; i < tree.length; i++){
                     if(tree[i].type == 'String'){
                         callback(false);
                         return;
-                    }
-                    if(tree[i].value == 'var'){
-                        varCount++;
                     }
 
                     if(tree[i].type == 'Numeric'){
@@ -1240,27 +1279,40 @@ function validate(code, filename, callback){
                             opUsed = 4;
                         }
                     }
+                    if(tree[i].type == 'Identifier'){
+                        if(iden.indexOf(tree[i].value) < 0){
+                            iden[iden.length] = tree[i].value;
+                        }
+                    }
+
+                    if(i == (tree.length - 1)){
+                        if(tree[i].type == 'Punctuator' && tree[i].value == ';'){
+                            correctEnd = true;
+                        }
+                    }
                 }
-                if(opBool == true && varCount == 3 && numCount == 2){
-                    evalVar(code, (varCount - 1), function(data){
-                        if(data != "ERROR"){
-                            var program = code + " exports.x = "+data;
+                if(opBool == true && iden.length == 3 && numCount == 2){
+                    var program = "";
+                    if(correctEnd){
+                        program = code + " exports.x = "+String(iden[iden.length - 1]).trim();
+                    }else{
+                        program = code + "; exports.x = "+String(iden[iden.length - 1]).trim();
+                    }
                             var logger = EVAL(program);
-                            var stepOne = parseInt(logger.x);
-                            var stepTwo = parseInt(usedNums[0]);
+                            var stepOne = parseFloat(logger.x);
+                            var stepTwo = parseFloat(usedNums[0]);
                             for(var i = 1; i < usedNums.length; i++){
                                 if(opUsed == 1){
-                                    stepTwo += parseInt(usedNums[i]);
+                                    stepTwo += parseFloat(usedNums[i]);
                                 }else if(opUsed == 2){
-                                    stepTwo -= parseInt(usedNums[i]);
+                                    stepTwo -= parseFloat(usedNums[i]);
                                 }else if(opUsed == 3){
-                                    stepTwo /= parseInt(usedNums[i]);
+                                    stepTwo /= parseFloat(usedNums[i]);
                                 }else if(opUsed == 4){
-                                    stepTwo *= parseInt(usedNums[i]);
+                                    stepTwo *= parseFloat(usedNums[i]);
                                 }
                                 
                             }
-                            console.log(stepOne + " : " + stepTwo);
                             if(stepOne == stepTwo){
                             callback(true);
                             return;
@@ -1268,8 +1320,6 @@ function validate(code, filename, callback){
                             callback(false);
                             return;
                         }
-                        }
-                    });
                     
                 }else{
                     callback(false);

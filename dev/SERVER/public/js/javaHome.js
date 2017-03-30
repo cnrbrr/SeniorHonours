@@ -71,9 +71,21 @@ function parseJSON(json){
 	for (var i = 0; i < taskLev; i++) {
 		taskVal += json.levels.level[i].task + " ";
 	}
-	$('#informationArea').append(descVal + "<button class='btn btn-default btn-sm' id='descBtn' onclick='descIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
-	$('#informationArea').append(howVal + "<button class='btn btn-default btn-sm' id='howBtn' onclick='howIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
-	$('#informationArea').append(taskVal + "<button class='btn btn-default btn-sm' id='taskBtn' onclick='taskIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
+ if(descLev < 5){//disable the buttons if they cannot be clicked anymore
+    $('#informationArea').append(descVal + "<button class='btn btn-default btn-sm' id='descBtn' onclick='descIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
+  }else{
+    $('#informationArea').append(descVal + "<button class='btn btn-default btn-sm' id='descBtn' onclick='descIncrease()' disabled> <span class='glyphicon glyphicon-plus'></span></button>" + "</p>");
+  }
+  if(howLev < 5){
+    $('#informationArea').append(howVal + "<button class='btn btn-default btn-sm' id='howBtn' onclick='howIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
+  }else{
+    $('#informationArea').append(howVal + "<button class='btn btn-default btn-sm' id='howBtn' onclick='howIncrease()' disabled> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
+  }
+  if(taskLev < 5){
+    $('#informationArea').append(taskVal + "<button class='btn btn-default btn-sm' id='taskBtn' onclick='taskIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
+  }else{
+    $('#informationArea').append(taskVal + "<button class='btn btn-default btn-sm' id='taskBtn' onclick='taskIncrease()' disabled> <span class='glyphicon glyphicon-plus'></span></button>" + "</p>");
+  }
 	$('#informationArea').append("<button class='btn btn-primary btn-lg text-center' id='subBtn' onclick='check()'>Submit!</button>");
 }
 
