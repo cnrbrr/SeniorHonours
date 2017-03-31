@@ -1,85 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8"> 
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/jstext.js"></script>
+    <title>Text Editor</title>
 </head>
 <body>
-	<div class="container">
-		<div id="bg">
-			<img src="Images/LoginBackground.jpg" id ="bgimg" alt="">
-		</div>
-	</div>
-	<div class="container text-center" >
-		<div class="btn-group text-center" role="group" >
-			<div class="page-header text-center" id="titleHead">
-				<h1>Register</h1>
-			</div>
-		</div>
-	</div>
-	<div class="container text-center" id="textGrp">
-	<form name="registerForm" action="/regSubmit"
-	onsubmit="return validateForm()" method="post">
-	
-		<div class="btn-group text-center" role="group" id="text1">
-			<p> </p>
-			<br>
-		</div>
-		<div class="btn-group text-center" role="group" id="text2">
-			<p> </p>
-			<br>
-		</div>
-		<div class="btn-group text-center" role="group" id="date1">
-			<p> </p>
-			<br>
-			<input type="date" id="bday" style="width: 30%;">
-		</div>
-		<div class="btn-group text-center" role="group" id="text3">
-			<p> </p>
-			<br>
-		</div>
-		<div class="btn-group text-center" role="group" id="pass1">
-			<p> </p>
-			<br>
-		</div>
-		<div class="btn-group text-center" role="group" id="pass2">
-			<p> </p>
-			<br>
-		</div>
-		<div class="container text-center btn-group" >
-			<br>
-			<select id="genderID">
-				<option value="Male">Male</option>
-				<option value="Female">Female</option>
-				<option value="other">other</option>
-			</select>
+    <div class="container">
+        <div id="bg">
+          <img src="Images/LoginBackground.jpg" id ="bgimg" alt="">
+      </div>
+  </div>
+  <div class="container text-center" >
+     <div class="container navbar">
+        <div class="page-header text-center well" id="titleHead">
+            <h1 style="color: #ff751a;">Text Editor</h1>
+      </div>
+  </div>
+</div>
 
-			<p> </p>
-			<br>
-		</div>
-		<div class="container text-center">
-			<div class="btn-group text-center" role="group" id="skillLevel">
-				<input class="text-center" type="range" min="1" max="5" value="3" step="1" style="width: 30%; display:table;margin:0 auto;" id="rangeVal">
-			</div>
-			<p> </p>
-			<br>
-		</div>
-		<div class="btn-group text-center" role="group" id="btnSub">
-			<p> </p>
-			<input type="submit" class="btn btn-primary" value="Register" id="regBtn">
-		</div>
-		</form>
-	</div>
+<div class="container btn-group">
+  <div class="well" id="informationArea" ></div>
+  <div id="editor"></div>    
+</div>
 
+<link rel="stylesheet" href="/css/jstext.css">
+<script src="../ace/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/merbivore");
+    editor.getSession().setMode("ace/mode/javascript");
+    function check(){
+        validate(editor.getSession().getValue());
+    }
+</script>
+  <div class="modal fade text-center" id="loginModal" role="dialog">
+    <div class="modal-dialog modal-lg text-center">
+      <div class="modal-content text-center">
+        <div class="modal-header text-center">
+          <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
+          <h4 class="modal-title text-center" id="logDetails">Your Session has expired, please login again!</h4>
+        </div>
+        <div class="modal-body text-center">
+            <span>
+            <input type="text" placeholder="Enter your Email" id="emailCheck">
+            <p></p>
+            <input type="password" placeholder="Enter your Password" id="passCheck">
+            </span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal"id="modalLogin1">Login</button>
+          <button type="button" class="btn btn-warning" id="modalClose" data-dismiss="modal" style="float: left;">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade text-center" id="infoModal" role="dialog">
+    <div class="modal-dialog modal-lg text-center">
+      <div class="modal-content text-center">
+        <div class="modal-header text-center">
+          <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
+          <h4 class="modal-title text-center" id="infoTitle"></h4>
+        </div>
+        <div class="modal-body text-center">
+            <p id="infoHelp"></p>
+        </div>
+        <div class="modal-footer" id="infoBtns">
+          <button type="button" class="btn btn-success text-center" data-dismiss="modal"id="modalReg1">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade text-center" id="endModal" role="dialog">
+    <div class="modal-dialog modal-lg text-center">
+      <div class="modal-content text-center">
+        <div class="modal-header text-center">
+          <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
+          <h4 class="modal-title text-center"></h4>
+        </div>
+        <div class="modal-body text-center">
+            <h3 id="congratsHelp">Thats all folks! You've made it to the end of the tutorials so far! Congratulations! But there will be more soon!</h3>
+        </div>
+        <div class="modal-footer" id="infoBtns">
+          <button type="button" class="btn btn-success text-center" data-dismiss="modal" onclick="location.href = 'main'" id="modalReg1">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="../css/register.css">
-
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="../js/register.js"></script>
-<script src="../js/registerUser.js"></script>
 </html>

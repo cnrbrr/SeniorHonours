@@ -23,8 +23,8 @@ div.container {
 #editor {
     margin-left: 35%;
     border-left: 1px solid gray;
-    width:63vw;
-    height: 40vw;
+    width:  65%;
+    height: 30vw;
     padding: 1em;
     overflow: hidden;
 }

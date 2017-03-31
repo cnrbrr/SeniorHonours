@@ -1,219 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>Blockly Editor</title>
-  <meta charset="utf-8"> 
-  <script src="../js/alertify.js"></script>
-  <link rel="stylesheet" href="../js/css/alertify.css">
-  <link rel="stylesheet" href="../js/css/themes/default.css"> 
-  <script src="../js/blockly_compressed.js"></script>
-  <script src="../js/blocks_compressed.js"></script>
-  <script src="/javascript_compressed.js"></script>
-  <script src="msg/js/en.js"></script>
-  <xml id="toolbox" style="display: none">
-    <category name="Logic">
-      <category name="If">
-        <block type="controls_if"></block>
-        <block type="controls_if">
-          <mutation else="1"></mutation>
-        </block>
-        <block type="controls_if">
-          <mutation elseif="1" else="1"></mutation>
-        </block>
-      </category>
-      <category name="Boolean">
-        <block type="logic_compare"></block>
-        <block type="logic_operation"></block>
-        <block type="logic_negate"></block>
-        <block type="logic_boolean"></block>
-        <block type="logic_null"></block>
-        <block type="logic_ternary"></block>
-      </category>
-    </category>
-    <category name="Loops">
-      <block type="controls_repeat_ext">
-        <value name="TIMES">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-      </block>
-      <block type="controls_whileUntil"></block>
-      <block type="controls_for">
-        <field name="VAR">i</field>
-        <value name="FROM">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="TO">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-        <value name="BY">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-      </block>
-      <block type="controls_forEach"></block>
-      <block type="controls_flow_statements"></block>
-    </category>
-    <category name="Math">
-      <block type="math_number"></block>
-      <block type="math_arithmetic"></block>
-      <block type="math_single"></block>
-      <block type="math_trig"></block>
-      <block type="math_constant"></block>
-      <block type="math_number_property"></block>
-      <block type="math_round"></block>
-      <block type="math_on_list"></block>
-      <block type="math_modulo"></block>
-      <block type="math_constrain">
-        <value name="LOW">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="HIGH">
-          <block type="math_number">
-            <field name="NUM">100</field>
-          </block>
-        </value>
-      </block>
-      <block type="math_random_int">
-        <value name="FROM">
-          <block type="math_number">
-            <field name="NUM">1</field>
-          </block>
-        </value>
-        <value name="TO">
-          <block type="math_number">
-            <field name="NUM">100</field>
-          </block>
-        </value>
-      </block>
-      <block type="math_random_float"></block>
-    </category>
-    <category name="Lists">
-      <block type="lists_create_empty"></block>
-      <block type="lists_create_with"></block>
-      <block type="lists_repeat">
-        <value name="NUM">
-          <block type="math_number">
-            <field name="NUM">5</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_length"></block>
-      <block type="lists_isEmpty"></block>
-      <block type="lists_indexOf"></block>
-      <block type="lists_getIndex"></block>
-      <block type="lists_setIndex"></block>
-    </category>
-    <category name="Variables" custom="VARIABLE"></category>
-    <category name="Functions" custom="PROCEDURE"></category>
-    <sep></sep>
-    <category name="Text">
-      <block type="text"></block>
-      <block type="text_print"></block>
-    </category>
 
-  </xml>
-</head>
-<body>
-	<div class="container">
-    <div id="bg">
-      <img src="Images/LoginBackground.jpg" id ="bgimg" alt="">
-    </div>
-  </div>
-  <div class="container text-center" >
-   <div class="container navbar">
-    <div class="page-header text-center well" id="titleHead">
-      <h1 style="color: #ff751a;">Blockly</h1>
-    </div>
-  </div>
-</div>
-<div class="container btn-group">
-  <div class="well" id="informationArea" ></div>
-  <div id="blocklyArea"></div>    
-</div>
-</body>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="../css/javaHome.css">
-<script>
-var workspace = Blockly.inject('blocklyArea',
-  {toolbox: document.getElementById('toolbox')});
-function check(){
-  var code = Blockly.JavaScript.workspaceToCode(workspace);
-  validate(code);
-}
-</script> 
+  <title>Simple Sidebar - Start Bootstrap Template</title>
 
-  <div class="modal fade text-center" id="loginModal" role="dialog">
-    <div class="modal-dialog modal-lg text-center">
-      <div class="modal-content text-center">
-        <div class="modal-header text-center">
-          <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
-          <h4 class="modal-title text-center" id="logDetails">Your Session has expired, please login again!</h4>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../css/javaHome.css">
+  <link href="css/simple-sidebar.css" rel="stylesheet">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <title>Blockly Editor</title>
+        <meta charset="utf-8"> 
+        <script src="../js/alertify.js"></script>
+        <link rel="stylesheet" href="../js/css/alertify.css">
+        <link rel="stylesheet" href="../js/css/themes/default.css"> 
+        <script src="../js/blockly_compressed.js"></script>
+        <script src="../js/blocks_compressed.js"></script>
+        <script src="/javascript_compressed.js"></script>
+        <script src="msg/js/en.js"></script>
+        <xml id="toolbox" style="display: none">
+          <category name="Logic">
+            <category name="If">
+              <block type="controls_if"></block>
+              <block type="controls_if">
+                <mutation else="1"></mutation>
+              </block>
+              <block type="controls_if">
+                <mutation elseif="1" else="1"></mutation>
+              </block>
+            </category>
+            <category name="Boolean">
+              <block type="logic_compare"></block>
+              <block type="logic_operation"></block>
+              <block type="logic_negate"></block>
+              <block type="logic_boolean"></block>
+              <block type="logic_null"></block>
+              <block type="logic_ternary"></block>
+            </category>
+          </category>
+          <category name="Loops">
+            <block type="controls_repeat_ext">
+              <value name="TIMES">
+                <block type="math_number">
+                  <field name="NUM">10</field>
+                </block>
+              </value>
+            </block>
+            <block type="controls_whileUntil"></block>
+            <block type="controls_for">
+              <field name="VAR">i</field>
+              <value name="FROM">
+                <block type="math_number">
+                  <field name="NUM">1</field>
+                </block>
+              </value>
+              <value name="TO">
+                <block type="math_number">
+                  <field name="NUM">10</field>
+                </block>
+              </value>
+              <value name="BY">
+                <block type="math_number">
+                  <field name="NUM">1</field>
+                </block>
+              </value>
+            </block>
+            <block type="controls_forEach"></block>
+            <block type="controls_flow_statements"></block>
+          </category>
+          <category name="Math">
+            <block type="math_number"></block>
+            <block type="math_arithmetic"></block>
+            <block type="math_single"></block>
+            <block type="math_trig"></block>
+            <block type="math_constant"></block>
+            <block type="math_number_property"></block>
+            <block type="math_round"></block>
+            <block type="math_on_list"></block>
+            <block type="math_modulo"></block>
+            <block type="math_constrain">
+              <value name="LOW">
+                <block type="math_number">
+                  <field name="NUM">1</field>
+                </block>
+              </value>
+              <value name="HIGH">
+                <block type="math_number">
+                  <field name="NUM">100</field>
+                </block>
+              </value>
+            </block>
+            <block type="math_random_int">
+              <value name="FROM">
+                <block type="math_number">
+                  <field name="NUM">1</field>
+                </block>
+              </value>
+              <value name="TO">
+                <block type="math_number">
+                  <field name="NUM">100</field>
+                </block>
+              </value>
+            </block>
+            <block type="math_random_float"></block>
+          </category>
+          <category name="Lists">
+            <block type="lists_create_empty"></block>
+            <block type="lists_create_with"></block>
+            <block type="lists_repeat">
+              <value name="NUM">
+                <block type="math_number">
+                  <field name="NUM">5</field>
+                </block>
+              </value>
+            </block>
+            <block type="lists_length"></block>
+            <block type="lists_isEmpty"></block>
+            <block type="lists_indexOf"></block>
+            <block type="lists_getIndex"></block>
+            <block type="lists_setIndex"></block>
+          </category>
+          <category name="Variables" custom="VARIABLE"></category>
+          <category name="Functions" custom="PROCEDURE"></category>
+          <sep></sep>
+          <category name="Text">
+            <block type="text"></block>
+            <block type="text_print"></block>
+          </category>
+
+        </xml>
+      </head>
+
+      <body>
+        <div class="container">
+          <div id="bg">
+            <img src="Images/LoginBackground.jpg" id ="bgimg" alt="">
+          </div>
         </div>
-        <div class="modal-body text-center">
+        <div id="wrapper">
+
+          <!-- Sidebar -->
+          <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+              <li class="sidebar-brand">
+                <a href="#">
+                  Start Bootstrap
+                </a>
+              </li>
+              <li>
+                <a href="/main">Return to main</a>
+              </li>
+              <li>
+                <a data-toggle="collapse" data-target="#PossibleHistory">History</a>
+                    <div id="PossibleHistory" class="collapse">
+                      <a data-toggle="collapse" data-target="#historyOne">Level 1</a>
+                        <div id="historyOne" class="collapse">
+                          <a href="#" onclick="alert('hello world')">Text1-1</a>
+                          <a href="#" onclick="alert('hello world2')">Text1-2</a>
+                          <a href="#" onclick="alert('hello world3')">Text1-3</a>
+                        </div>
+                    </div>
+              </li>
+            </ul>
+          </div>
+          <!-- /#sidebar-wrapper -->
+
+          <!-- Page Content -->
+          <div id="page-content-wrapper">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="container text-center" >
+                 <div class="container navbar">
+                  <div class="page-header text-center well" id="titleHead">
+                    <button href="#menu-toggle" class="btn btn-default" id="menu-toggle" style="float: left;"><span class='glyphicon glyphicon-menu-hamburger'></span></button>
+                    <h1 style="color: #ff751a;">Blockly</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="container btn-group">
+                <div class="well" id="informationArea" ></div>
+                <div id="blocklyArea"></div>    
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+      </div>
+      <!-- /#wrapper -->
+
+      <!-- jQuery library -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <!-- Latest compiled JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="/javaHome.js"></script>
+
+      <!-- Menu Toggle Script -->
+      <script>
+      var workspace = Blockly.inject('blocklyArea',
+        {toolbox: document.getElementById('toolbox')});
+      function check(){
+        var code = Blockly.JavaScript.workspaceToCode(workspace);
+        validate(code);
+      }
+      $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+      });
+      </script>
+
+    </body>
+
+    <div class="modal fade text-center" id="loginModal" role="dialog">
+      <div class="modal-dialog modal-lg text-center">
+        <div class="modal-content text-center">
+          <div class="modal-header text-center">
+            <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
+            <h4 class="modal-title text-center" id="logDetails">Your Session has expired, please login again!</h4>
+          </div>
+          <div class="modal-body text-center">
             <span>
-            <input type="text" placeholder="Enter your Email" id="emailCheck">
-            <p></p>
-            <input type="password" placeholder="Enter your Password" id="passCheck">
+              <input type="text" placeholder="Enter your Email" id="emailCheck">
+              <p></p>
+              <input type="password" placeholder="Enter your Password" id="passCheck">
             </span>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-dismiss="modal"id="modalLogin1">Login</button>
-          <button type="button" class="btn btn-warning" id="modalClose" data-dismiss="modal" style="float: left;">Cancel</button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal"id="modalLogin1">Login</button>
+            <button type="button" class="btn btn-warning" id="modalClose" data-dismiss="modal" style="float: left;">Cancel</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="modal fade text-center" id="infoModal" role="dialog">
-    <div class="modal-dialog modal-lg text-center">
-      <div class="modal-content text-center">
-        <div class="modal-header text-center">
-          <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
-          <h4 class="modal-title text-center" id="infoTitle"></h4>
-        </div>
-        <div class="modal-body text-center">
+    <div class="modal fade text-center" id="infoModal" role="dialog">
+      <div class="modal-dialog modal-lg text-center">
+        <div class="modal-content text-center">
+          <div class="modal-header text-center">
+            <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
+            <h4 class="modal-title text-center" id="infoTitle"></h4>
+          </div>
+          <div class="modal-body text-center">
             <p id="infoHelp"></p>
-        </div>
-        <div class="modal-footer" id="infoBtns">
-          <button type="button" class="btn btn-success text-center" data-dismiss="modal"id="modalReg1">Understood</button>
+          </div>
+          <div class="modal-footer" id="infoBtns">
+            <button type="button" class="btn btn-success text-center" data-dismiss="modal"id="modalReg1">Understood</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="modal fade text-center" id="endModal" role="dialog">
-    <div class="modal-dialog modal-lg text-center">
-      <div class="modal-content text-center">
-        <div class="modal-header text-center">
-          <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
-          <h4 class="modal-title text-center"></h4>
-        </div>
-        <div class="modal-body text-center">
+    <div class="modal fade text-center" id="endModal" role="dialog">
+      <div class="modal-dialog modal-lg text-center">
+        <div class="modal-content text-center">
+          <div class="modal-header text-center">
+            <button type="button" class="close" data-dismiss="modal" id="modalClose1">&times;</button>
+            <h4 class="modal-title text-center"></h4>
+          </div>
+          <div class="modal-body text-center">
             <h3 id="congratsHelp">Thats all folks! You've made it to the end of the tutorials so far! Congratulations! But there will be more soon!</h3>
-        </div>
-        <div class="modal-footer" id="infoBtns">
-          <button type="button" class="btn btn-success text-center" data-dismiss="modal" onclick="location.href = 'main'" id="modalReg1">Understood</button>
+          </div>
+          <div class="modal-footer" id="infoBtns">
+            <button type="button" class="btn btn-success text-center" data-dismiss="modal" onclick="location.href = 'main'" id="modalReg1">Understood</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="/javaHome.js"></script>
-
-
-</html>
+    </html>

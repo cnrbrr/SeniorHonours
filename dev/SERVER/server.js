@@ -274,6 +274,14 @@ server.register(require('inert'), (err) => {
 
     server.route({
         method: 'GET',
+        path: '/css/simple-sidebar.css',
+        handler: function (request, reply) {
+            reply.file('./public/css/simple-sidebar.css');
+        }
+    });
+
+    server.route({
+        method: 'GET',
         path: '/js/blockly_compressed.js',
         handler: function (request, reply) {
             reply.file('./public/js/blockly_compressed.js');
