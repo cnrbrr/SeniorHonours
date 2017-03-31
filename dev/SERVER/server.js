@@ -177,6 +177,51 @@ server.register(require('inert'), (err) => {
 
     server.route({
         method: 'GET',
+        path: '/Images/text1-1',
+        handler: function (request, reply) {
+            reply.file('./public/JSON/Images/text1-1.png');
+        }
+    });
+    server.route({
+        method: 'GET',
+        path: '/Images/text1-2',
+        handler: function (request, reply) {
+            reply.file('./public/JSON/Images/text1-2.png');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/Images/text1-3',
+        handler: function (request, reply) {
+            reply.file('./public/JSON/Images/text1-3.png');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/Images/blockly1-1',
+        handler: function (request, reply) {
+            reply.file('./public/JSON/Images/blockly1-1.png');
+        }
+    });
+    server.route({
+        method: 'GET',
+        path: '/Images/blockly1-2',
+        handler: function (request, reply) {
+            reply.file('./public/JSON/Images/blockly1-2.png');
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/Images/blockly1-3',
+        handler: function (request, reply) {
+            reply.file('./public/JSON/Images/blockly1-3.png');
+        }
+    });
+    server.route({
+        method: 'GET',
         path: '/css/javaHome.css',
         handler: function (request, reply) {
             reply.file('./public/css/javaHome.css');

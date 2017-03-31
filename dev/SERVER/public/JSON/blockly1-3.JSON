@@ -6,11 +6,11 @@
 	"levels":
 	{
 			"level":
-					[{"diff": "5", "description": "", "how": "", "task": ""},
-					{"diff": "4", "description": "", "how": "", "task": ""},
-					{"diff": "3", "description": "", "how": "", "task": ""},
-					{"diff": "2", "description": "", "how": "", "task": ""},
-					{"diff": "1", "description": "", "how": "", "task": ""}
+					[{"diff": "5", "description": "Javascript makes use of the following Mathmatical operators! + (addition),- (subtraction), / (division), * (Multiplication)", "how": "When we have two numbers, or variables, we can perform these mathmatical operators on them!", "task": "Lets create two variables, then a third variable, which will be equal to the first two added together!"},
+					{"diff": "4", "description": "There are a number of other operators which we will demonstrate in later tutorials!", "how": "6 + 5 or a + b", "task": ""},
+					{"diff": "3", "description": "Such as % (modulo)", "how": "Lets declare 3 seperate variables. Make sure they are in the number format!!", "task": ""},
+					{"diff": "2", "description": "<br></br>One interesting feature is when + is used on a string as opposed to a number! We will cover this later on!", "how": "", "task": "var a = 4; <br></br> var b = 3; <br></br> var c = a + b; "},
+					{"diff": "1", "description": "", "how": "", "task": "<br></br><img src='Images/blockly1-3'>"}
 					]
 	}
 }

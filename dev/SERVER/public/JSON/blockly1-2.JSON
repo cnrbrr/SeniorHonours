@@ -9,8 +9,8 @@
 					[{"diff": "5", "description": "Next step is learning about how to use different variable types.", "how": "When we want to use text we use quotation marks ''. Other wise we dont use anything for a number ", "task": "Create one variable to store the string 'Hello World!, and another to store the number 8."},
 					{"diff": "4", "description": "", "how": "", "task": ""},
 					{"diff": "3", "description": "We don't need to specify the types", "how": "", "task": "In the form of: String: var variableName = 'STRING HERE'; Number: var variableName = NumberVALUE"},
-					{"diff": "2", "description": "", "how": "", "task": ""},
-					{"diff": "1", "description": "Remember to always give variables good names!", "how": "", "task": "Which for this example looks like: String: var stringVariable = 'Hello World!'; and Number: var numberVariable = 8;"}
+					{"diff": "2", "description": "", "how": "", "task": "Which for this example looks like: String: var stringVariable = 'Hello World!'; and Number: var numberVariable = 8;"},
+					{"diff": "1", "description": "Remember to always give variables good names!", "how": "", "task": "<br></br><img src='Images/blockly1-2'>"}
 					]
 	}
 }

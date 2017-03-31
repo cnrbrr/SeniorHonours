@@ -74,17 +74,17 @@ function parseJSON(json){
  if(descLev < 5){//disable the buttons if they cannot be clicked anymore
     $('#informationArea').append(descVal + "<button class='btn btn-default btn-sm' id='descBtn' onclick='descIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
   }else{
-    $('#informationArea').append(descVal + "<button class='btn btn-default btn-sm' id='descBtn' onclick='descIncrease()' disabled> <span class='glyphicon glyphicon-plus'></span></button>" + "</p>");
+    $('#informationArea').append(descVal + "</p>");
   }
   if(howLev < 5){
     $('#informationArea').append(howVal + "<button class='btn btn-default btn-sm' id='howBtn' onclick='howIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
   }else{
-    $('#informationArea').append(howVal + "<button class='btn btn-default btn-sm' id='howBtn' onclick='howIncrease()' disabled> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
+    $('#informationArea').append(howVal + "</p>");
   }
   if(taskLev < 5){
     $('#informationArea').append(taskVal + "<button class='btn btn-default btn-sm' id='taskBtn' onclick='taskIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
   }else{
-    $('#informationArea').append(taskVal + "<button class='btn btn-default btn-sm' id='taskBtn' onclick='taskIncrease()' disabled> <span class='glyphicon glyphicon-plus'></span></button>" + "</p>");
+    $('#informationArea').append(taskVal + "</p>");
   }
 	$('#informationArea').append("<button class='btn btn-primary btn-lg text-center' id='subBtn' onclick='check()'>Submit!</button>");
 }
@@ -160,9 +160,17 @@ function taskIncrease(){
 function beginParse(){
 	$.post("/getCurrentJSON", pageData)
 	.done(function(jsonData) {
-		$.getJSON( jsonData, function( json ) {
-			parseJSON(json);//set the value to one above the value we want, if 0-4 in array 5 will do all not 4
+		if(jsonData.charAt(0) == 'b'){//ensures we are working with a blockly file not a text file
+			$.getJSON( jsonData, function( json ) {
+			parseJSON(json);
 		});
+		}else{
+			$.post("/blocklySubmit", pageData)
+			.done(function(rep) {
+				beginParse();
+			});
+		}
+		
 	});
 }
 
@@ -180,10 +188,11 @@ function validate(code){
 			$("#infoTitle").empty();
 			$("#infoTitle").append("Congratulations!");
 			$("#infoHelp").empty();
-			$("#infoHelp").append("You have completed this task! Are you ready to progress onto the next task?");
+			$("#infoHelp").append("Congratulations! This is the code you created on this level!<br></br>" + code + "<br></br>Would you like to continue using blockly? Or try our text editor?");
 			$("#infoHelp").css('color', 'black');   
 			$('#infoBtns').empty();
 			$('#infoBtns').append("<button type='button'class='btn btn-success text-center' data-dismiss='modal' onclick='ontoNext()' id='modalInfo1'>Continue</button>");
+			$('#infoBtns').append('<button type="button" class="btn btn-warning" id="modalClose" data-dismiss="modal" onclick="ontoText()" style="float: left;">Text Editor</button>');
 			$("#infoModal").modal("toggle");
 		}else if(data == "Relog"){
 			$("#loginModal").modal();
@@ -295,4 +304,22 @@ function ontoNext(){
     }
 
 });
+}
+
+function ontoText(){
+		userData = new Object();
+	if (typeof(Storage) !== "undefined") {
+		userData.data = localStorage.getItem("jwt");
+	} else {
+		userData.data = getCookie("jwt");
+	}
+	$.post("/textSubmit", userData)
+	.done(function(data) {
+		if(data == 'Y'){
+			history.replaceState( {} , 'home', '/main' );
+			location.href = "jstext";
+		}else{
+			//modal about how something went wrong
+		}
+	});
 }

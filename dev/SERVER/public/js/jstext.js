@@ -74,17 +74,17 @@ function parseJSON(json){
   if(descLev < 5){//disable the buttons if they cannot be clicked anymore
     $('#informationArea').append(descVal + "<button class='btn btn-default btn-sm' id='descBtn' onclick='descIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
   }else{
-    $('#informationArea').append(descVal + "<button class='btn btn-default btn-sm' id='descBtn' onclick='descIncrease()' disabled> <span class='glyphicon glyphicon-plus'></span></button>" + "</p>");
+    $('#informationArea').append(descVal + "</p>");
   }
   if(howLev < 5){
     $('#informationArea').append(howVal + "<button class='btn btn-default btn-sm' id='howBtn' onclick='howIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
   }else{
-    $('#informationArea').append(howVal + "<button class='btn btn-default btn-sm' id='howBtn' onclick='howIncrease()' disabled> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
+    $('#informationArea').append(howVal + "</p>");
   }
   if(taskLev < 5){
     $('#informationArea').append(taskVal + "<button class='btn btn-default btn-sm' id='taskBtn' onclick='taskIncrease()'> <span class='glyphicon glyphicon-plus'></span> </button>" + "</p>");
   }else{
-    $('#informationArea').append(taskVal + "<button class='btn btn-default btn-sm' id='taskBtn' onclick='taskIncrease()' disabled> <span class='glyphicon glyphicon-plus'></span></button>" + "</p>");
+    $('#informationArea').append(taskVal +"</p>");
   }
   $('#informationArea').append("<button class='btn btn-primary btn-lg text-center' id='subBtn' onclick='check()'>Submit!</button>");
 }
@@ -160,9 +160,17 @@ function taskIncrease(){
 function beginParse(){
   $.post("/getCurrentJSON", pageData)
   .done(function(jsonData) {
-    $.getJSON( jsonData, function( json ) {
-      parseJSON(json);//set the value to one above the value we want, if 0-4 in array 5 will do all not 4
+    if(jsonData.charAt(0) == 't'){//ensures we are working with a text file not a blockly file
+      $.getJSON( jsonData, function( json ) {
+      parseJSON(json);
     });
+    }else{
+      $.post("/textSubmit", pageData)
+      .done(function(rep) {
+        beginParse();
+      });
+    }
+    
   });
 }
 
