@@ -296,3 +296,55 @@ function ontoNext(){
 
 });
 }
+
+function currentSetter(val){
+  userData = new Object();
+  if (typeof(Storage) !== "undefined") {
+    userData.data = localStorage.getItem("jwt");
+  } else {
+    userData.data = getCookie("jwt");
+  }
+  userData.changeTo = val;
+  $.post("/changeCurrentJSON", userData)
+  .done(function(data) {
+    if(data == 'Y'){
+      location.reload();
+    }else if(data == "Err"){
+          $("#infoTitle").empty();
+          $("#infoTitle").append("Error!");
+          $("#infoHelp").empty();
+          $("#infoHelp").append("An incorrect value was recieved! We will not be able to change your level at this time!<br></br>We appologise for any inconvenience!<br></br>Please continue with your current tutorial!");
+          $("#infoHelp").css('color', 'black');
+          $('#infoBtns').empty();
+          $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+          $("#infoModal").modal("toggle");
+    }else if(data == "H"){
+          $("#infoTitle").empty();
+          $("#infoTitle").append("No Cheating!");
+          $("#infoHelp").empty();
+          $("#infoHelp").append("Unfortunately you have not reached that point yet! Please continue with your current tutorial!");
+          $("#infoHelp").css('color', 'black');
+          $('#infoBtns').empty();
+          $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+          $("#infoModal").modal("toggle");
+    }else if(data == "SAME"){
+          $("#infoTitle").empty();
+          $("#infoTitle").append("Oops!");
+          $("#infoHelp").empty();
+          $("#infoHelp").append("Oops! Seems like you tried to change to the same tutorial!");
+          $("#infoHelp").css('color', 'black');
+          $('#infoBtns').empty();
+          $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+          $("#infoModal").modal("toggle");
+    }else{
+          $("#infoTitle").empty();
+          $("#infoTitle").append("Error!");
+          $("#infoHelp").empty();
+          $("#infoHelp").append("An Error! We will not be able to change your level at this time!<br></br>We appologise for any inconvenience!<br></br>Please continue with your current tutorial!");
+          $("#infoHelp").css('color', 'black');
+          $('#infoBtns').empty();
+          $('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+          $("#infoModal").modal("toggle");
+    }
+  });
+}

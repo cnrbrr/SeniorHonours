@@ -40,12 +40,12 @@ console.log("Connecting to application...");
 var application;
 client.getApplication(my_href,
     function(err, app) {
-       if (err) {
-          return console.error(err);
-      }
-      application = app;
-      console.log("Application Connected!");
-  });
+     if (err) {
+      return console.error(err);
+  }
+  application = app;
+  console.log("Application Connected!");
+});
 
 server.register({
     register: Good,
@@ -454,21 +454,21 @@ server.route({
         };
                //register the user
                application.createAccount(newUser, function(err, createdAccount) {
-                   if (err) {
-                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                      if(String(err).includes("2001")){
-                        reply("USED");
-                    }else{
-                        reply("N");
-                    }
+                 if (err) {
+                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                  if(String(err).includes("2001")){
+                    reply("USED");
                 }else{
-                   console.log('Account Registered!');
+                    reply("N");
+                }
+            }else{
+             console.log('Account Registered!');
 
 
-                   createdAccount.getCustomData(function(err, customData){
-                    customData.DOB = request.payload.DOB;
-                    customData.level = request.payload.level;
-                    customData.gender = request.payload.gender;
+             createdAccount.getCustomData(function(err, customData){
+                customData.DOB = request.payload.DOB;
+                customData.level = request.payload.level;
+                customData.gender = request.payload.gender;
                     customData.crntJSON = "text1-1";//saves the current progress of the files, always starts here
                     customData.txtHist = [];
                     customData.blHist = [];
@@ -495,10 +495,10 @@ server.route({
                     //A successful request will result in an accessTokenResponse
                 });
                         }else{
-                         console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                         reply("N");
-                     }
-                 });
+                           console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                           reply("N");
+                       }
+                   });
 });
 }
 
@@ -517,13 +517,13 @@ server.route({
 
                //register the user
                application.authenticateAccount(userAuth, function(err, validAccount) {
-                   if (err) {
-                      console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-                      reply("N");
-                  }else{
-                   console.log('Account Valid!');
-                   var authenticator = new stormpath.OAuthAuthenticator(application);
-                   authenticator.authenticate({
+                 if (err) {
+                  console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                  reply("N");
+              }else{
+                 console.log('Account Valid!');
+                 var authenticator = new stormpath.OAuthAuthenticator(application);
+                 authenticator.authenticate({
                     body: {
                         grant_type: 'password',
                         username: request.payload.email,
@@ -539,9 +539,9 @@ server.route({
                     }
                     //A successful request will result in an accessTokenResponse
                 });
-               }
+             }
 
-           });
+         });
 }
 });
 
@@ -587,36 +587,36 @@ server.route({
                                                 });
                                             }
                                         });
-                                 
-                                    }else{
-                                        customData.crntJSON = "blockly1-1";
-                                        customData.save(function(err, callback){
-                                            if(!err){
-                                                reply("Y");
-                                                console.log("Blockly Confirmed!");
-                                            }else{
-                                                reply("N");
-                                            }
-                                        });
-                                    }
-                                }else{
-                                    reply("Y");
-                                }
-                            }else{
-                                reply("N");
-                            }
-                        });
-                }else{
-                    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-                    reply("N");
-                }
-            });
+
+}else{
+    customData.crntJSON = "blockly1-1";
+    customData.save(function(err, callback){
+        if(!err){
+            reply("Y");
+            console.log("Blockly Confirmed!");
         }else{
-            console.log("SOMETHING WENT WRONG!\n" + err + "-----");
             reply("N");
         }
     });
-    }
+}
+}else{
+    reply("Y");
+}
+}else{
+    reply("N");
+}
+});
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+    reply("N");
+}
+});
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+    reply("N");
+}
+});
+}
 });
 
 server.route({
@@ -661,36 +661,36 @@ server.route({
                                                 });
                                             }
                                         });
-                                 
-                                    }else{
-                                        customData.crntJSON = "text1-1";
-                                        customData.save(function(err, callback){
-                                            if(!err){
-                                                reply("Y");
-                                                console.log("Text Confirmed!");
-                                            }else{
-                                                reply("N");
-                                            }
-                                        });
-                                    }
-                                }else{
-                                    reply("Y");
-                                }
-                            }else{
-                                reply("N");
-                            }
-                        });
-                }else{
-                    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-                    reply("N");
-                }
-            });
+
+}else{
+    customData.crntJSON = "text1-1";
+    customData.save(function(err, callback){
+        if(!err){
+            reply("Y");
+            console.log("Text Confirmed!");
         }else{
-            console.log("SOMETHING WENT WRONG!\n" + err + "-----");
             reply("N");
         }
     });
-    }
+}
+}else{
+    reply("Y");
+}
+}else{
+    reply("N");
+}
+});
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+    reply("N");
+}
+});
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+    reply("N");
+}
+});
+}
 });
 
 server.route({
@@ -786,6 +786,95 @@ server.route({
 
 server.route({
     method: 'POST',
+    path: '/changeCurrentJSON',
+    handler: function (request, reply) {
+        var token = request.payload.data;
+        var changeTo = request.payload.changeTo;
+        var authenticator = new stormpath.OAuthAuthenticator(application);
+        authenticator.authenticate({
+            headers: { authorization: 'Bearer: ' + token }
+        }, function(err, result) {
+            if(!err){
+                result.getAccount(function(err2, account) {
+                    if(!err2){
+                        console.log("Account valid!");
+                        account.getCustomData(function(err, customData){
+                            if(!err){
+                                validateVal(changeTo, function(boolVal){
+                                    if(boolVal == true){
+                                        if(changeTo == customData.crntJSON){
+                                            reply("SAME");
+                                            console.log("Attempting to change to same file");
+                                        }else{
+                                        if(changeTo.charAt(0) == 't'){
+                                            var arr = customData.txtHist;
+                                            validateHistory(changeTo, arr, function(returned){
+                                                if(returned == true){
+                                                    customData.crntJSON = changeTo;
+                                                    customData.save(function(err, callback){
+                                                        if(!err){
+                                                            console.log("New JSON Confirmed!");
+                                                            reply("Y");
+                                                        }else{
+                                                            console.log("N")
+                                                            console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                                        }
+                                                    });
+                                                }else{
+                                                    console.log("User Not at this point yet");
+                                                    reply("H");
+                                                }
+                                            });
+                                        }else if(changeTo.charAt(0) == 'b'){
+                                            var arr = customData.blHist;
+                                            validateHistory(changeTo, arr, function(returned){
+                                                if(returned == true){
+                                                    customData.crntJSON = changeTo;
+                                                    customData.save(function(err, callback){
+                                                        if(!err){
+                                                            console.log("New JSON Confirmed!");
+                                                            reply("Y");
+                                                        }else{
+                                                            reply("N");
+                                                            console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                                        }
+                                                    });
+                                                }else{
+                                                    console.log("User Not at this point yet");
+                                                    reply("H");
+                                                }
+                                            });
+                                        }
+                                    }
+                                    }else{
+                                        reply("Err");
+                                        console.log("Not a valid subission");
+                                    }
+                            });
+
+
+                            }else{
+                                console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                reply("N");
+                            }
+                        });
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+}else{
+    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+    reply("N");
+}
+});
+
+
+}
+});
+
+server.route({
+    method: 'POST',
     path: '/getLevel',
     handler: function (request, reply) {
         var token = request.payload.data;
@@ -832,73 +921,114 @@ server.route({
                         account.getCustomData(function(err, customData){
                             var fileName = customData.crntJSON;
                             if(fileName.charAt(0) == 't'){
-                                textNext(fileName, function(jsonNext){
-                                    if(jsonNext.charAt(0) == 'E'){
-                                        if(customData.txtHist.length > 0){
-                                           customData.txtHist[customData.txtHist.length] = customData.crntJSON;
-                                       }else{
-                                        customData.txtHist[0] = customData.crntJSON;
-                                    }
-                                    reply("END");
-                                    customData.save(function(err, callback){
-                                        if(!err){
-                                            console.log("Last Confirmed!");
-                                        }else{
-                                            console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-                                        }
-                                    });
-                                }else{
-                                    if(customData.txtHist.length > 0){
-                                        customData.txtHist[customData.txtHist.length] = customData.crntJSON;
+                                var arr = customData.txtHist;
+                                validateContains(fileName, arr, function(replyVal){
+                                    if(replyVal == true){
+                                        textNext(fileName, function(jsonNext){
+                                            if(jsonNext.charAt(0) == 'E'){
+                                                reply("END");
+                                            }else{
+                                            customData.crntJSON = jsonNext;
+                                            customData.save(function(err, callback){
+                                                if(!err){
+                                                    console.log("Next Confirmed!");
+                                                    reply("Y");
+                                                }else{
+                                                    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                                }
+                                            }); 
+                                            }
+                                        });
                                     }else{
-                                        customData.txtHist[0] = customData.crntJSON;
+                                        textNext(fileName, function(jsonNext){
+                                            if(jsonNext.charAt(0) == 'E'){
+                                                if(customData.txtHist.length > 0){
+                                                    customData.txtHist[customData.txtHist.length] = customData.crntJSON;
+                                                }else{
+                                                    customData.txtHist[0] = customData.crntJSON;
+                                                }    
+                                                customData.save(function(err, callback){
+                                                    if(!err){
+                                                        reply("END");
+                                                        console.log("Last Confirmed!");
+                                                    }else{
+                                                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                                    }
+                                                });
+                                            }else{
+                                                if(customData.txtHist.length > 0){
+                                                    customData.txtHist[customData.txtHist.length] = customData.crntJSON;
+                                                }else{
+                                                    customData.txtHist[0] = customData.crntJSON;
+                                                }
+                                                customData.crntJSON = jsonNext;
+                                                customData.save(function(err, callback){
+                                                    if(!err){
+                                                        console.log("Next Confirmed!");
+                                                        reply("Y");
+                                                    }else{
+                                                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
-                                    customData.crntJSON = jsonNext;
-                                    customData.save(function(err, callback){
-                                        if(!err){
-                                            console.log("Next Confirmed!");
-                                            reply("Y");
-                                        }else{
-                                            console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-                                        }
-                                    });
-                                    
-                                }
-                            });
-}else if(fileName.charAt(0) == 'b'){
-    blocklyNext(fileName, function(jsonNext){
-        if(jsonNext.charAt(0) == 'E'){
-            if(customData.blHist.length > 0){
-               customData.blHist[customData.blHist.length] = customData.crntJSON;
-           }else{
-            customData.blHist[0] = customData.crntJSON;
-        }
-        reply("END");
-        customData.save(function(err, callback){
-            if(!err){
-                console.log("Last Confirmed!");
-            }else{
-                console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-            }
-        });
-    }else{
-        if(customData.blHist.length > 0){
-           customData.blHist[customData.blHist.length] = customData.crntJSON;
-       }else{
-        customData.blHist[0] = customData.crntJSON;
-    }
-    customData.crntJSON = jsonNext;
-    customData.save(function(err, callback){
-        if(!err){
-            console.log("Next Confirmed!");
-            reply("Y");
-        }else{
-            console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-        }
-    });
-}
-});
-
+                                });
+                                
+                        }else if(fileName.charAt(0) == 'b'){
+                                var arr = customData.blHist;
+                                validateContains(fileName, arr, function(replyVal){
+                                    if(replyVal == true){
+                                        blocklyNext(fileName, function(jsonNext){
+                                            if(jsonNext.charAt(0) == 'E'){
+                                                reply("END");
+                                            }else{
+                                            customData.crntJSON = jsonNext;
+                                            customData.save(function(err, callback){
+                                                if(!err){
+                                                    console.log("Next Confirmed!");
+                                                    reply("Y");
+                                                }else{
+                                                    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                                }
+                                            }); 
+                                            }
+                                        });
+                                    }else{
+                                        blocklyNext(fileName, function(jsonNext){
+                                            if(jsonNext.charAt(0) == 'E'){
+                                                if(customData.blHist.length > 0){
+                                                    customData.blHist[customData.blHist.length] = customData.crntJSON;
+                                                }else{
+                                                    customData.blHist[0] = customData.crntJSON;
+                                                }    
+                                                customData.save(function(err, callback){
+                                                    if(!err){
+                                                        reply("END");
+                                                        console.log("Last Confirmed!");
+                                                    }else{
+                                                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                                    }
+                                                });
+                                            }else{
+                                                if(customData.blHist.length > 0){
+                                                    customData.blHist[customData.blHist.length] = customData.crntJSON;
+                                                }else{
+                                                    customData.blHist[0] = customData.crntJSON;
+                                                }
+                                                customData.crntJSON = jsonNext;
+                                                customData.save(function(err, callback){
+                                                    if(!err){
+                                                        console.log("Next Confirmed!");
+                                                        reply("Y");
+                                                    }else{
+                                                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
 }
 
 });
@@ -1034,12 +1164,9 @@ function blocklyNext(current, callback){//gets the next blockly file
 }
 
 function textNext(current, callback){//gets the next text file
-    console.log("1.1");
     for(var i = 0; i < textOrder.length; i++){
         if(current == textOrder[i]){
-            console.log("1.2: " + textOrder);
             if(i+1 <  textOrder.length){
-                console.log("1.3");
                 callback(textOrder[i+1]);
                 return;
             }else{
@@ -1048,344 +1175,342 @@ function textNext(current, callback){//gets the next text file
             }
         }
     }
-
-    console.log("UH OH")
 }
 
 function validate(code, filename, callback){
     // var result = filename + "Result.txt";
     switch(filename){
         case "blockly1-1":
-            var str = code.toLowerCase();
-            try{
-                test.value(str).contains('hello');
-                test.value(str).contains('world');
-                esprima.parse(code);
-                var tree = esprima.tokenize(code);
-                var strBool = false;
-                var varBool = false;              
-                for(var i = 0; i < tree.length; i++){
-                    if(tree[i].type == 'String'){
-                        var comp = String(tree[i].value).toLowerCase();
-                        if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
-                            strBool = true;
-                        }
-                    }
-                    if(tree[i].value == 'var'){
-                        varBool = true;
+        var str = code.toLowerCase();
+        try{
+            test.value(str).contains('hello');
+            test.value(str).contains('world');
+            esprima.parse(code);
+            var tree = esprima.tokenize(code);
+            var strBool = false;
+            var varBool = false;              
+            for(var i = 0; i < tree.length; i++){
+                if(tree[i].type == 'String'){
+                    var comp = String(tree[i].value).toLowerCase();
+                    if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
+                        strBool = true;
                     }
                 }
-                if(strBool == true && varBool == true){
-                    callback(true);
-                    return;
-                }else{
-                    callback(false);
-                    console.log("FAILED!");
-                    return;
+                if(tree[i].value == 'var'){
+                    varBool = true;
                 }
-            }catch(err){
-                console.log(err);
+            }
+            if(strBool == true && varBool == true){
+                callback(true);
+                return;
+            }else{
                 callback(false);
+                console.log("FAILED!");
                 return;
             }
-            console.log("PASSED!");
-            break; 
+        }catch(err){
+            console.log(err);
+            callback(false);
+            return;
+        }
+        console.log("PASSED!");
+        break; 
 
         case "blockly1-2":
-            var str = code.toLowerCase();
-            try{
-                test.value(str).contains('hello', 'world', 8);
-                esprima.parse(code);
-                var tree = esprima.tokenize(code);
-                var strBool = false;
-                var varBool = false;
-                var numBool = false;
-                for(var i = 0; i < tree.length; i++){
-                    if(tree[i].type == 'String'){
-                        var comp = String(tree[i].value).toLowerCase();
-                        if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
-                            strBool = true;
-                        }
-                    }
-                    if(tree[i].value == 'var'){
-                        varBool = true;
-                    }
-                    if(tree[i].type == 'Numeric' && tree[i].value == '8'){
-                        numBool = true;
+        var str = code.toLowerCase();
+        try{
+            test.value(str).contains('hello', 'world', 8);
+            esprima.parse(code);
+            var tree = esprima.tokenize(code);
+            var strBool = false;
+            var varBool = false;
+            var numBool = false;
+            for(var i = 0; i < tree.length; i++){
+                if(tree[i].type == 'String'){
+                    var comp = String(tree[i].value).toLowerCase();
+                    if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
+                        strBool = true;
                     }
                 }
-                if(strBool == true && varBool == true && numBool == true){
-                    callback(true);
-                    return;
-                }else{
-                    callback(false);
-                    console.log("FAILED!");
-                    return;
+                if(tree[i].value == 'var'){
+                    varBool = true;
                 }
-            }catch(err){
-                console.log(err);
+                if(tree[i].type == 'Numeric' && tree[i].value == '8'){
+                    numBool = true;
+                }
+            }
+            if(strBool == true && varBool == true && numBool == true){
+                callback(true);
+                return;
+            }else{
                 callback(false);
+                console.log("FAILED!");
                 return;
             }
-            console.log("PASSED!");
-            break;
+        }catch(err){
+            console.log(err);
+            callback(false);
+            return;
+        }
+        console.log("PASSED!");
+        break;
         
         case "blockly1-3":
-            try{
-                esprima.parse(code);
-                var tree = esprima.tokenize(code);
-                var opBool = false;
-                var correctEnd = false;
-                var numCount = 0;
-                var usedNums = [];
-                var iden = [];
-                var opUsed;
-                for(var i = 0; i < tree.length; i++){
-                    if(tree[i].type == 'String'){
-                        callback(false);
-                        return;
-                    }
-
-                    if(tree[i].type == 'Numeric'){
-                        usedNums[numCount] = tree[i].value;
-                        numCount++;
-
-                    }
-                    if(tree[i].type == 'Punctuator'){
-                        if(tree[i].value == '+'){
-                            opBool = true;
-                            opUsed = 1;
-                        }else if(tree[i].value == '-'){
-                            opBool = true;
-                            opUsed = 2;
-                        }else if(tree[i].value == '/'){
-                            opBool = true;
-                            opUsed = 3;
-                        }else if(tree[i].value == '*'){
-                            opBool = true;
-                            opUsed = 4;
-                        }
-                    }
-                    if(tree[i].type == 'Identifier'){
-                        if(iden.indexOf(tree[i].value) < 0){
-                            iden[iden.length] = tree[i].value;
-                        }
-                    }
-
-                    if(i == (tree.length - 1)){
-                        if(tree[i].type == 'Punctuator' && tree[i].value == ';'){
-                            correctEnd = true;
-                        }
-                    }
-                }
-                if(opBool == true && iden.length == 3 && numCount == 2){
-                    var program = "";
-                    if(correctEnd){
-                        program = code + " exports.x = "+String(iden[iden.length - 1]).trim();
-                    }else{
-                        program = code + "; exports.x = "+String(iden[iden.length - 1]).trim();
-                    }
-                            var logger = EVAL(program);
-                            var stepOne = parseFloat(logger.x);
-                            var stepTwo = parseFloat(usedNums[0]);
-                            for(var i = 1; i < usedNums.length; i++){
-                                if(opUsed == 1){
-                                    stepTwo += parseFloat(usedNums[i]);
-                                }else if(opUsed == 2){
-                                    stepTwo -= parseFloat(usedNums[i]);
-                                }else if(opUsed == 3){
-                                    stepTwo /= parseFloat(usedNums[i]);
-                                }else if(opUsed == 4){
-                                    stepTwo *= parseFloat(usedNums[i]);
-                                }
-                                
-                            }
-                            if(stepOne == stepTwo){
-                            callback(true);
-                            return;
-                        }else{
-                            callback(false);
-                            return;
-                        }
-                    
-                }else{
+        try{
+            esprima.parse(code);
+            var tree = esprima.tokenize(code);
+            var opBool = false;
+            var correctEnd = false;
+            var numCount = 0;
+            var usedNums = [];
+            var iden = [];
+            var opUsed;
+            for(var i = 0; i < tree.length; i++){
+                if(tree[i].type == 'String'){
                     callback(false);
-                    console.log("FAILED!");
                     return;
                 }
-            }catch(err){
-                console.log(err);
+
+                if(tree[i].type == 'Numeric'){
+                    usedNums[numCount] = tree[i].value;
+                    numCount++;
+
+                }
+                if(tree[i].type == 'Punctuator'){
+                    if(tree[i].value == '+'){
+                        opBool = true;
+                        opUsed = 1;
+                    }else if(tree[i].value == '-'){
+                        opBool = true;
+                        opUsed = 2;
+                    }else if(tree[i].value == '/'){
+                        opBool = true;
+                        opUsed = 3;
+                    }else if(tree[i].value == '*'){
+                        opBool = true;
+                        opUsed = 4;
+                    }
+                }
+                if(tree[i].type == 'Identifier'){
+                    if(iden.indexOf(tree[i].value) < 0){
+                        iden[iden.length] = tree[i].value;
+                    }
+                }
+
+                if(i == (tree.length - 1)){
+                    if(tree[i].type == 'Punctuator' && tree[i].value == ';'){
+                        correctEnd = true;
+                    }
+                }
+            }
+            if(opBool == true && iden.length == 3 && numCount == 2){
+                var program = "";
+                if(correctEnd){
+                    program = code + " exports.x = "+String(iden[iden.length - 1]).trim();
+                }else{
+                    program = code + "; exports.x = "+String(iden[iden.length - 1]).trim();
+                }
+                var logger = EVAL(program);
+                var stepOne = parseFloat(logger.x);
+                var stepTwo = parseFloat(usedNums[0]);
+                for(var i = 1; i < usedNums.length; i++){
+                    if(opUsed == 1){
+                        stepTwo += parseFloat(usedNums[i]);
+                    }else if(opUsed == 2){
+                        stepTwo -= parseFloat(usedNums[i]);
+                    }else if(opUsed == 3){
+                        stepTwo /= parseFloat(usedNums[i]);
+                    }else if(opUsed == 4){
+                        stepTwo *= parseFloat(usedNums[i]);
+                    }
+
+                }
+                if(stepOne == stepTwo){
+                    callback(true);
+                    return;
+                }else{
+                    callback(false);
+                    return;
+                }
+
+            }else{
                 callback(false);
+                console.log("FAILED!");
                 return;
             }
-            console.log("PASSED!");
-            break;
+        }catch(err){
+            console.log(err);
+            callback(false);
+            return;
+        }
+        console.log("PASSED!");
+        break;
         
         case "text1-1":
-            var str = code.toLowerCase();
-            try{
-                test.value(str).contains('hello');
-                test.value(str).contains('world');
-                esprima.parse(code);
-                var tree = esprima.tokenize(code);
-                var strBool = false;
-                var varBool = false;              
-                for(var i = 0; i < tree.length; i++){
-                    if(tree[i].type == 'String'){
-                        var comp = String(tree[i].value).toLowerCase();
-                        if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
-                            strBool = true;
-                        }
-                    }
-                    if(tree[i].value == 'var'){
-                        varBool = true;
+        var str = code.toLowerCase();
+        try{
+            test.value(str).contains('hello');
+            test.value(str).contains('world');
+            esprima.parse(code);
+            var tree = esprima.tokenize(code);
+            var strBool = false;
+            var varBool = false;              
+            for(var i = 0; i < tree.length; i++){
+                if(tree[i].type == 'String'){
+                    var comp = String(tree[i].value).toLowerCase();
+                    if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
+                        strBool = true;
                     }
                 }
-                if(strBool == true && varBool == true){
-                    callback(true);
-                    return;
-                }else{
-                    callback(false);
-                    console.log("FAILED!");
-                    return;
+                if(tree[i].value == 'var'){
+                    varBool = true;
                 }
-            }catch(err){
-                console.log(err);
+            }
+            if(strBool == true && varBool == true){
+                callback(true);
+                return;
+            }else{
                 callback(false);
+                console.log("FAILED!");
                 return;
             }
-            console.log("PASSED!");
-            break; 
+        }catch(err){
+            console.log(err);
+            callback(false);
+            return;
+        }
+        console.log("PASSED!");
+        break; 
 
         case "text1-2":
-            var str = code.toLowerCase();
-            try{
-                test.value(str).contains('hello', 'world', 8);
-                esprima.parse(code);
-                var tree = esprima.tokenize(code);
-                var strBool = false;
-                var varBool = false;
-                var numBool = false;
-                for(var i = 0; i < tree.length; i++){
-                    if(tree[i].type == 'String'){
-                        var comp = String(tree[i].value).toLowerCase();
-                        if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
-                            strBool = true;
-                        }
-                    }
-                    if(tree[i].value == 'var'){
-                        varBool = true;
-                    }
-                    if(tree[i].type == 'Numeric' && tree[i].value == '8'){
-                        numBool = true;
+        var str = code.toLowerCase();
+        try{
+            test.value(str).contains('hello', 'world', 8);
+            esprima.parse(code);
+            var tree = esprima.tokenize(code);
+            var strBool = false;
+            var varBool = false;
+            var numBool = false;
+            for(var i = 0; i < tree.length; i++){
+                if(tree[i].type == 'String'){
+                    var comp = String(tree[i].value).toLowerCase();
+                    if(comp == "'hello world'" || comp == "'hello world!'" || comp == '"hello world"' || comp == '"hello world!"'){
+                        strBool = true;
                     }
                 }
-                if(strBool == true && varBool == true && numBool == true){
+                if(tree[i].value == 'var'){
+                    varBool = true;
+                }
+                if(tree[i].type == 'Numeric' && tree[i].value == '8'){
+                    numBool = true;
+                }
+            }
+            if(strBool == true && varBool == true && numBool == true){
+                callback(true);
+                return;
+            }else{
+                callback(false);
+                console.log("FAILED!");
+                return;
+            }
+        }catch(err){
+            console.log(err);
+            callback(false);
+            return;
+        }
+        console.log("PASSED!");
+        break;
+
+        case "text1-3":
+        try{
+            esprima.parse(code);
+            var tree = esprima.tokenize(code);
+            var opBool = false;
+            var correctEnd = false;
+            var numCount = 0;
+            var usedNums = [];
+            var iden = [];
+            var opUsed;
+            for(var i = 0; i < tree.length; i++){
+                if(tree[i].type == 'String'){
+                    callback(false);
+                    return;
+                }
+
+                if(tree[i].type == 'Numeric'){
+                    usedNums[numCount] = tree[i].value;
+                    numCount++;
+
+                }
+                if(tree[i].type == 'Punctuator'){
+                    if(tree[i].value == '+'){
+                        opBool = true;
+                        opUsed = 1;
+                    }else if(tree[i].value == '-'){
+                        opBool = true;
+                        opUsed = 2;
+                    }else if(tree[i].value == '/'){
+                        opBool = true;
+                        opUsed = 3;
+                    }else if(tree[i].value == '*'){
+                        opBool = true;
+                        opUsed = 4;
+                    }
+                }
+                if(tree[i].type == 'Identifier'){
+                    if(iden.indexOf(tree[i].value) < 0){
+                        iden[iden.length] = tree[i].value;
+                    }
+                }
+
+                if(i == (tree.length - 1)){
+                    if(tree[i].type == 'Punctuator' && tree[i].value == ';'){
+                        correctEnd = true;
+                    }
+                }
+            }
+            if(opBool == true && iden.length == 3 && numCount == 2){
+                var program = "";
+                if(correctEnd){
+                    program = code + " exports.x = "+String(iden[iden.length - 1]).trim();
+                }else{
+                    program = code + "; exports.x = "+String(iden[iden.length - 1]).trim();
+                }
+                var logger = EVAL(program);
+                var stepOne = parseFloat(logger.x);
+                var stepTwo = parseFloat(usedNums[0]);
+                for(var i = 1; i < usedNums.length; i++){
+                    if(opUsed == 1){
+                        stepTwo += parseFloat(usedNums[i]);
+                    }else if(opUsed == 2){
+                        stepTwo -= parseFloat(usedNums[i]);
+                    }else if(opUsed == 3){
+                        stepTwo /= parseFloat(usedNums[i]);
+                    }else if(opUsed == 4){
+                        stepTwo *= parseFloat(usedNums[i]);
+                    }
+
+                }
+                if(stepOne == stepTwo){
                     callback(true);
                     return;
                 }else{
                     callback(false);
-                    console.log("FAILED!");
                     return;
                 }
-            }catch(err){
-                console.log(err);
+
+            }else{
                 callback(false);
+                console.log("FAILED!");
                 return;
             }
-            console.log("PASSED!");
-            break;
-            
-        case "text1-3":
-            try{
-                esprima.parse(code);
-                var tree = esprima.tokenize(code);
-                var opBool = false;
-                var correctEnd = false;
-                var numCount = 0;
-                var usedNums = [];
-                var iden = [];
-                var opUsed;
-                for(var i = 0; i < tree.length; i++){
-                    if(tree[i].type == 'String'){
-                        callback(false);
-                        return;
-                    }
-
-                    if(tree[i].type == 'Numeric'){
-                        usedNums[numCount] = tree[i].value;
-                        numCount++;
-
-                    }
-                    if(tree[i].type == 'Punctuator'){
-                        if(tree[i].value == '+'){
-                            opBool = true;
-                            opUsed = 1;
-                        }else if(tree[i].value == '-'){
-                            opBool = true;
-                            opUsed = 2;
-                        }else if(tree[i].value == '/'){
-                            opBool = true;
-                            opUsed = 3;
-                        }else if(tree[i].value == '*'){
-                            opBool = true;
-                            opUsed = 4;
-                        }
-                    }
-                    if(tree[i].type == 'Identifier'){
-                        if(iden.indexOf(tree[i].value) < 0){
-                            iden[iden.length] = tree[i].value;
-                        }
-                    }
-
-                    if(i == (tree.length - 1)){
-                        if(tree[i].type == 'Punctuator' && tree[i].value == ';'){
-                            correctEnd = true;
-                        }
-                    }
-                }
-                if(opBool == true && iden.length == 3 && numCount == 2){
-                    var program = "";
-                    if(correctEnd){
-                        program = code + " exports.x = "+String(iden[iden.length - 1]).trim();
-                    }else{
-                        program = code + "; exports.x = "+String(iden[iden.length - 1]).trim();
-                    }
-                            var logger = EVAL(program);
-                            var stepOne = parseFloat(logger.x);
-                            var stepTwo = parseFloat(usedNums[0]);
-                            for(var i = 1; i < usedNums.length; i++){
-                                if(opUsed == 1){
-                                    stepTwo += parseFloat(usedNums[i]);
-                                }else if(opUsed == 2){
-                                    stepTwo -= parseFloat(usedNums[i]);
-                                }else if(opUsed == 3){
-                                    stepTwo /= parseFloat(usedNums[i]);
-                                }else if(opUsed == 4){
-                                    stepTwo *= parseFloat(usedNums[i]);
-                                }
-                                
-                            }
-                            if(stepOne == stepTwo){
-                            callback(true);
-                            return;
-                        }else{
-                            callback(false);
-                            return;
-                        }
-                    
-                }else{
-                    callback(false);
-                    console.log("FAILED!");
-                    return;
-                }
-            }catch(err){
-                console.log(err);
-                callback(false);
-                return;
-            }
-            console.log("PASSED!");
-            break;
+        }catch(err){
+            console.log(err);
+            callback(false);
+            return;
+        }
+        console.log("PASSED!");
+        break;
     }
 
 
@@ -1449,11 +1574,72 @@ function evalVar(code, countVal, callback){
                 counter++;
             }
             
-    }
+        }
     }
     callback("ERROR");
 }
 
 
+function validateVal(val, callback){
+    if(val.charAt(0) == 't'){
+        for(var i = 0; i < textOrder.length; i++){
+            if(val == textOrder[i]){
+                callback(true);
+                return;
+            }
+        }
+    }else if(val.charAt(0) == 'b'){
+        for(var i = 0; i < blocklyOrder.length; i++){
+            if(val == blocklyOrder[i]){
+                callback(true);
+                return;
+            }
+        }
+    }
+    callback(false);
+}
 
+function validateHistory(val, arr, callback){
+    if(arr.length > 0){
+        for(var i = 0; i < arr.length; i++){
+            if(val == arr[i]){
+                callback(true);
+                return;
+            }
+        }
+        if(val.charAt(0) == 'b'){
+            blocklyNext(arr[arr.length-1], function(boolGetter){
+                if(val == boolGetter){
+                    callback(true);
+                    return;
+                }else{
+                    callback(false);
+                }
+            });
+        }else if(val.charAt(0) == 't'){
+            textNext(arr[arr.length-1], function(boolGetter){
+                if(val == boolGetter){
+                    callback(true);
+                    return;
+                }else{
+                    callback(false);
+                }
+            });
+        }
+        
+    }else{
+        callback(false);
+    }
+    
+    
+}
 
+function validateContains(val, arr, callback){
+    for(var i = 0; i < arr.length; i++){
+        if(val == arr[i]){
+            callback(true);
+            return;
+        }
+    }
+    callback(false);
+}
