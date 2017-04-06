@@ -588,35 +588,35 @@ server.route({
                                             }
                                         });
 
-}else{
-    customData.crntJSON = "blockly1-1";
-    customData.save(function(err, callback){
-        if(!err){
-            reply("Y");
-            console.log("Blockly Confirmed!");
-        }else{
-            reply("N");
-        }
-    });
-}
-}else{
-    reply("Y");
-}
-}else{
-    reply("N");
-}
-});
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-    reply("N");
-}
-});
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-    reply("N");
-}
-});
-}
+                                    }else{
+                                        customData.crntJSON = "blockly1-1";
+                                        customData.save(function(err, callback){
+                                            if(!err){
+                                                reply("Y");
+                                                console.log("Blockly Confirmed!");
+                                            }else{
+                                                reply("N");
+                                            }
+                                        });
+                                    }
+                                }else{
+                                    reply("Y");
+                                }
+                            }else{
+                                reply("N");
+                            }
+                        });
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("N");
+            }
+        });
+    }
 });
 
 server.route({
@@ -661,36 +661,35 @@ server.route({
                                                 });
                                             }
                                         });
-
-}else{
-    customData.crntJSON = "text1-1";
-    customData.save(function(err, callback){
-        if(!err){
-            reply("Y");
-            console.log("Text Confirmed!");
-        }else{
-            reply("N");
-        }
-    });
-}
-}else{
-    reply("Y");
-}
-}else{
-    reply("N");
-}
-});
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-    reply("N");
-}
-});
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-    reply("N");
-}
-});
-}
+                                    }else{
+                                        customData.crntJSON = "text1-1";
+                                        customData.save(function(err, callback){
+                                            if(!err){
+                                                reply("Y");
+                                                console.log("Text Confirmed!");
+                                            }else{
+                                                reply("N");
+                                            }
+                                        });
+                                    }
+                                }else{
+                                    reply("Y");
+                                }
+                            }else{
+                                reply("N");
+                            }
+                        });
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("N");
+            }
+        });
+    }
 });
 
 server.route({
@@ -1029,22 +1028,20 @@ server.route({
                                         });
                                     }
                                 });
-}
+                            }
 
-});
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-    reply("N");
-}
-});
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-    reply("N");
-}
-});
-
-
-}
+                        });
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                        reply("N");
+                    }
+                });
+            }else{
+                console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                reply("N");
+            }
+        });
+    }
 });
 
 server.route({
@@ -1082,7 +1079,7 @@ server.route({
                 reply("Relog");
             }
         });
-}
+    }
 });
 
 server.route({
@@ -1136,17 +1133,16 @@ server.route({
                                 }
                             });
                         });
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
-}
-});
-}else{
-    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
-}
-});
-}
-});
-
+                    }else{
+                        console.log("SOMETHING WENT WRONG!\n" + err2 + "-----");
+                    }
+                });
+                }else{
+                    console.log("SOMETHING WENT WRONG!\n" + err + "-----");
+                }
+            });
+        }
+    });
 });
 
 function blocklyNext(current, callback){//gets the next blockly file
@@ -1512,31 +1508,6 @@ function validate(code, filename, callback){
         console.log("PASSED!");
         break;
     }
-
-
-
-
-
-    // fs.readFile('./public/results/'+filename, 'utf-8', function(err, data){
-    //     if(err){
-    //         console.log("ERROR: ", err);
-    //     }else{
-    //         var fileData = data.split("||");
-    //         for(var i = 0; i < fileData.length; i++){
-    //             console.log(fileData[i]);
-    //             if(fileData[i] === evalCode || fileData[i] == evalCode){
-    //                 console.log("Found!");
-    //                 callback(true);
-    //                 break;
-    //             }else if(i == fileData.length - 1){
-    //                 console.log("Not Found!");
-    //                 callback(false);
-    //                 break;
-    //             }
-    //         }           
-
-    //     }
-    // });
 }
 
 function evalVar(code, countVal, callback){

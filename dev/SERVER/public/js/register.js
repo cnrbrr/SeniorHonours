@@ -1,5 +1,5 @@
 
-var skillSet = ["Very Experienced", "A Little Experience", "Refresh My Memory", "I've heard of the language?", "Nope, no experience"];//options for the slider
+var skillSet = ["Very Experienced", "A Little Experience", "Refresh My Memory", "I've heard of Programming?", "Nope, no experience"];//options for the slider
 $("#rangeVal").on("input", function(){$("#skillDisplay").empty();//display options beneath the slider
 	$("#skillDisplay").append(skillSet[$("#rangeVal").val() - 1]);});
 
@@ -20,6 +20,10 @@ $( document ).ready(function() {
 	});
 });
 
+$( document ).ready(function() {
+	popSelect();
+});
+
 function validateForm(){
 	var $first = $( '#fname' ).val();//get values
 	var $second = $( '#sname' ).val();
@@ -27,7 +31,7 @@ function validateForm(){
 	var $passFirst = $( '#initPass' ).val();
 	var $level = $( '#rangeVal' ).val();
 	var $passSecond = $( '#sPass' ).val();
-	var $DOB = $( '#bday' ).val();
+	var $DOB = createDate();
 	var $gender = getGender();
 
 	if(nameCheck($first) === false){
@@ -66,6 +70,7 @@ function validateForm(){
 	}
 		// based on http://stackoverflow.com/questions/35969139/nodejs-how-to-send-data-from-html-to-hapi
 //create an object to hold the user data
+
 userdata = new Object();
 userdata.givenName = $first;
 userdata.surname = $second;
@@ -187,5 +192,22 @@ function passwordVal(passCheck){
 
 }
 
+function popSelect(){
+	var year = new Date().getFullYear();
+	var minYear = year - 100;
+	for(var i = minYear; i <= year; i++){
+		$('#year').append($('<option>', {
+    		value: i,
+    		text: i
+		}));
+	}
+}
+
+function createDate(){
+	var $day = $( '#day' ).val();
+	var $month = $( '#month' ).val();
+	var $year = $( '#year' ).val();
+	return String($day) + "-" + String($month) + "-" + String($year); 
+}
 
 

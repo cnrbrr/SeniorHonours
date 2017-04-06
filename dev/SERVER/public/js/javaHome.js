@@ -319,7 +319,14 @@ function ontoText(){
 			history.replaceState( {} , 'home', '/main' );
 			location.href = "jstext";
 		}else{
-			//modal about how something went wrong
+	      	$("#infoTitle").empty();
+	      	$("#infoTitle").append("Error!");
+	      	$("#infoHelp").empty();
+	      	$("#infoHelp").append("An Error Occurred!<br></br>We appologise for any inconvenience!<br></br>Please continue with your current tutorial, or move onto the next one!");
+	      	$("#infoHelp").css('color', 'black');
+	      	$('#infoBtns').empty();
+	      	$('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
+	      	$("#infoModal").modal("toggle");
 		}
 	});
 }
@@ -367,7 +374,7 @@ function currentSetter(val){
 	      	$("#infoTitle").empty();
 	      	$("#infoTitle").append("Error!");
 	      	$("#infoHelp").empty();
-	      	$("#infoHelp").append("An Error! We will not be able to change your level at this time!<br></br>We appologise for any inconvenience!<br></br>Please continue with your current tutorial!");
+	      	$("#infoHelp").append("An Error Occurred! We will not be able to change your level at this time!<br></br>We appologise for any inconvenience!<br></br>Please continue with your current tutorial!");
 	      	$("#infoHelp").css('color', 'black');
 	      	$('#infoBtns').empty();
 	      	$('#infoBtns').append("<button type='button' class='btn btn-success text-center' data-dismiss='modal' id='modalReg1'>Understood</button>");
