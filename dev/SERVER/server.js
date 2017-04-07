@@ -335,7 +335,7 @@ server.route({
     method: 'GET',
     path: '/ace/src-noconflict/ace.js',
     handler: function (request, reply) {
-        reply.file('./public/ace/src-noconflict/ace.js');
+        reply.file('./public/js/ace.js');
     }
 });
 
@@ -366,7 +366,7 @@ server.route({
     method: 'GET',
     path: '/ace/src-noconflict/theme-merbivore.js',
     handler: function (request, reply) {
-        reply.file('./public/ace/src-noconflict/theme-merbivore.js');
+        reply.file('./public/js/theme-merbivore.js');
     }
 });
 
@@ -375,7 +375,7 @@ server.route({
     method: 'GET',
     path: '/ace/src-noconflict/mode-javascript.js',
     handler: function (request, reply) {
-        reply.file('./public/ace/src-noconflict/mode-javascript.js');
+        reply.file('./public/js/mode-javascript.js');
     }
 });
 
@@ -383,7 +383,7 @@ server.route({
     method: 'GET',
     path: '/ace/src-noconflict/worker-javascript.js',
     handler: function (request, reply) {
-        reply.file('./public/ace/src-noconflict/worker-javascript.js');
+        reply.file('./public/js/worker-javascript.js');
     }
 });
 
