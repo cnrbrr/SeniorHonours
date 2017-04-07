@@ -1,16 +1,16 @@
 {
 	"tutorial": "1",
 	"point": "3",
-	"topic": "Basic Javascript (JS)",
-	"deeper": "Working with Variables! Mathmatical Operations!",
+	"topic": "Basic Blockly",
+	"deeper": "Working with Maths!",
 	"levels":
 	{
 			"level":
-					[{"diff": "5", "description": "Javascript makes use of the following Mathmatical operators! + (addition),- (subtraction), / (division), * (Multiplication)", "how": "When we have two numbers, or variables, we can perform these mathmatical operators on them!", "task": "Lets create two variables, then a third variable, which will be equal to the first two added together!"},
-					{"diff": "4", "description": "There are a number of other operators which we will demonstrate in later tutorials!", "how": "6 + 5 or a + b", "task": ""},
-					{"diff": "3", "description": "Such as % (modulo)", "how": "Lets declare 3 seperate variables. Make sure they are in the number format!!", "task": ""},
-					{"diff": "2", "description": "<br></br>One interesting feature is when + is used on a string as opposed to a number! We will cover this later on!", "how": "", "task": "var a = 4; <br></br> var b = 3; <br></br> var c = a + b; "},
-					{"diff": "1", "description": "", "how": "", "task": "<br></br><img src='Images/blockly1-3'>"}
+					[{"diff": "5", "description": "Blockly has five different mathematical operators", "how": "Lets start by creating three seperate variables", "task": "To start off with lets create two variables, set them equal to a number. Then create a third variable equal to the previous two combined"},
+					{"diff": "4", "description": "Addition, subtraction, multiplication and division", "how": "Remember: to do this we click on the variable tab", "task": "Create the three variables, and connect maths pieces to the first two variables! Then we are going to use the maths piece with two open slots and a + in the middle"},
+					{"diff": "3", "description": "These are all available in the maths tab", "how": "Create the three then drag them across", "task": "If we connect that to our third variable, we can begin to play about with this"},
+					{"diff": "2", "description": "Handy enough, they are all in one piece, when we click the drop down option we can choose which option we would like to use", "how": "If you cant see the name of one of your variables, try clicking the drop down menu in the variable piece", "task": "Going to the variables tab, you will be able to drag the end pieces with the names of the variables into the two open slots in the third variable"},
+					{"diff": "1", "description": "Much easier than different pieces for each!", "how": "Then we are going to drag pieces from the maths tab to connect up with the variable piece", "task": "<br></br><img src='Images/blockly1-3'>"}
 					]
 	}
 }

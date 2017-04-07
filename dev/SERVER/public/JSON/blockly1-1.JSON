@@ -1,16 +1,16 @@
 {
 	"tutorial": "1",
 	"point": "1",
-	"topic": "Basic Javascript (JS)",
+	"topic": "Basic Blockly",
 	"deeper": "Working with Variables!",
 	"levels":
 	{
 			"level":
-					[{"diff": "5", "description": "This part of the tutorial will be based on creating variables!", "how": "In javascript, variables are used to store data! We will do this using the 'var' keyword.", "task": "To complete the first task, create a variable which will store the value 'Hello world'. You may name the variable anything you like."},
-					{"diff": "4", "description": "", "how": "Variables, normally have the structure: var VARIABLENAME = SOME VALUE", "task": ""},
-					{"diff": "3", "description": "Variables are a key part of javascript!", "how": "", "task": ""},
-					{"diff": "2", "description": "Variables in Javascript have a great feature, where they don't require the programmer to specify their type!", "how": "To set the value of the variable to a string, place the value inside quotation marks 'Hello world!'", "task": "to complete this task, the code will look like this:<br></br> var myFirstVariable = 'Hello World!';"},
-					{"diff": "1", "description": "", "how": "", "task": "<br></br><img src='Images/blockly1-1'>"}
+					[{"diff": "5", "description": "This part of the tutorial will be based on creating variables!", "how": "In blockly, variables are used to store data! We will do this using the variable tab!.", "task": "To complete the first task, create a variable which will store the value 'Hello world'. You may name the variable anything you like."},
+					{"diff": "4", "description": "To access variables in Blockly, please select the Variables tab. Then click create!", "how": "Once in the tab select the create option!", "task": "To get hello world into our variable, click on the text tab"},
+					{"diff": "3", "description": "The name you type in the box will be how we remember our variable!", "how": "Type any name you want into the box", "task": "See the empty box with quotation marks in it? Click and drag that onto the screen.<br></br>Now try connecting the pieces like a jigsaw puzzle!"},
+					{"diff": "2", "description": "Variables in Blockly have a great feature, where they don't require the programmer to specify their type!", "how": "To set the value of the variable , go to the text tab and click and drag the piece onto the screen", "task": ""},
+					{"diff": "1", "description": "If you want to get rid of a piece, simply drag it to the bin!", "how": "If you click and drag the piece and slot them together just like a jigsaw", "task": "<br></br><img src='Images/blockly1-1'>"}
 					]
 	}
 }
