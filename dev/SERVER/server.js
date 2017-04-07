@@ -186,7 +186,7 @@ server.register(require('inert'), (err) => {
         method: 'GET',
         path: '/Images/text1-2',
         handler: function (request, reply) {
-            reply.file('./public/JSON/Images/text1-2.png');
+            reply.file('./public/JSON/Images/text1-2.PNG');
         }
     });
 
@@ -194,7 +194,7 @@ server.register(require('inert'), (err) => {
         method: 'GET',
         path: '/Images/text1-3',
         handler: function (request, reply) {
-            reply.file('./public/JSON/Images/text1-3.png');
+            reply.file('./public/JSON/Images/text1-3.PNG');
         }
     });
 
@@ -202,14 +202,14 @@ server.register(require('inert'), (err) => {
         method: 'GET',
         path: '/Images/blockly1-1',
         handler: function (request, reply) {
-            reply.file('./public/JSON/Images/blockly1-1.png');
+            reply.file('./public/JSON/Images/blockly1-1.PNG');
         }
     });
     server.route({
         method: 'GET',
         path: '/Images/blockly1-2',
         handler: function (request, reply) {
-            reply.file('./public/JSON/Images/blockly1-2.png');
+            reply.file('./public/JSON/Images/blockly1-2.PNG');
         }
     });
 
@@ -217,7 +217,7 @@ server.register(require('inert'), (err) => {
         method: 'GET',
         path: '/Images/blockly1-3',
         handler: function (request, reply) {
-            reply.file('./public/JSON/Images/blockly1-3.png');
+            reply.file('./public/JSON/Images/blockly1-3.PNG');
         }
     });
     server.route({
